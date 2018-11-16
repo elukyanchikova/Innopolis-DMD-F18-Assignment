@@ -4,7 +4,7 @@ public class Workshop {
     private int WID;
     private int NumberOfPlaces;
     private int NumberOfPlacesAvailable;
-    private Residence WorkshopLocation; //TODO: ask whether it is GPS Location
+    private GPSLocation WorkshopLocation;
 
     public Workshop(int WID, int numberOfPlaces, int numberOfPlacesAvailable){
         setWID(WID);
@@ -34,5 +34,13 @@ public class Workshop {
 
     public void setNumberOfPlacesAvailable(int numberOfPlacesAvailable) {
         NumberOfPlacesAvailable = numberOfPlacesAvailable;
+    }
+
+    public GPSLocation getWorkshopLocation() {
+        return WorkshopLocation;
+    }
+
+    public void setWorkshopLocation(GPSLocation workshopLocation) {
+        WorkshopLocation = workshopLocation;
     }
 }

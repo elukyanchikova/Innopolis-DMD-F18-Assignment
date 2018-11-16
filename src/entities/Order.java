@@ -8,7 +8,8 @@ public class Order {
     private float LuggageVolume;
     private boolean NeedBabySeat;
     private float OrderCost;
-    //TODO: how to write GPS location
+    private GPSLocation DeparturePoint;
+    private GPSLocation Destination;
 
     public Order(int orderID, String orderStatus, int orderTime, int numberOfAdultPassengers, float luggageVolume, boolean needBabySeat, float orderCost) {
         setOrderID(orderID);
@@ -74,5 +75,21 @@ public class Order {
 
     public void setOrderCost(float orderCost) {
         OrderCost = orderCost;
+    }
+
+    public GPSLocation getDeparturePoint() {
+        return DeparturePoint;
+    }
+
+    public void setDeparturePoint(GPSLocation departurePoint) {
+        DeparturePoint = departurePoint;
+    }
+
+    public GPSLocation getDestination() {
+        return Destination;
+    }
+
+    public void setDestination(GPSLocation destination) {
+        Destination = destination;
     }
 }

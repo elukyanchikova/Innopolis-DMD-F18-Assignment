@@ -31,7 +31,12 @@ public class Residence {
         this.ZIPCode = ZIPCode;
     }
 
-    public String toString(){//TODO: convert residence to string
-        return null;
+    public int getZIPCode() {
+        return ZIPCode;
     }
+    public String toString(){
+        return getCity() + ", " + getCountry() +", " + getZIPCode();
+    }
+
+
 }

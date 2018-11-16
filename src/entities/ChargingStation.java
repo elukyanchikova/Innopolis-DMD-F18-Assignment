@@ -1,6 +1,5 @@
 package entities;
 
-import java.util.List;
 
 public class ChargingStation {
     private int UID;
@@ -8,6 +7,7 @@ public class ChargingStation {
     private int NumberOfSocketsAvailable;
     private float ElectricalPower;
     private float ChargingAmountPrice;
+    private GPSLocation StationLocation;
 
     public ChargingStation(int UID, int numberOfSockets, int numberOfSocketsAvailable, float electricalPower, float chargingAmountPrice){
         setUID(UID);
@@ -55,5 +55,13 @@ public class ChargingStation {
 
     public void setChargingAmountPrice(float chargingAmountPrice) {
         ChargingAmountPrice = chargingAmountPrice;
+    }
+
+    public GPSLocation getStationLocation() {
+        return StationLocation;
+    }
+
+    public void setStationLocation(GPSLocation stationLocation) {
+        StationLocation = stationLocation;
     }
 }

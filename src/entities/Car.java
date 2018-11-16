@@ -10,7 +10,7 @@ public class Car {
     private int CarRating;
     private boolean CrashFlag;
     private float BatteryPercentage;
-    //GPS Location?
+    private GPSLocation CarLocation;
 
     public Car(String brandName, String modelName, int carPlate, String color, int currentOrderID, int carRating, boolean crashFlag, float batteryPercentage){
         setBrandName(brandName);
@@ -85,5 +85,13 @@ public class Car {
 
     public void setBatteryPercentage(float batteryPercentage) {
         BatteryPercentage = batteryPercentage;
+    }
+
+    public GPSLocation getCarLocation() {
+        return CarLocation;
+    }
+
+    public void setCarLocation(GPSLocation carLocation) {
+        CarLocation = carLocation;
     }
 }
