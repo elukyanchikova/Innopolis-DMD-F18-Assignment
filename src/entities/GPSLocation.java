@@ -4,6 +4,11 @@ public class GPSLocation {
     private float Latitude;
     private float Longitude;
 
+    public GPSLocation(float latitude, float longitude) {
+        Latitude = latitude;
+        Longitude = longitude;
+    }
+
 
     public float getLatitude() {
         return Latitude;

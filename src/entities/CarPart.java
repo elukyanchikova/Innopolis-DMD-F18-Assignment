@@ -6,12 +6,14 @@ public class CarPart {
     private String PartName;
     private float PartPrice;
     private String PartManufacturer;
+    private int ProviderID;
 
-    public CarPart(int partID, String partName, float partPrice, String partManufacturer){
+    public CarPart(int partID, String partName, float partPrice, String partManufacturer, int providerID){
         setPartID(partID);
         setPartName(partName);
         setPartPrice(partPrice);
         setPartManufacturer(partManufacturer);
+        setProviderID(providerID);
     }
 
     public int getPartID() {
@@ -44,5 +46,13 @@ public class CarPart {
 
     public void setPartManufacturer(String partManufacturer) {
         PartManufacturer = partManufacturer;
+    }
+
+    public int getProviderID() {
+        return ProviderID;
+    }
+
+    public void setProviderID(int providerID) {
+        ProviderID = providerID;
     }
 }

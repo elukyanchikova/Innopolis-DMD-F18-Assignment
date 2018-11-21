@@ -1,16 +1,23 @@
 package relations;
 
 public class ChargesAt {
-    private int CarPlate;
+    private String CarPlate;
     private int UID;
     private int TimeStart;
     private int TimeFinish;
 
-    public int getCarPlate() {
+    public ChargesAt(String carPlate, int UID, int timeStart, int timeFinish) {
+        CarPlate = carPlate;
+        this.UID = UID;
+        TimeStart = timeStart;
+        TimeFinish = timeFinish;
+    }
+
+    public String getCarPlate() {
         return CarPlate;
     }
 
-    public void setCarPlate(int carPlate) {
+    public void setCarPlate(String carPlate) {
         CarPlate = carPlate;
     }
 

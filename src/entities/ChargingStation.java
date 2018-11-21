@@ -3,16 +3,14 @@ package entities;
 
 public class ChargingStation {
     private int UID;
-    private int NumberOfSockets;
     private int NumberOfSocketsAvailable;
     private float ElectricalPower;
     private float ChargingAmountPrice;
     private GPSLocation StationLocation;
 
-    public ChargingStation(int UID, int numberOfSockets, int numberOfSocketsAvailable, float electricalPower, float chargingAmountPrice){
+    public ChargingStation(int UID, int numberOfSocketsAvailable, float electricalPower, float chargingAmountPrice){
         setUID(UID);
-        setNumberOfSockets(numberOfSockets);
-        setNumberOfSockets(numberOfSocketsAvailable);
+        setNumberOfSocketsAvailable(numberOfSocketsAvailable);
         setElectricalPower(electricalPower);
         setChargingAmountPrice(chargingAmountPrice);
     }
@@ -23,14 +21,6 @@ public class ChargingStation {
 
     public void setUID(int UID) {
         this.UID = UID;
-    }
-
-    public int getNumberOfSockets() {
-        return NumberOfSockets;
-    }
-
-    public void setNumberOfSockets(int numberOfSockets) {
-        NumberOfSockets = numberOfSockets;
     }
 
     public int getNumberOfSocketsAvailable() {

@@ -10,16 +10,21 @@ public class Order {
     private float OrderCost;
     private GPSLocation DeparturePoint;
     private GPSLocation Destination;
+    private String CustomerUsername;
 
-    public Order(int orderID, String orderStatus, int orderTime, int numberOfAdultPassengers, float luggageVolume, boolean needBabySeat, float orderCost) {
-        setOrderID(orderID);
-        setOrderStatus(orderStatus);
-        setOrderTime(orderTime);
-        setNumberOfAdultPassengers(numberOfAdultPassengers);
-        setLuggageVolume(luggageVolume);
-        setNeedBabySeat(needBabySeat);
-        setOrderCost(orderCost);
+    public Order(int orderID, String orderStatus, int orderTime, int numberOfAdultPassengers, float luggageVolume, boolean needBabySeat, float orderCost, GPSLocation departurePoint, GPSLocation destination, String customerUsername) {
+        OrderID = orderID;
+        OrderStatus = orderStatus;
+        OrderTime = orderTime;
+        NumberOfAdultPassengers = numberOfAdultPassengers;
+        LuggageVolume = luggageVolume;
+        NeedBabySeat = needBabySeat;
+        OrderCost = orderCost;
+        DeparturePoint = departurePoint;
+        Destination = destination;
+        CustomerUsername = customerUsername;
     }
+
 
     public int getOrderID() {
         return OrderID;
@@ -91,5 +96,13 @@ public class Order {
 
     public void setDestination(GPSLocation destination) {
         Destination = destination;
+    }
+
+    public String getCustomerUsername() {
+        return CustomerUsername;
+    }
+
+    public void setCustomerUsername(String customerUsername) {
+        CustomerUsername = customerUsername;
     }
 }

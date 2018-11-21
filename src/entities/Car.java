@@ -6,18 +6,16 @@ public class Car {
     private String ModelName;
     private int CarPlate;
     private String Color;
-    private int CurrentOrderID;
     private int CarRating;
     private boolean CrashFlag;
     private float BatteryPercentage;
     private GPSLocation CarLocation;
 
-    public Car(String brandName, String modelName, int carPlate, String color, int currentOrderID, int carRating, boolean crashFlag, float batteryPercentage){
+    public Car(String brandName, String modelName, int carPlate, String color, int carRating, boolean crashFlag, float batteryPercentage){
         setBrandName(brandName);
         setModelName(modelName);
         setCarPlate(carPlate);
         setColor(color);
-        setCurrentOrderID(currentOrderID);
         setCarRating(carRating);
         setCrashFlag(crashFlag);
         setBatteryPercentage(batteryPercentage);
@@ -53,14 +51,6 @@ public class Car {
 
     public void setColor(String color) {
         Color = color;
-    }
-
-    public int getCurrentOrderID() {
-        return CurrentOrderID;
-    }
-
-    public void setCurrentOrderID(int currentOrderID) {
-        CurrentOrderID = currentOrderID;
     }
 
     public int getCarRating() {

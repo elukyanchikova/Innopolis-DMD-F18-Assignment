@@ -1,16 +1,16 @@
 package relations;
 
 public class Repairs {
-    private int CarPlate;
+    private String CarPlate;
     private int WID;
     private int TimeStart;
     private int TimeFinish;
 
-    public int getCarPlate() {
+    public String getCarPlate() {
         return CarPlate;
     }
 
-    public void setCarPlate(int carPlate) {
+    public void setCarPlate(String carPlate) {
         CarPlate = carPlate;
     }
 

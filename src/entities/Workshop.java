@@ -2,15 +2,15 @@ package entities;
 
 public class Workshop {
     private int WID;
-    private int NumberOfPlaces;
     private int NumberOfPlacesAvailable;
-    private GPSLocation WorkshopLocation;
+    private Residence WorkshopLocation;
 
-    public Workshop(int WID, int numberOfPlaces, int numberOfPlacesAvailable){
-        setWID(WID);
-        setNumberOfPlaces(numberOfPlaces);
-        setNumberOfPlacesAvailable(numberOfPlacesAvailable);
+    public Workshop(int WID, int numberOfPlacesAvailable, Residence workshopLocation) {
+        this.WID = WID;
+        NumberOfPlacesAvailable = numberOfPlacesAvailable;
+        WorkshopLocation = workshopLocation;
     }
+
 
     public int getWID() {
         return WID;
@@ -18,14 +18,6 @@ public class Workshop {
 
     public void setWID(int WID) {
         this.WID = WID;
-    }
-
-    public int getNumberOfPlaces() {
-        return NumberOfPlaces;
-    }
-
-    public void setNumberOfPlaces(int numberOfPlaces) {
-        NumberOfPlaces = numberOfPlaces;
     }
 
     public int getNumberOfPlacesAvailable() {
@@ -36,11 +28,11 @@ public class Workshop {
         NumberOfPlacesAvailable = numberOfPlacesAvailable;
     }
 
-    public GPSLocation getWorkshopLocation() {
+    public Residence getWorkshopLocation() {
         return WorkshopLocation;
     }
 
-    public void setWorkshopLocation(GPSLocation workshopLocation) {
+    public void setWorkshopLocation(Residence workshopLocation) {
         WorkshopLocation = workshopLocation;
     }
 }

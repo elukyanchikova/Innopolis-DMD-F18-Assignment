@@ -5,6 +5,15 @@ public class Requests {
     private int WID;
     private String PartName;
     private int NumberOfParts;
+    private int RequestID;
+
+    public Requests(int providerID, int WID, String partName, int numberOfParts, int requestID) {
+        ProviderID = providerID;
+        this.WID = WID;
+        PartName = partName;
+        NumberOfParts = numberOfParts;
+        RequestID = requestID;
+    }
 
     public int getProviderID() {
         return ProviderID;
@@ -36,5 +45,13 @@ public class Requests {
 
     public void setNumberOfParts(int numberOfParts) {
         NumberOfParts = numberOfParts;
+    }
+
+    public int getRequestID() {
+        return RequestID;
+    }
+
+    public void setRequestID(int requestID) {
+        RequestID = requestID;
     }
 }
