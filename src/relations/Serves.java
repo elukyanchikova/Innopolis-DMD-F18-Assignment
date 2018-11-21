@@ -6,6 +6,13 @@ public class Serves {
     private int TimeStart;
     private int TimeFinish;
 
+    public Serves(String carPlate, int orderID, int timeStart, int timeFinish) {
+        CarPlate = carPlate;
+        OrderID = orderID;
+        TimeStart = timeStart;
+        TimeFinish = timeFinish;
+    }
+
     public int getTimeFinish() {
         return TimeFinish;
     }

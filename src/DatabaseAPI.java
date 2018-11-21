@@ -63,12 +63,12 @@ public class DatabaseAPI {
 		}
 	}
 
-	public void createNewTable(String name, String[] column_name, String[] column_type, String[] f) {
+	public void createNewTable(String name, String[] column_name, String[] column_type, String[] f, String others) {
 		String SQLStatement = "CREATE TABLE IF NOT EXIST " + name + " (\n";
 		for (int i = 0; i < column_name.length; i++) {
 			SQLStatement += column_name[i] + " " + column_type[i] + " " + f[i] + ",\n";
 		}
-		SQLStatement += ");";
+		SQLStatement += others + ");";
 		execute(SQLStatement);
 	}
 

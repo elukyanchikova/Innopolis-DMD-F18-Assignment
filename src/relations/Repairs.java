@@ -6,6 +6,13 @@ public class Repairs {
     private int TimeStart;
     private int TimeFinish;
 
+    public Repairs(String carPlate, int WID, int timeStart, int timeFinish) {
+        CarPlate = carPlate;
+        this.WID = WID;
+        TimeStart = timeStart;
+        TimeFinish = timeFinish;
+    }
+
     public String getCarPlate() {
         return CarPlate;
     }
