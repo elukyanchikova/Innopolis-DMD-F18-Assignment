@@ -1,3 +1,5 @@
+package database;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -15,21 +17,23 @@ public class DatabaseAPI {
 		Name = name;
 		URL = url;
 		connect();
+
 	}
 
 	public void connect() {
 		if (connection != null)
 			System.out.println("Database already connected!");
 		else
-			try (Connection con = DriverManager.getConnection(URL)) {
-				if (con != null) {
+			try {
+			Connection con = DriverManager.getConnection(URL);
+			if (con != null) {
 					connection = con;
 					isConnected = true;
 					System.out.println("Database connected!");
 				}
 			} catch (SQLException e) {
 				isConnected = false;
-				System.err.println("Connection failed!");
+				e.printStackTrace();
 			}
 	}
 
@@ -61,16 +65,17 @@ public class DatabaseAPI {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+
 	}
 
 	public void createNewTable(String name, String[] column_name, String[] column_type, String[] f, String others) {
-		String SQLStatement = "CREATE TABLE IF NOT EXIST " + name + " (\n";
+		String SQLStatement = "CREATE TABLE IF NOT EXISTS " + name + " (\n";
 		for (int i = 0; i < column_name.length; i++) {
-			SQLStatement += column_name[i] + " " + column_type[i] + " " + f[i] + ",\n";
+			if (i == column_name.length - 1 && others.length() == 0) SQLStatement += column_name[i] + " " + column_type[i] + " " + f[i] + "\n";
+			else SQLStatement += column_name[i] + " " + column_type[i] + " " + f[i] + ",\n";
 		}
 		SQLStatement += others + ");";
 		execute(SQLStatement);
 	}
-
 
 }
