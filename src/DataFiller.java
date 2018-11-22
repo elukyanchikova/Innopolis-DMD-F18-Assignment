@@ -1,6 +1,8 @@
 import entities.*;
 import relations.ChargesAt;
 import relations.Repairs;
+import relations.Requests;
+import relations.Serves;
 
 import java.io.InputStream;
 import java.util.Collection;
@@ -54,15 +56,25 @@ public class DataFiller {
 
 	}
 
-	public Collection<StationSocket> parseStationSockets(){
+	public Collection<StationSocket> parseStationSockets() {
 
 	}
 
-	public Collection<ChargesAt> parseChargesAt(){
+	public Collection<ChargesAt> parseChargesAt() {
 
 	}
 
-	public Collection<Repairs> parseRepairs
+	public Collection<Repairs> parseRepairs() {
+
+	}
+
+	public Collection<Requests> parseRequests(){
+
+	}
+
+	public Collection<Serves> parseServes(){
+		
+	}
 
 	private Collection<String[]> loadStrings(String verify) {
 		Scanner scanner = new Scanner(input);
