@@ -1,5 +1,6 @@
 package database;
 import java.io.*;
+import java.sql.ResultSet;
 import java.util.Collection;
 import java.util.LinkedList;
 
@@ -153,7 +154,8 @@ public class DatabaseQueries {
 	void Query01() {
 		String SQLStatement = "SELECT * FROM car\n" +
 				"\tWHERE car_color='red' AND car_plate LIKE 'AN%'";
-//		sample.execute(SQLStatement);
+		ResultSet result =  sample.executeQuery(SQLStatement);
+		//TODO: create new table and insert result there (for all queries!)
 	}
 
 	void Query02(long requestedDate) {
@@ -162,7 +164,7 @@ public class DatabaseQueries {
 			String SQLStatement = "SELECT count(*) FROM charges_at WHERE " +
 					"strftime('%s', date(" + requestedDate + ", 'unixepoch'), 'start of day', '+" + hour + " hour') <= time_start < strftime('%s', date(" + requestedDate + ", 'unixepoch'), 'start of day', '+" + hour + "+1 hour') OR " +
 					"strftime('%s', date(" + requestedDate + ", 'unixepoch'), 'start of day', '+" + hour + " hour') <= time_finish < strftime('%s', date(" + requestedDate + ", 'unixepoch'), 'start of day', '+" + hour + "+1 hour')";
-//			sample.execute(SQLStatement);
+            ResultSet result = sample.executeQuery(SQLStatement);
 		}
 	}
 
