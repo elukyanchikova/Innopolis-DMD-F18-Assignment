@@ -1,7 +1,6 @@
 package entities;
 
 public class CarModel {
-
     private String BrandName;
     private String ModelName;
     private int PassengerCapacity;
