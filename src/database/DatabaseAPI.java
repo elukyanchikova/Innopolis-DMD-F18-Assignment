@@ -203,6 +203,6 @@ public class DatabaseAPI {
 		execute(SQLStatement);
     }
 
-    //TODO: queries change IDs to autogenerate - Workshop WID, Charging Station UID, Sockets socket_number, requests - request_id, provider - provider_id, car_parts - car_part_id, orders - order_id
+    //TODO: queries change IDs to autogenerate -  Sockets socket_number
 
 }

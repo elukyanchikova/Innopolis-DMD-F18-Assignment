@@ -54,38 +54,38 @@ public class DatabaseQueries {
         sample.createNewTable("car", carColumns, carTypes, carF, carOthers);
 
 
-        String chargingStationColumns[] = {"UID",         "station_latitude", "station_longitude", "electrical_power", "number_of_available_sockets", "charging_amount_price"};
-        String chargingStationTypes[]   = {"integer",     "real",             "real",              "real",             "integer",                     "real"};
-        String chargingStationF[]       = {"PRIMARY KEY", "NOT NULL",         "NOT NULL",          "",                 "NOT NULL",                    ""};
+        String chargingStationColumns[] = {"UID",                       "station_latitude", "station_longitude", "electrical_power", "number_of_available_sockets", "charging_amount_price"};
+        String chargingStationTypes[]   = {"integer",                   "real",             "real",              "real",             "integer",                     "real"};
+        String chargingStationF[]       = {"PRIMARY KEY AUTOINCREMENT", "NOT NULL",         "NOT NULL",          "",                 "NOT NULL",                    ""};
 
         sample.createNewTable("charging_station", chargingStationColumns, chargingStationTypes, chargingStationF, "");
 
 
-        String workshopColumns[] = {"WID",         "number_of_available_places", "zip_code", "city",     "country"};
-        String workshopTypes[]   = {"integer",     "integer",                    "integer",  "text",     "text"};
-        String workshopF[]       = {"PRIMARY KEY", "NOT NULL",                   "NOT NULL", "NOT NULL", "NOT NULL"};
+        String workshopColumns[] = {"WID",                       "number_of_available_places", "zip_code", "city",     "country"};
+        String workshopTypes[]   = {"integer",                   "integer",                    "integer",  "text",     "text"};
+        String workshopF[]       = {"PRIMARY KEY AUTOINCREMENT", "NOT NULL",                   "NOT NULL", "NOT NULL", "NOT NULL"};
 
         sample.createNewTable("workshop", workshopColumns, workshopTypes, workshopF, "");
 
 
-        String providerColumns[] = {"provider_id", "provider_name", "provider_phone", "payment_info", "zip_code", "city",     "country"};
-        String providerTypes[]   = {"integer",     "text",          "text",           "text",         "integer",  "text",     "text"};
-        String providerF[]       = {"PRIMARY KEY", "NOT NULL",      "NOT NULL",       "NOT NULL",     "NOT NULL", "NOT NULL", "NOT NULL"};
+        String providerColumns[] = {"provider_id",               "provider_name", "provider_phone", "payment_info", "zip_code", "city",     "country"};
+        String providerTypes[]   = {"integer",                   "text",          "text",           "text",         "integer",  "text",     "text"};
+        String providerF[]       = {"PRIMARY KEY AUTOINCREMENT", "NOT NULL",      "NOT NULL",       "NOT NULL",     "NOT NULL", "NOT NULL", "NOT NULL"};
 
         sample.createNewTable("provider", providerColumns, providerTypes, providerF, "");
 
 
-        String carPartColumns[] = {"part_id",     "part_name", "part_price", "part_manufacturer", "provider_id", "WID"};
-        String carPartTypes[]   = {"integer",     "text",      "real",       "text",              "integer",     "integer"};
-        String carPartF[]       = {"PRIMARY KEY", "NOT NULL",  "NOT NULL",   "NOT NULL",          "NOT NULL",    ""};
+        String carPartColumns[] = {"part_id",                   "part_name", "part_price", "part_manufacturer", "provider_id", "WID"};
+        String carPartTypes[]   = {"integer",                   "text",      "real",       "text",              "integer",     "integer"};
+        String carPartF[]       = {"PRIMARY KEY AUTOINCREMENT", "NOT NULL",  "NOT NULL",   "NOT NULL",          "NOT NULL",    ""};
         String carPartOthers = "FOREIGN KEY (provider_id) REFERENCES provider (provider_id) \n FOREIGN KEY (WID) REFERENCES workshop(WID)\n";
 
         sample.createNewTable("car_parts", carPartColumns, carPartTypes, carPartF, carPartOthers);
 
 
-        String orderColumns[] = {"order_id",    "order_status", "order_time", "A_latitude", "A_longitude", "B_latitude", "B_longitude", "number_of_adult_passengers", "need_babyseat", "luggage_volume", "customer_username"};
-        String orderTypes[]   = {"integer",     "text",         "integer",    "real",       "real",        "real",       "real",        "integer",                    "integer",       "real",           "text"};
-        String orderF[]       = {"PRIMARY KEY", "NOT NULL",     "NOT NULL",   "NOT NULL",   "NOT NULL",    "NOT NULL",   "NOT NULL",    "NOT NULL",                   "NOT NULL",      "NOT NULL",       "NOT NULL"};
+        String orderColumns[] = {"order_id",                  "order_status", "order_time", "A_latitude", "A_longitude", "B_latitude", "B_longitude", "number_of_adult_passengers", "need_babyseat", "luggage_volume", "customer_username"};
+        String orderTypes[]   = {"integer",                   "text",         "integer",    "real",       "real",        "real",       "real",        "integer",                    "integer",       "real",           "text"};
+        String orderF[]       = {"PRIMARY KEY AUTOINCREMENT", "NOT NULL",     "NOT NULL",   "NOT NULL",   "NOT NULL",    "NOT NULL",   "NOT NULL",    "NOT NULL",                   "NOT NULL",      "NOT NULL",       "NOT NULL"};
         String orderOthers = "FOREIGN KEY (customer_username) REFERENCES customer (username)\n";
 
         sample.createNewTable("orders", orderColumns, orderTypes, orderF, orderOthers);
@@ -94,8 +94,8 @@ public class DatabaseQueries {
 
 
 
-        String socketsColumns[] = {"UID",      "socket_number", "socket_shape", "socket_size"};
-        String socketsTypes[]   = {"integer",  "integer",       "text",         "text"};
+        String socketsColumns[] = {"UID",      "socket_number",               "socket_shape", "socket_size"};
+        String socketsTypes[]   = {"integer",  "integer",                     "text",         "text"};
         String socketsF[]       = {"NOT NULL", "NOT NULL",      "NOT NULL",     "NOT NULL"};
         String socketsOthers = "FOREIGN KEY (UID) REFERENCES charging_station(UID) \n PRIMARY KEY (UID, socket_number)\n";
 
@@ -122,9 +122,9 @@ public class DatabaseQueries {
         sample.createNewTable("repairs", repairsColumns, repairsTypes, repairsF, repairsOthers);
 
 
-        String requestsColumns[] = {"request_id",  "part_name", "number_of_parts", "WID",      "provider_id"};
-        String requestsTypes[]   = {"integer",     "text",      "integer",         "integer",  "integer"};
-        String requestsF[]       = {"PRIMARY KEY", "NOT NULL",  "NOT NULL",        "NOT NULL", "NOT NULL"};
+        String requestsColumns[] = {"request_id",                "part_name", "number_of_parts", "WID",      "provider_id"};
+        String requestsTypes[]   = {"integer",                   "text",      "integer",         "integer",  "integer"};
+        String requestsF[]       = {"PRIMARY KEY AUTOINCREMENT", "NOT NULL",  "NOT NULL",        "NOT NULL", "NOT NULL"};
         String requestOthers = "FOREIGN KEY (provider_id) REFERENCES provider (provider_id) \n FOREIGN KEY (WID) REFERENCES workshop(WID)\n";
 
         sample.createNewTable("requests", requestsColumns, requestsTypes, requestsF, requestOthers);
