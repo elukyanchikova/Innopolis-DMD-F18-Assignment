@@ -7,6 +7,7 @@ public class CarPart {
     private float PartPrice;
     private String PartManufacturer;
     private int ProviderID;
+    private int WID;
 
     public CarPart(int partID, String partName, float partPrice, String partManufacturer, int providerID){
         setPartID(partID);
@@ -54,5 +55,13 @@ public class CarPart {
 
     public void setProviderID(int providerID) {
         ProviderID = providerID;
+    }
+
+    public void setWID(int WID) {
+        this.WID = WID;
+    }
+
+    public int getWID() {
+        return WID;
     }
 }

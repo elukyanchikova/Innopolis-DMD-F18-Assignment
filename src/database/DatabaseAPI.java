@@ -1,13 +1,9 @@
 package database;
 
 
-import com.sun.org.apache.xpath.internal.operations.Bool;
-
+import entities.*;
 import java.io.*;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 
 public class DatabaseAPI {
 
@@ -82,6 +78,20 @@ public class DatabaseAPI {
 		execute(SQLStatement);
 	}
 
+	public ResultSet executeQuery(String SQLStatement){
+		if(!isConnected())
+			connect();
+		try{
+			Statement statement = connection.createStatement();
+			ResultSet resultSet = statement.executeQuery(SQLStatement);
+			statement.close();
+			return  resultSet;
+		} catch (SQLException e){
+			e.printStackTrace();
+			return null;
+		}
+	}
+
 	//TODO: write clear for db
 	public void clear(){
 
@@ -89,76 +99,109 @@ public class DatabaseAPI {
 
 
     //TODO: write insertion for all the tables
-	public void insertIntoCar(String carPlate, String carModel, String carBrand, String carColor, float carRating, float carLat, float carLon, float batteryPercentage, boolean crashFlag){
-	    String SQLStatement = "INSERT INTO car (car_plate, brand_name, model_name, car_color, car_latitude, car_longitude, car_rating, crash_flag, battery_percentage)\n"
-                              + "VALUES (" + carPlate + ", " + carBrand + ", " + carModel + ", " + carColor + ", " + carLat + ", " + carLon + ", " + carRating + ", " + (crashFlag ? 1 : 0) + ", " + batteryPercentage + ");";
 
-	    execute(SQLStatement);
-    }
+    public void insertIntoCar(Car car){
+		String SQLStatement = "INSERT INTO car (car_plate, brand_name, model_name, car_color, car_latitude, car_longitude, car_rating, crash_flag, battery_percentage)\n"
+				+ "VALUES (" + car.getCarPlate() + ", " + car.getBrandName() + ", " + car.getModelName() + ", " + car.getColor() + ", " + car.getCarLocation().getLatitude() + ", " + car.getCarLocation().getLongitude() + ", " + car.getCarRating() + ", " + (car.isCrashFlag() ? 1 : 0) + ", " + car.getBatteryPercentage() + ");";
+
+		execute(SQLStatement);
+	}
 
     public void fillTheCar(){
-	    File f = new File("/home/stale/Education/Databases/DB-project/src/sample_data/car.txt");
-
-        try {
-            BufferedReader br = new BufferedReader(new FileReader(f));
-            String line;
-            while ((line = br.readLine()) != null) {
-                System.out.println(line);
-                String[] args = line.split(" ");
-                insertIntoCar(args[0], args[1], args[2], args[3], Float.valueOf(args[4]), Float.valueOf(args[5]), Float.valueOf(args[6]), Float.valueOf(args[7]), Boolean.valueOf(args[8]));
-            }
-        } catch (IOException e){
-	        e.printStackTrace();
-        }
-    }
-
-    public void insertIntoCarModel(){
 
     }
 
-    public void insertIntoCarParts(){
+    public void insertIntoCarModel(CarModel carModel){
+		String SQLStatement = "INSERT INTO car_model ()\n"
+				+ "VALUES (" + ")";
 
+		execute(SQLStatement);
+    }
+
+    public void insertIntoCarParts(CarPart carPart){
+		String SQLStatement = "INSERT INTO car_parts (part_name, part_price, part_manufacturer, provider_id, WID)\n"
+				+ "VALUES (" + carPart.getPartName() + ", "+ carPart.getPartPrice() + ", "+ carPart.getPartManufacturer()+ ", " + carPart.getProviderID()+ ", " + carPart.getWID() +");";
+
+		execute(SQLStatement);
     }
 
     public void insertIntoChargesAt(){
+		String SQLStatement = "INSERT INTO charges_at ()\n"
+				+ "VALUES (" + ")";
 
+		execute(SQLStatement);
     }
 
-    public void insertIntoChargingStation(){
+    public void insertIntoChargingStation(ChargingStation chargingStation){
+		String SQLStatement = "INSERT INTO charging_station (station_latitude, station_longitude, electrical_power, number_of_available_sockets, charging_amount_price)\n"
+				+ "VALUES (" + chargingStation.getStationLocation().getLatitude() + ", " + chargingStation.getStationLocation().getLongitude() + ", " + chargingStation.getElectricalPower() + ", " + chargingStation.getNumberOfSocketsAvailable() + " " + chargingStation.getChargingAmountPrice() + ");";
 
+		execute(SQLStatement);
     }
 
-    public void insertIntoCustomer(){
+    public void insertIntoCustomer(Customer customer){
+		String SQLStatement = "INSERT INTO customer (username, customer_name, customer_phone, customer_email, payment_info, zip_code, city, country)\n"
+				+ "VALUES (" +customer.getUsername() + ", " + customer.getCustomerName() + ", " + customer.getCustomerPhone() + ", " + customer.getCustomerEmail() + ", " + customer.getPaymentInfo() + ", " + customer.getCustomerResidence().getZIPCode() + ", " + customer.getCustomerResidence().getCity() + ", " + customer.getCustomerResidence().getCountry() + ");";
 
+		execute(SQLStatement);
     }
 
-    public void insertIntoFits(){}
+    public void insertIntoFits(){
+		String SQLStatement = "INSERT INTO fits ()\n"
+				+ "VALUES (" + ")";
 
-    public void insertIntoOrders(){
+		execute(SQLStatement);
+	}
 
+    public void insertIntoOrders(Order order){
+		String SQLStatement = "INSERT INTO orders (order_status, order_time, A_latitude, A_longitude, B_latitude, B_longitude, number_of_adult_passengers, need_babyseat, luggage_volume, customer_username)\n"
+				+ "VALUES (" + order.getOrderStatus() + ", " + order.getOrderTime() + ", " + order.getDeparturePoint().getLatitude() + ", " + order.getDeparturePoint().getLongitude() + ", " + order.getDestination().getLatitude() + ", " + order.getDestination().getLongitude() + ", " + order.getNumberOfAdultPassengers() + ", " + order.isNeedBabySeat() + ", " + order.getLuggageVolume() + ", " + order.getCustomerUsername() + ");";
+
+		execute(SQLStatement);
     }
 
-    public void insertIntoProvider(){
+    public void insertIntoProvider(Provider provider){
+		String SQLStatement = "INSERT INTO provider (provider_name, provider_phone, payment_info, zip_code, city, country)\n"
+				+ "VALUES (" + provider.getProviderName() +", "+provider.getProviderPhone()+", "+provider.getProviderPaymentInfo()+", "+provider.getProviderAddress().getZIPCode()+", "+provider.getProviderAddress().getCity()+", "+provider.getProviderAddress().getCountry()+");";
 
+		execute(SQLStatement);
     }
 
     public void insertIntoRepairs(){
+		String SQLStatement = "INSERT INTO repairs ()\n"
+				+ "VALUES (" + ")";
 
+		execute(SQLStatement);
     }
 
     public void insertIntoRequests(){
+		String SQLStatement = "INSERT INTO request ()\n"
+				+ "VALUES (" + ")";
 
+		execute(SQLStatement);
     }
 
     public void insertIntoServes(){
+		String SQLStatement = "INSERT INTO serves ()\n"
+				+ "VALUES (" + ")";
 
+		execute(SQLStatement);
     }
 
-    public void insertIntoSockets(){
+    public void insertIntoSockets(StationSocket stationSocket){
+		String SQLStatement = "INSERT INTO sockets (UID, socket_shape, socket_size)\n"
+				+ "VALUES (" + stationSocket.getStationUID()  + ", " + stationSocket.getSocketShape() + ", " + stationSocket.getSocketSize()+ ");";
 
+		execute(SQLStatement);
     }
 
-    public void insertIntoWorkshop(){
+    public void insertIntoWorkshop(Workshop workshop){
+		String SQLStatement = "INSERT INTO workshop (number_of_available_places, zip_code, city, country)\n"
+				+ "VALUES (" + workshop.getNumberOfPlacesAvailable() + ", " + workshop.getWorkshopLocation().getZIPCode() + ", " + workshop.getWorkshopLocation().getCity() + ", " + workshop.getWorkshopLocation().getCountry() + ");";
 
+		execute(SQLStatement);
     }
+
+    //TODO: queries change IDs to autogenerate - Workshop WID, Charging Station UID, Sockets socket_number, requests - request_id, provider - provider_id, car_parts - car_part_id, orders - order_id
+
 }
