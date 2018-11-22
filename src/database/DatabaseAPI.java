@@ -2,6 +2,7 @@ package database;
 
 
 import entities.*;
+import relations.*;
 import java.io.*;
 import java.sql.*;
 
@@ -112,8 +113,8 @@ public class DatabaseAPI {
     }
 
     public void insertIntoCarModel(CarModel carModel){
-		String SQLStatement = "INSERT INTO car_model ()\n"
-				+ "VALUES (" + ")";
+		String SQLStatement = "INSERT INTO car_model (brand_name, model_name, socket_shape, socket_size, passenger_capacity, luggage_capacity, battery_capacity)\n"
+				+ "VALUES (" + carModel.getBrandName() + ", " + carModel.getModelName() + ", " + carModel.getModelSocket().getSocketShape() + ", " + carModel.getModelSocket().getSocketSize() + ", " + carModel.getPassengerCapacity() + ", " + carModel.getLuggageCapacity() + ", " + carModel.getBatteryCapacity() + ");";
 
 		execute(SQLStatement);
     }
@@ -125,9 +126,9 @@ public class DatabaseAPI {
 		execute(SQLStatement);
     }
 
-    public void insertIntoChargesAt(){
-		String SQLStatement = "INSERT INTO charges_at ()\n"
-				+ "VALUES (" + ")";
+    public void insertIntoChargesAt(ChargesAt chargesAt){
+		String SQLStatement = "INSERT INTO charges_at (UID, car_plate, time_start, time_finish)\n"
+				+ "VALUES (" + chargesAt.getUID() + ", " + chargesAt.getCarPlate() + ", " + chargesAt.getTimeStart() + ", " + chargesAt.getTimeFinish() + ");";
 
 		execute(SQLStatement);
     }
@@ -148,14 +149,14 @@ public class DatabaseAPI {
 
     public void insertIntoFits(){
 		String SQLStatement = "INSERT INTO fits ()\n"
-				+ "VALUES (" + ")";
+				+ "VALUES (" + ");";
 
 		execute(SQLStatement);
 	}
 
     public void insertIntoOrders(Order order){
 		String SQLStatement = "INSERT INTO orders (order_status, order_time, A_latitude, A_longitude, B_latitude, B_longitude, number_of_adult_passengers, need_babyseat, luggage_volume, customer_username)\n"
-				+ "VALUES (" + order.getOrderStatus() + ", " + order.getOrderTime() + ", " + order.getDeparturePoint().getLatitude() + ", " + order.getDeparturePoint().getLongitude() + ", " + order.getDestination().getLatitude() + ", " + order.getDestination().getLongitude() + ", " + order.getNumberOfAdultPassengers() + ", " + order.isNeedBabySeat() + ", " + order.getLuggageVolume() + ", " + order.getCustomerUsername() + ");";
+				+ "VALUES (" + order.getOrderStatus() + ", " + order.getOrderTime() + ", " + order.getDeparturePoint().getLatitude() + ", " + order.getDeparturePoint().getLongitude() + ", " + order.getDestination().getLatitude() + ", " + order.getDestination().getLongitude() + ", " + order.getNumberOfAdultPassengers() + ", " + ((order.isNeedBabySeat())? 1 : 0) + ", " + order.getLuggageVolume() + ", " + order.getCustomerUsername() + ");";
 
 		execute(SQLStatement);
     }
@@ -167,23 +168,23 @@ public class DatabaseAPI {
 		execute(SQLStatement);
     }
 
-    public void insertIntoRepairs(){
-		String SQLStatement = "INSERT INTO repairs ()\n"
-				+ "VALUES (" + ")";
+    public void insertIntoRepairs(Repairs repairs){
+		String SQLStatement = "INSERT INTO repairs (WID, car_plate, time_start, time_finish)\n"
+				+ "VALUES (" + repairs.getWID() + ", " + repairs.getCarPlate() + ", " + repairs.getTimeStart() + ", " + repairs.getTimeFinish() + ");";
 
 		execute(SQLStatement);
     }
 
-    public void insertIntoRequests(){
-		String SQLStatement = "INSERT INTO request ()\n"
-				+ "VALUES (" + ")";
+    public void insertIntoRequests(Requests requests){
+		String SQLStatement = "INSERT INTO requests (part_name, number_of_parts, WID, provider_id)\n"
+				+ "VALUES (" + requests.getPartName() + ", " + requests.getNumberOfParts() + ", " + requests.getWID() + ", " + requests.getProviderID() + ");";
 
 		execute(SQLStatement);
     }
 
-    public void insertIntoServes(){
-		String SQLStatement = "INSERT INTO serves ()\n"
-				+ "VALUES (" + ")";
+    public void insertIntoServes(Serves serves){
+		String SQLStatement = "INSERT INTO serves (order_id, car_plate, time_start, time_finish)\n"
+				+ "VALUES (" +serves.getOrderID() + ", "+ serves.getCarPlate() + ", " + serves.getTimeStart() + ", " + serves.getTimeFinish() + ");";
 
 		execute(SQLStatement);
     }

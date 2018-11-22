@@ -153,7 +153,7 @@ public class DatabaseQueries {
 	void Query01() {
 		String SQLStatement = "SELECT * FROM car\n" +
 				"\tWHERE car_color='red' AND car_plate LIKE 'AN%'";
-		sample.execute(SQLStatement);
+//		sample.execute(SQLStatement);
 	}
 
 	void Query02(long requestedDate) {
@@ -162,7 +162,7 @@ public class DatabaseQueries {
 			String SQLStatement = "SELECT count(*) FROM charges_at WHERE " +
 					"strftime('%s', date(" + requestedDate + ", 'unixepoch'), 'start of day', '+" + hour + " hour') <= time_start < strftime('%s', date(" + requestedDate + ", 'unixepoch'), 'start of day', '+" + hour + "+1 hour') OR " +
 					"strftime('%s', date(" + requestedDate + ", 'unixepoch'), 'start of day', '+" + hour + " hour') <= time_finish < strftime('%s', date(" + requestedDate + ", 'unixepoch'), 'start of day', '+" + hour + "+1 hour')";
-			sample.execute(SQLStatement);
+//			sample.execute(SQLStatement);
 		}
 	}
 
