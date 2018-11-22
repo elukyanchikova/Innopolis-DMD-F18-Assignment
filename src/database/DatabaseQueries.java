@@ -1,4 +1,5 @@
 package database;
+import java.io.*;
 
 public class DatabaseQueries {
 
@@ -7,6 +8,8 @@ public class DatabaseQueries {
     public void MainTest(){
         createSample();
         sample.connect();
+
+        sample.fillTheCar();
 
         Query01();
         Query02();
@@ -42,7 +45,7 @@ public class DatabaseQueries {
 
 
         String carColumns[] = {"car_plate",   "brand_name", "model_name", "car_color", "car_latitude", "car_longitude", "car_rating", "crash_flag", "battery_percentage"};
-        String carTypes[]   = {"text",        "text",       "text",       "text",      "real",         "real",          "integer",   "integer",    "real"};
+        String carTypes[]   = {"text",        "text",       "text",       "text",      "real",         "real",          "real",       "integer",    "real"};
         String carF[]       = {"PRIMARY_KEY", "NOT NULL",   "NOT NULL",   "NOT NULL",  "NOT NULL",     "NOT NULL",      "NOT NULL",  "NOT NULL",   "NOT NULL"};
         String carOthers    = "FOREIGN KEY (brand_name) REFERENCES car_model (brand_name) \n FOREIGN KEY (model_name) REFERENCES car_model (model_name)\n";
 
@@ -146,10 +149,14 @@ public class DatabaseQueries {
 
 
     void Query01(){
-
+        String SQLStatement = "SELECT * FROM car\n" +
+                "\tWHERE car_color='red' AND car_plate LIKE 'AN%'";
+        sample.execute(SQLStatement);
     }
 
     void Query02(){
+        String SQLStatement = "";
+        sample.execute(SQLStatement);
 
     }
 
