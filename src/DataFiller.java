@@ -33,7 +33,17 @@ public class DataFiller {
 	}
 
 	public Collection<CarModel> parseCarModels() {
+		LinkedList<CarModel> models = new LinkedList<>();
 
+		Collection<String[]> strings = loadStrings("CarModel");
+		for (String[] fields : strings) {
+			CarSocket socket = new CarSocket(Float.valueOf(fields[5]), fields[6]);
+			CarModel obj = new CarModel(fields[1], fields[0], Integer.valueOf(fields[2]),
+					Float.valueOf(fields[3]), Float.valueOf(fields[4]), socket);
+			models.add(obj);
+		}
+
+		return models;
 	}
 
 	public Collection<ChargingStation> parseChargingStations() {
@@ -68,12 +78,12 @@ public class DataFiller {
 
 	}
 
-	public Collection<Requests> parseRequests(){
+	public Collection<Requests> parseRequests() {
 
 	}
 
-	public Collection<Serves> parseServes(){
-		
+	public Collection<Serves> parseServes() {
+
 	}
 
 	private Collection<String[]> loadStrings(String verify) {
