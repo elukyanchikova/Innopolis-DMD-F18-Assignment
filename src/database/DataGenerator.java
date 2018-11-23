@@ -26,7 +26,7 @@ public class DataGenerator {
 		random = new Random();
 	}
 
-	public GeneratedData generateData(int nModels, int nCars) {
+	public GeneratedData generateData(int nModels, int nCars, int nCustomers) {
 		GeneratedData data = new GeneratedData();
 		data.setModels(new LinkedList<>());
 		for (int i = 0; i < nModels; i++) {
@@ -38,6 +38,10 @@ public class DataGenerator {
 			data.getCars().add(generateCar((CarModel) pickRandomFrom(data.getModels())));
 		}
 
+		data.setCustomers(new LinkedList<>());
+		for (int i = 0; i < nCustomers; i++) {
+
+		}
 
 		return data;
 	}
