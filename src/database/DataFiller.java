@@ -76,35 +76,108 @@ public class DataFiller {
 	}
 
 	public Collection<Order> parseOrders() {
-		return null;
+		LinkedList<Order> orders = new LinkedList<>();
+
+		Collection<String[]> strings = loadStrings("Order");
+		for (String[]fields: strings){
+			GPSLocation departure = new GPSLocation(Float.valueOf(fields[7]), Float.valueOf(fields[8]));
+			GPSLocation destination = new GPSLocation(Float.valueOf(fields[9]),Float.valueOf(fields[10]));
+			Order obj = new Order(Integer.valueOf(fields[0]), fields[1], Integer.valueOf(fields[2]), Integer.valueOf(fields[3]), Float.valueOf(fields[4]), Boolean.valueOf(fields[5]), Float.valueOf(fields[6]), departure, destination, fields[11]);
+			orders.add(obj);
+		}
+
+		return orders;
 	}
 
 	public Collection<Provider> parseProviders() {
-		return null;
+		LinkedList<Provider> providers = new LinkedList<>();
+
+		Collection<String[]> strings = loadStrings("Provider");
+		for (String[]fields: strings){
+
+			Provider obj;
+			//providers.add(obj);
+		}
+
+		return providers;
 	}
 
 	public Collection<Workshop> parseWorkshops() {
-		return null;
+		LinkedList<Workshop> workshops = new LinkedList<>();
+
+		Collection<String[]> strings = loadStrings("Workshops");
+		for (String[]fields: strings){
+
+			Workshop obj;
+			//workshops.add(obj);
+		}
+
+		return workshops;
 	}
 
 	public Collection<StationSocket> parseStationSockets() {
-		return null;
+		LinkedList<StationSocket> stationSockets = new LinkedList<>();
+
+		Collection<String[]> strings = loadStrings("Sockets");
+		for (String[]fields: strings){
+
+			StationSocket obj;
+			//stationSockets.add(obj);
+		}
+
+		return stationSockets;
 	}
 
 	public Collection<ChargesAt> parseChargesAt() {
-		return null;
+		LinkedList<ChargesAt> chargesAt = new LinkedList<>();
+
+		Collection<String[]> strings = loadStrings("ChargesAt");
+		for (String[]fields: strings){
+
+			ChargesAt obj;
+			//chargesAt.add(obj);
+		}
+
+		return chargesAt;
 	}
 
 	public Collection<Repairs> parseRepairs() {
-		return null;
+		LinkedList<Repairs> repairs = new LinkedList<>();
+
+		Collection<String[]> strings = loadStrings("Repair");
+		for (String[]fields: strings){
+
+			Repairs obj;
+			//repairs.add(obj);
+		}
+
+		return repairs;
 	}
 
 	public Collection<Requests> parseRequests() {
-		return null;
+		LinkedList<Requests> requests = new LinkedList<>();
+
+		Collection<String[]> strings = loadStrings("Request");
+		for (String[]fields: strings){
+
+			Provider obj;
+			//requests.add(obj);
+		}
+
+		return requests;
 	}
 
 	public Collection<Serves> parseServes() {
-		return null;
+		LinkedList<Serves> serves = new LinkedList<>();
+
+		Collection<String[]> strings = loadStrings("Serves");
+		for (String[]fields: strings){
+
+			Serves obj;
+			//serves.add(obj);
+		}
+
+		return serves;
 	}
 
 	private Collection<String[]> loadStrings(String verify) {

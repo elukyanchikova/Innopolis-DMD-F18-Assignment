@@ -244,7 +244,17 @@ public class DatabaseAPI {
     }
 
     public void fillTheOrders(){
+		try{
+			FileInputStream input = new FileInputStream("SampleData/Order-Fill.txt");
+			DataFiller filler = new DataFiller(input);
+			Collection<Order> orders = filler.parseOrders();
+			for (Order order: orders){
+				insertIntoOrders(order);
+			}
 
+		} catch (IOException e){
+			e.printStackTrace();
+		}
 	}
 
     public void insertIntoProvider(Provider provider){
