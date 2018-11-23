@@ -3,6 +3,7 @@ import relations.ChargesAt;
 import relations.Repairs;
 import relations.Requests;
 import relations.Serves;
+import sun.awt.image.ImageWatched;
 
 import java.io.InputStream;
 import java.util.Collection;
@@ -47,43 +48,52 @@ public class DataFiller {
 	}
 
 	public Collection<ChargingStation> parseChargingStations() {
+		LinkedList<ChargingStation> stations = new LinkedList<>();
 
+		Collection<String[]> strings = loadStrings("ChargingStation");
+		for (String[]fields : strings){
+			GPSLocation location = new GPSLocation(Float.valueOf(fields[1]), Float.valueOf(fields[2]));
+			ChargingStation obj = new ChargingStation(Integer.valueOf(fields[0]), Integer.valueOf(fields[4]), Float.valueOf(fields[3]), Float.valueOf(fields[5]), location);
+			stations.add(obj);
+		}
+
+		return stations;
 	}
 
 	public Collection<Customer> parseCustomers() {
-
+		return null;
 	}
 
 	public Collection<Order> parseOrders() {
-
+		return null;
 	}
 
 	public Collection<Provider> parseProviders() {
-
+		return null;
 	}
 
 	public Collection<Workshop> parseWorkshops() {
-
+		return null;
 	}
 
 	public Collection<StationSocket> parseStationSockets() {
-
+		return null;
 	}
 
 	public Collection<ChargesAt> parseChargesAt() {
-
+		return null;
 	}
 
 	public Collection<Repairs> parseRepairs() {
-
+		return null;
 	}
 
 	public Collection<Requests> parseRequests() {
-
+		return null;
 	}
 
 	public Collection<Serves> parseServes() {
-
+		return null;
 	}
 
 	private Collection<String[]> loadStrings(String verify) {
