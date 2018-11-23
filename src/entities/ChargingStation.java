@@ -8,12 +8,14 @@ public class ChargingStation {
     private float ChargingAmountPrice;
     private GPSLocation StationLocation;
 
-    public ChargingStation(int UID, int numberOfSocketsAvailable, float electricalPower, float chargingAmountPrice){
-        setUID(UID);
-        setNumberOfSocketsAvailable(numberOfSocketsAvailable);
-        setElectricalPower(electricalPower);
-        setChargingAmountPrice(chargingAmountPrice);
+    public ChargingStation(int UID, int numberOfSocketsAvailable, float electricalPower, float chargingAmountPrice, GPSLocation stationLocation) {
+        this.UID = UID;
+        NumberOfSocketsAvailable = numberOfSocketsAvailable;
+        ElectricalPower = electricalPower;
+        ChargingAmountPrice = chargingAmountPrice;
+        StationLocation = stationLocation;
     }
+
 
     public int getUID() {
         return UID;
