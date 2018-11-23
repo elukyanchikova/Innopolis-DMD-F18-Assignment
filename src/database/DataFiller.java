@@ -5,7 +5,6 @@ import relations.ChargesAt;
 import relations.Repairs;
 import relations.Requests;
 import relations.Serves;
-import sun.awt.image.ImageWatched;
 
 import java.io.InputStream;
 import java.util.Collection;
@@ -53,7 +52,7 @@ public class DataFiller {
 		LinkedList<ChargingStation> stations = new LinkedList<>();
 
 		Collection<String[]> strings = loadStrings("ChargingStation");
-		for (String[]fields : strings){
+		for (String[] fields : strings) {
 			GPSLocation location = new GPSLocation(Float.valueOf(fields[1]), Float.valueOf(fields[2]));
 			ChargingStation obj = new ChargingStation(Integer.valueOf(fields[0]), Integer.valueOf(fields[4]), Float.valueOf(fields[3]), Float.valueOf(fields[5]), location);
 			stations.add(obj);
@@ -66,7 +65,7 @@ public class DataFiller {
 		LinkedList<Customer> customers = new LinkedList<>();
 
 		Collection<String[]> strings = loadStrings("Customer");
-		for (String[]fields: strings){
+		for (String[] fields : strings) {
 			Residence residence = new Residence(fields[6], fields[7], Integer.valueOf(fields[5]));
 			Customer obj = new Customer(fields[0], fields[1], fields[2], fields[3], fields[4], residence);
 			customers.add(obj);
@@ -79,9 +78,9 @@ public class DataFiller {
 		LinkedList<Order> orders = new LinkedList<>();
 
 		Collection<String[]> strings = loadStrings("Order");
-		for (String[]fields: strings){
+		for (String[] fields : strings) {
 			GPSLocation departure = new GPSLocation(Float.valueOf(fields[7]), Float.valueOf(fields[8]));
-			GPSLocation destination = new GPSLocation(Float.valueOf(fields[9]),Float.valueOf(fields[10]));
+			GPSLocation destination = new GPSLocation(Float.valueOf(fields[9]), Float.valueOf(fields[10]));
 			Order obj = new Order(Integer.valueOf(fields[0]), fields[1], Integer.valueOf(fields[2]), Integer.valueOf(fields[3]), Float.valueOf(fields[4]), Boolean.valueOf(fields[5]), Float.valueOf(fields[6]), departure, destination, fields[11]);
 			orders.add(obj);
 		}
@@ -93,7 +92,7 @@ public class DataFiller {
 		LinkedList<Provider> providers = new LinkedList<>();
 
 		Collection<String[]> strings = loadStrings("Provider");
-		for (String[]fields: strings){
+		for (String[] fields : strings) {
 
 			Provider obj;
 			//providers.add(obj);
@@ -106,7 +105,7 @@ public class DataFiller {
 		LinkedList<Workshop> workshops = new LinkedList<>();
 
 		Collection<String[]> strings = loadStrings("Workshops");
-		for (String[]fields: strings){
+		for (String[] fields : strings) {
 
 			Workshop obj;
 			//workshops.add(obj);
@@ -119,7 +118,7 @@ public class DataFiller {
 		LinkedList<StationSocket> stationSockets = new LinkedList<>();
 
 		Collection<String[]> strings = loadStrings("Sockets");
-		for (String[]fields: strings){
+		for (String[] fields : strings) {
 
 			StationSocket obj;
 			//stationSockets.add(obj);
@@ -132,7 +131,7 @@ public class DataFiller {
 		LinkedList<ChargesAt> chargesAt = new LinkedList<>();
 
 		Collection<String[]> strings = loadStrings("ChargesAt");
-		for (String[]fields: strings){
+		for (String[] fields : strings) {
 
 			ChargesAt obj;
 			//chargesAt.add(obj);
@@ -145,7 +144,7 @@ public class DataFiller {
 		LinkedList<Repairs> repairs = new LinkedList<>();
 
 		Collection<String[]> strings = loadStrings("Repair");
-		for (String[]fields: strings){
+		for (String[] fields : strings) {
 
 			Repairs obj;
 			//repairs.add(obj);
@@ -158,7 +157,7 @@ public class DataFiller {
 		LinkedList<Requests> requests = new LinkedList<>();
 
 		Collection<String[]> strings = loadStrings("Request");
-		for (String[]fields: strings){
+		for (String[] fields : strings) {
 
 			Provider obj;
 			//requests.add(obj);
@@ -171,7 +170,7 @@ public class DataFiller {
 		LinkedList<Serves> serves = new LinkedList<>();
 
 		Collection<String[]> strings = loadStrings("Serves");
-		for (String[]fields: strings){
+		for (String[] fields : strings) {
 
 			Serves obj;
 			//serves.add(obj);
