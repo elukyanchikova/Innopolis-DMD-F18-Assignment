@@ -185,13 +185,23 @@ public class DatabaseAPI {
 
     public void insertIntoChargingStation(ChargingStation chargingStation){
 		String SQLStatement = "INSERT INTO charging_station (station_latitude, station_longitude, electrical_power, number_of_available_sockets, charging_amount_price)\n"
-				+ "VALUES (" + chargingStation.getStationLocation().getLatitude() + ", " + chargingStation.getStationLocation().getLongitude() + ", " + chargingStation.getElectricalPower() + ", " + chargingStation.getNumberOfSocketsAvailable() + " " + chargingStation.getChargingAmountPrice() + ");";
+				+ "VALUES (" + chargingStation.getStationLocation().getLatitude() + ", " + chargingStation.getStationLocation().getLongitude() + ", " + chargingStation.getElectricalPower() + ", " + chargingStation.getNumberOfSocketsAvailable() + ", " + chargingStation.getChargingAmountPrice() + ");";
 
 		execute(SQLStatement);
     }
 
     public void fillTheChargingStation(){
+        try{
+            FileInputStream input = new FileInputStream("SampleData/ChargingStation-Fill.txt");
+            DataFiller filler = new DataFiller(input);
+            Collection<ChargingStation> stations = filler.parseChargingStations();
+            for (ChargingStation station: stations){
+                insertIntoChargingStation(station);
+            }
 
+        } catch (IOException e){
+            e.printStackTrace();
+        }
 	}
 
     public void insertIntoCustomer(Customer customer){
@@ -202,7 +212,17 @@ public class DatabaseAPI {
     }
 
     public void fillTheCustomer(){
+        try{
+            FileInputStream input = new FileInputStream("SampleData/Customer-Fill.txt");
+            DataFiller filler = new DataFiller(input);
+            Collection<Customer> customers = filler.parseCustomers();
+            for (Customer customer: customers){
+                insertIntoCustomer(customer);
+            }
 
+        } catch (IOException e){
+            e.printStackTrace();
+        }
 	}
 
     public void insertIntoFits(Fits fits){

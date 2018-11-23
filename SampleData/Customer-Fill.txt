@@ -1,4 +1,4 @@
 Customer
 shakirovrrr;Ruslan Shakrov;79991575040;r.shakirov@innopolis.ru;4420000000000001;420500;Innopolis;Russia
-stalem;Anastasia Minakova;79871681162;a.minakova@innopolis.ru;4420000000000002;420500;Innopolis;Russia
+stalem9;Anastasiia Minakova;79871681162;a.minakova@innopolis.ru;4420000000000002;420500;Innopolis;Russia
 elukyanchikova;Elena Lukyanchikova;79175668234;e.lukyanchikova@innopolis.ru;4420000000000001;420500;Innopolis;Russia

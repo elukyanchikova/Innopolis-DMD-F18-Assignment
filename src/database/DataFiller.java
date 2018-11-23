@@ -63,7 +63,16 @@ public class DataFiller {
 	}
 
 	public Collection<Customer> parseCustomers() {
-		return null;
+		LinkedList<Customer> customers = new LinkedList<>();
+
+		Collection<String[]> strings = loadStrings("Customer");
+		for (String[]fields: strings){
+			Residence residence = new Residence(fields[6], fields[7], Integer.valueOf(fields[5]));
+			Customer obj = new Customer(fields[0], fields[1], fields[2], fields[3], fields[4], residence);
+			customers.add(obj);
+		}
+
+		return customers;
 	}
 
 	public Collection<Order> parseOrders() {

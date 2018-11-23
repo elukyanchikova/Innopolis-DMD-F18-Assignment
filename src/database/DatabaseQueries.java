@@ -13,8 +13,8 @@ public class DatabaseQueries {
 		FillSample();
 		sample.connect();
 
-		/*Query01();
-		Query02(12425346);
+		Query01();
+		/*Query02(12425346);
 		Query03();
 		Query04();
 		Query05();
