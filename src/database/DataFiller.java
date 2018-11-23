@@ -1,3 +1,5 @@
+package database;
+
 import entities.*;
 import relations.ChargesAt;
 import relations.Repairs;
