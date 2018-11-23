@@ -21,6 +21,6 @@ app/**
 
 .idea/**
 *.iml
-*.bd
+*.db
 
 src/Main.java
