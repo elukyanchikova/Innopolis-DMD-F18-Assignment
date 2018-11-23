@@ -12,8 +12,6 @@ public class DatabaseQueries {
 		createSample();
 		sample.connect();
 
-		sample.fillTheCar();
-
 		Query01();
 		Query02(12425346);
 		Query03();
@@ -39,12 +37,15 @@ public class DatabaseQueries {
         String carModelOthers = "PRIMARY KEY (brand_name, model_name)\n";
 
         sample.createNewTable("car_model", carModelColumns, carModelTypes, carModelF, carModelOthers);
+        sample.fillTheCarModel();
+
 
         String customerColumns[] = {"username",    "customer_name", "customer_phone", "customer_email", "payment_info", "zip_code", "city",     "country"};
         String customerTypes[]   = {"text",        "text",          "text",           "text",           "text",         "integer",  "text",     "text"};
         String customerF[]       = {"PRIMARY KEY", "NOT NULL",      "NOT NULL",       "NOT NULL",       "NOT NULL",     "NOT NULL", "NOT NULL", "NOT NULL"};
 
         sample.createNewTable("customer", customerColumns, customerTypes, customerF, "");
+        sample.fillTheCustomer();
 
 
         String carColumns[] = {"car_plate",   "brand_name", "model_name", "car_color", "car_latitude", "car_longitude", "car_rating", "crash_flag", "battery_percentage"};
@@ -53,6 +54,7 @@ public class DatabaseQueries {
         String carOthers    = "FOREIGN KEY (brand_name) REFERENCES car_model (brand_name) \n FOREIGN KEY (model_name) REFERENCES car_model (model_name)\n";
 
         sample.createNewTable("car", carColumns, carTypes, carF, carOthers);
+        sample.fillTheCar();
 
 
         String chargingStationColumns[] = {"UID",                       "station_latitude", "station_longitude", "electrical_power", "number_of_available_sockets", "charging_amount_price"};
@@ -60,6 +62,7 @@ public class DatabaseQueries {
         String chargingStationF[]       = {"PRIMARY KEY AUTOINCREMENT", "NOT NULL",         "NOT NULL",          "",                 "NOT NULL",                    ""};
 
         sample.createNewTable("charging_station", chargingStationColumns, chargingStationTypes, chargingStationF, "");
+        sample.fillTheChargingStation();
 
 
         String workshopColumns[] = {"WID",                       "number_of_available_places", "zip_code", "city",     "country"};
@@ -67,6 +70,7 @@ public class DatabaseQueries {
         String workshopF[]       = {"PRIMARY KEY AUTOINCREMENT", "NOT NULL",                   "NOT NULL", "NOT NULL", "NOT NULL"};
 
         sample.createNewTable("workshop", workshopColumns, workshopTypes, workshopF, "");
+        sample.fillTheWorkshop();
 
 
         String providerColumns[] = {"provider_id",               "provider_name", "provider_phone", "payment_info", "zip_code", "city",     "country"};
@@ -74,6 +78,7 @@ public class DatabaseQueries {
         String providerF[]       = {"PRIMARY KEY AUTOINCREMENT", "NOT NULL",      "NOT NULL",       "NOT NULL",     "NOT NULL", "NOT NULL", "NOT NULL"};
 
         sample.createNewTable("provider", providerColumns, providerTypes, providerF, "");
+        sample.fillTheProvider();
 
 
         String carPartColumns[] = {"part_id",                   "part_name", "part_price", "part_manufacturer", "provider_id", "WID"};
@@ -82,6 +87,7 @@ public class DatabaseQueries {
         String carPartOthers = "FOREIGN KEY (provider_id) REFERENCES provider (provider_id) \n FOREIGN KEY (WID) REFERENCES workshop(WID)\n";
 
         sample.createNewTable("car_parts", carPartColumns, carPartTypes, carPartF, carPartOthers);
+        sample.fillTheCarParts();
 
 
         String orderColumns[] = {"order_id",                  "order_status", "order_time", "A_latitude", "A_longitude", "B_latitude", "B_longitude", "number_of_adult_passengers", "need_babyseat", "luggage_volume", "customer_username"};
@@ -90,6 +96,7 @@ public class DatabaseQueries {
         String orderOthers = "FOREIGN KEY (customer_username) REFERENCES customer (username)\n";
 
         sample.createNewTable("orders", orderColumns, orderTypes, orderF, orderOthers);
+        sample.fillTheOrders();
 
 
 
@@ -101,6 +108,7 @@ public class DatabaseQueries {
         String socketsOthers = "FOREIGN KEY (UID) REFERENCES charging_station(UID) \n PRIMARY KEY (UID, socket_number)\n";
 
         sample.createNewTable("sockets", socketsColumns, socketsTypes, socketsF, socketsOthers);
+        sample.fillTheSockets();
 
 
 
@@ -112,6 +120,7 @@ public class DatabaseQueries {
         String chargesAtOthers = "FOREIGN KEY (UID) REFERENCES charging_station(UID) \n FOREIGN KEY (car_plate) references car(car_plate) \n PRIMARY KEY (UID, car_plate, time_start)\n";
 
         sample.createNewTable("charges_at", chargesAtColumns, chargesAtTypes, chargesAtF, chargesAtOthers);
+        sample.fillTheChargesAt();
 
 
         String repairsColumns[] = {"WID",      "car_plate", "time_start", "time_finish"};
@@ -120,7 +129,9 @@ public class DatabaseQueries {
         String repairsOthers = "FOREIGN KEY (WID) REFERENCES workshop(WID) \n FOREIGN KEY (car_plate) references car(car_plate) \n PRIMARY KEY (WID, car_plate, time_start)\n";
 
 
+
         sample.createNewTable("repairs", repairsColumns, repairsTypes, repairsF, repairsOthers);
+        sample.fillTheRepairs();
 
 
         String requestsColumns[] = {"request_id",                "part_name", "number_of_parts", "WID",      "provider_id"};
@@ -129,6 +140,7 @@ public class DatabaseQueries {
         String requestOthers = "FOREIGN KEY (provider_id) REFERENCES provider (provider_id) \n FOREIGN KEY (WID) REFERENCES workshop(WID)\n";
 
         sample.createNewTable("requests", requestsColumns, requestsTypes, requestsF, requestOthers);
+        sample.fillTheRequests();
 
 
         String servesColumns[] = {"order_id",    "car_plate", "time_start", "time_finish"};
@@ -137,6 +149,7 @@ public class DatabaseQueries {
         String servesOthers = "FOREIGN KEY (order_id) references orders(order_id) \n FOREIGN KEY (car_plate) references car(car_plate)\n";
 
         sample.createNewTable("serves", servesColumns, servesTypes, servesF, servesOthers);
+        sample.fillTheServes();
 
 
         String fitsColumns[] = {"part_id",  "model_name", "brand_name"};
@@ -145,6 +158,8 @@ public class DatabaseQueries {
         String fitsOthers = "FOREIGN KEY (part_id) REFERENCES car_parts(part_id)\n FOREIGN KEY (brand_name) REFERENCES car_model (brand_name) \n FOREIGN KEY (model_name) REFERENCES car_model (model_name)\n";
 
         sample.createNewTable("fits", fitsColumns, fitsTypes, fitsF, fitsOthers);
+        sample.fillTheFits();
+
 
         sample.close();
 

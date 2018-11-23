@@ -93,13 +93,28 @@ public class DatabaseAPI {
 		}
 	}
 
-	//TODO: write clear for db
-	public void clear(){
 
+	public void clear(){
+		execute("DELETE FROM car");
+		execute("DELETE FROM car_model");
+		execute("DELETE FROM car_parts");
+		execute("DELETE FROM charges_at");
+		execute("DELETE FROM charging_station");
+		execute("DELETE FROM customer");
+		execute("DELETE FROM fits");
+		execute("DELETE FROM orders");
+		execute("DELETE FROM provider");
+		execute("DELETE FROM repairs");
+		execute("DELETE FROM requests");
+		execute("DELETE FROM serves");
+		execute("DELETE FROM sockets");
+		execute("DELETE FROM workshop");
+		System.out.println("Records cleared.");
+
+		execute("UPDATE sqlite_sequence SET seq=0");
+		System.out.println("Indices reset.");
     }
 
-
-    //TODO: write insertion for all the tables
 
     public void insertIntoCar(Car car){
 		String SQLStatement = "INSERT INTO car (car_plate, brand_name, model_name, car_color, car_latitude, car_longitude, car_rating, crash_flag, battery_percentage)\n"
@@ -119,12 +134,20 @@ public class DatabaseAPI {
 		execute(SQLStatement);
     }
 
+    public void fillTheCarModel(){
+
+	}
+
     public void insertIntoCarParts(CarPart carPart){
 		String SQLStatement = "INSERT INTO car_parts (part_name, part_price, part_manufacturer, provider_id, WID)\n"
 				+ "VALUES (" + carPart.getPartName() + ", "+ carPart.getPartPrice() + ", "+ carPart.getPartManufacturer()+ ", " + carPart.getProviderID()+ ", " + carPart.getWID() +");";
 
 		execute(SQLStatement);
     }
+
+    public void fillTheCarParts(){
+
+	}
 
     public void insertIntoChargesAt(ChargesAt chargesAt){
 		String SQLStatement = "INSERT INTO charges_at (UID, car_plate, time_start, time_finish)\n"
@@ -133,12 +156,20 @@ public class DatabaseAPI {
 		execute(SQLStatement);
     }
 
+    public void fillTheChargesAt(){
+
+	}
+
     public void insertIntoChargingStation(ChargingStation chargingStation){
 		String SQLStatement = "INSERT INTO charging_station (station_latitude, station_longitude, electrical_power, number_of_available_sockets, charging_amount_price)\n"
 				+ "VALUES (" + chargingStation.getStationLocation().getLatitude() + ", " + chargingStation.getStationLocation().getLongitude() + ", " + chargingStation.getElectricalPower() + ", " + chargingStation.getNumberOfSocketsAvailable() + " " + chargingStation.getChargingAmountPrice() + ");";
 
 		execute(SQLStatement);
     }
+
+    public void fillTheChargingStation(){
+
+	}
 
     public void insertIntoCustomer(Customer customer){
 		String SQLStatement = "INSERT INTO customer (username, customer_name, customer_phone, customer_email, payment_info, zip_code, city, country)\n"
@@ -147,11 +178,19 @@ public class DatabaseAPI {
 		execute(SQLStatement);
     }
 
-    public void insertIntoFits(){
-		String SQLStatement = "INSERT INTO fits ()\n"
-				+ "VALUES (" + ");";
+    public void fillTheCustomer(){
+
+	}
+
+    public void insertIntoFits(Fits fits){
+		String SQLStatement = "INSERT INTO fits (part_id, model_name, brand_name)\n"
+				+ "VALUES (" + fits.getCarPartID() + ", " + fits.getModelName() + ", " + fits.getBrandName() + ");";
 
 		execute(SQLStatement);
+	}
+
+	public void fillTheFits(){
+
 	}
 
     public void insertIntoOrders(Order order){
@@ -161,12 +200,20 @@ public class DatabaseAPI {
 		execute(SQLStatement);
     }
 
+    public void fillTheOrders(){
+
+	}
+
     public void insertIntoProvider(Provider provider){
 		String SQLStatement = "INSERT INTO provider (provider_name, provider_phone, payment_info, zip_code, city, country)\n"
 				+ "VALUES (" + provider.getProviderName() +", "+provider.getProviderPhone()+", "+provider.getProviderPaymentInfo()+", "+provider.getProviderAddress().getZIPCode()+", "+provider.getProviderAddress().getCity()+", "+provider.getProviderAddress().getCountry()+");";
 
 		execute(SQLStatement);
     }
+
+    public void fillTheProvider(){
+
+	}
 
     public void insertIntoRepairs(Repairs repairs){
 		String SQLStatement = "INSERT INTO repairs (WID, car_plate, time_start, time_finish)\n"
@@ -175,12 +222,20 @@ public class DatabaseAPI {
 		execute(SQLStatement);
     }
 
+    public void fillTheRepairs(){
+
+	}
+
     public void insertIntoRequests(Requests requests){
 		String SQLStatement = "INSERT INTO requests (part_name, number_of_parts, WID, provider_id)\n"
 				+ "VALUES (" + requests.getPartName() + ", " + requests.getNumberOfParts() + ", " + requests.getWID() + ", " + requests.getProviderID() + ");";
 
 		execute(SQLStatement);
     }
+
+    public void fillTheRequests(){
+
+	}
 
     public void insertIntoServes(Serves serves){
 		String SQLStatement = "INSERT INTO serves (order_id, car_plate, time_start, time_finish)\n"
@@ -189,6 +244,10 @@ public class DatabaseAPI {
 		execute(SQLStatement);
     }
 
+    public void fillTheServes(){
+
+	}
+
     public void insertIntoSockets(StationSocket stationSocket){
 		String SQLStatement = "INSERT INTO sockets (UID, socket_shape, socket_size)\n"
 				+ "VALUES (" + stationSocket.getStationUID()  + ", " + stationSocket.getSocketShape() + ", " + stationSocket.getSocketSize()+ ");";
@@ -196,12 +255,20 @@ public class DatabaseAPI {
 		execute(SQLStatement);
     }
 
+    public void fillTheSockets(){
+
+	}
+
     public void insertIntoWorkshop(Workshop workshop){
 		String SQLStatement = "INSERT INTO workshop (number_of_available_places, zip_code, city, country)\n"
 				+ "VALUES (" + workshop.getNumberOfPlacesAvailable() + ", " + workshop.getWorkshopLocation().getZIPCode() + ", " + workshop.getWorkshopLocation().getCity() + ", " + workshop.getWorkshopLocation().getCountry() + ");";
 
 		execute(SQLStatement);
     }
+
+    public void fillTheWorkshop(){
+
+	}
 
     //TODO: queries change IDs to autogenerate -  Sockets socket_number
 
