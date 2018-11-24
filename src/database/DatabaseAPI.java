@@ -265,7 +265,17 @@ public class DatabaseAPI {
     }
 
     public void fillTheProvider(){
+		try{
+			FileInputStream input = new FileInputStream("SampleData/Provider-Fill.txt");
+			DataFiller filler = new DataFiller(input);
+			Collection<Provider> providers = filler.parseProviders();
+			for (Provider provider: providers){
+				insertIntoProvider(provider);
+			}
 
+		} catch (IOException e){
+			e.printStackTrace();
+		}
 	}
 
     public void insertIntoRepairs(Repairs repairs){
@@ -276,7 +286,17 @@ public class DatabaseAPI {
     }
 
     public void fillTheRepairs(){
+		try{
+			FileInputStream input = new FileInputStream("SampleData/Repairs-Fill.txt");
+			DataFiller filler = new DataFiller(input);
+			Collection<Repairs> repairs = filler.parseRepairs();
+			for (Repairs repair: repairs){
+				insertIntoRepairs(repair);
+			}
 
+		} catch (IOException e){
+			e.printStackTrace();
+		}
 	}
 
     public void insertIntoRequests(Requests requests){
@@ -287,7 +307,17 @@ public class DatabaseAPI {
     }
 
     public void fillTheRequests(){
+		try{
+			FileInputStream input = new FileInputStream("SampleData/Requests-Fill.txt");
+			DataFiller filler = new DataFiller(input);
+			Collection<Requests> requests = filler.parseRequests();
+			for (Requests request: requests){
+				insertIntoRequests(request);
+			}
 
+		} catch (IOException e){
+			e.printStackTrace();
+		}
 	}
 
     public void insertIntoServes(Serves serves){
@@ -298,7 +328,17 @@ public class DatabaseAPI {
     }
 
     public void fillTheServes(){
+		try{
+			FileInputStream input = new FileInputStream("SampleData/Serves-Fill.txt");
+			DataFiller filler = new DataFiller(input);
+			Collection<Serves> serves = filler.parseServes();
+			for (Serves serve: serves){
+				insertIntoServes(serve);
+			}
 
+		} catch (IOException e){
+			e.printStackTrace();
+		}
 	}
 
     public void insertIntoSockets(StationSocket stationSocket){
@@ -309,7 +349,17 @@ public class DatabaseAPI {
     }
 
     public void fillTheSockets(){
+		try{
+			FileInputStream input = new FileInputStream("SampleData/Sockets-Fill.txt");
+			DataFiller filler = new DataFiller(input);
+			Collection<StationSocket> sockets = filler.parseStationSockets();
+			for (StationSocket socket: sockets){
+				insertIntoSockets(socket);
+			}
 
+		} catch (IOException e){
+			e.printStackTrace();
+		}
 	}
 
     public void insertIntoWorkshop(Workshop workshop){
@@ -320,7 +370,17 @@ public class DatabaseAPI {
     }
 
     public void fillTheWorkshop(){
+		try{
+			FileInputStream input = new FileInputStream("SampleData/Workshop-Fill.txt");
+			DataFiller filler = new DataFiller(input);
+			Collection<Workshop> workshops = filler.parseWorkshops();
+			for (Workshop workshop: workshops){
+				insertIntoWorkshop(workshop);
+			}
 
+		} catch (IOException e){
+			e.printStackTrace();
+		}
 	}
 
 }
