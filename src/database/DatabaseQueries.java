@@ -177,9 +177,9 @@ public class DatabaseQueries {
     void Query06(long requestedDate) {
         //выбрать 3 самые популярнык локации фром и ту на три времени 8-10, 12-2, 5-7
 
-        String timeConditions = "strftime('%s', date( + requestedDate + , 'unixepoch'), 'start of day', '+8')" +
+        String timeConditions = "strftime('%s', date("+ requestedDate +", 'unixepoch'), 'start of day', '+7')" +
                 " <= order_start <" +
-                " strftime('%s', date( + requestedDate + , 'unixepoch'), 'start of day', '+10')";
+                " strftime('%s', date("+ requestedDate +", 'unixepoch'), 'start of day', '+10')";
         String SQLStatement1_1 = "SELECT A_latitude*A_longitude AS hashed, count(*) AS timesOrdered , A_latitude, A_longitude FROM orders" +
                 "WHERE " + timeConditions +
                 "GROUP BY hashed ORDER BY timesOrdered DESC LIMIT 3";
@@ -190,9 +190,9 @@ public class DatabaseQueries {
         ResultSet result1_1 = sample.executeQuery(SQLStatement1_1);
         ResultSet result1_2 = sample.executeQuery(SQLStatement1_2);
 
-        timeConditions = "strftime('%s', date( + requestedDate + , 'unixepoch'), 'start of day', '+12')" +
+        timeConditions = "strftime('%s', date(" + requestedDate + ", 'unixepoch'), 'start of day', '+12')" +
                 " <= order_start <" +
-                " strftime('%s', date( + requestedDate + , 'unixepoch'), 'start of day', '+14')";
+                " strftime('%s', date(" + requestedDate + ", 'unixepoch'), 'start of day', '+14')";
         String SQLStatement2_1 = "SELECT A_latitude*A_longitude AS hashed, count(*) AS timesOrdered , A_latitude, A_longitude FROM orders" +
                 "WHERE " + timeConditions +
                 "GROUP BY hashed ORDER BY timesOrdered DESC LIMIT 3";
@@ -203,9 +203,9 @@ public class DatabaseQueries {
         ResultSet result2_1 = sample.executeQuery(SQLStatement2_1);
         ResultSet result2_2= sample.executeQuery(SQLStatement2_2);
 
-        timeConditions = "strftime('%s', date( + requestedDate + , 'unixepoch'), 'start of day', '+12')" +
+        timeConditions = "strftime('%s', date(" + requestedDate + ", 'unixepoch'), 'start of day', '+12')" +
                 " <= order_start <" +
-                " strftime('%s', date( + requestedDate + , 'unixepoch'), 'start of day', '+14')";
+                " strftime('%s', date("+ requestedDate +" , 'unixepoch'), 'start of day', '+14')";
         String SQLStatement3_1 = "SELECT A_latitude*A_longitude AS hashed, count(*) AS timesOrdered , A_latitude, A_longitude FROM orders" +
                 "WHERE " + timeConditions +
                 "GROUP BY hashed ORDER BY timesOrdered DESC LIMIT 3";
