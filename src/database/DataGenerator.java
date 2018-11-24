@@ -40,7 +40,7 @@ public class DataGenerator {
 
 		data.setCustomers(new LinkedList<>());
 		for (int i = 0; i < nCustomers; i++) {
-
+			data.getCustomers().add(generateCustomer());
 		}
 
 		return data;
@@ -57,8 +57,7 @@ public class DataGenerator {
 	public Car generateCar(CarModel model) {
 		float rating = (float) (random.nextInt(5)) + random.nextFloat() % 1; // TODO Correct rating
 		float battery = random.nextFloat() % 1;
-		GPSLocation location = new GPSLocation(random.nextFloat() % 180 - 90,
-				random.nextFloat() % 360 - 180);
+		GPSLocation location = generateLocation();
 
 		return new Car(model.getBrandName(), model.getModelName(),
 				generatePlate(), pickRandomFrom(colors),
@@ -67,12 +66,45 @@ public class DataGenerator {
 
 	public Customer generateCustomer() {
 		String username = pickRandomFrom(usernames) + random.nextInt(1000);
-		Residence residence = new Residence(pickRandomFrom(cities), pickRandomFrom(countries), random.nextInt(1000000) + 100000);
 
 		return new Customer(username,
 				pickRandomFrom(firstNames) + " " + pickRandomFrom(lastNames),
-				"+" + random.nextLong() % 10000000000L, username + "@example.com",
-				randomString(20), residence);
+				generatePhone(), username + "@example.com",
+				randomString(20), generateResidence());
+	}
+
+	public ChargingStation generateStation(int UID) {
+		return new ChargingStation(UID, random.nextInt(20) + 1,
+				random.nextInt(500) + 1,
+				random.nextInt(10) + 20, generateLocation());
+	}
+
+	public Provider generateProvider(int providerID) {
+		return new Provider(providerID, pickRandomFrom(providers), generatePhone(),
+				randomString(20), generateResidence());
+	}
+
+	public Workshop generateWorkshop(int WID) {
+		return new Workshop(WID, random.nextInt(20) + 1, generateResidence());
+	}
+
+	public CarPart generateCarPart(int partID, int providerID) {
+		return new CarPart(partID, pickRandomFrom(parts), random.nextInt(20000) + 500,
+				pickRandomFrom(manufacturers), providerID);
+	}
+
+	public GPSLocation generateLocation() {
+		return new GPSLocation(random.nextFloat() % 180 - 90,
+				random.nextFloat() % 360 - 180);
+	}
+
+	public String generatePhone() {
+		return "+" + random.nextLong() % 10000000000L;
+	}
+
+	public Residence generateResidence() {
+		return new Residence(pickRandomFrom(cities), pickRandomFrom(countries),
+				random.nextInt(1000000) + 100000);
 	}
 
 	private Object pickRandomFrom(List collection) {
