@@ -3,6 +3,8 @@ package database;
 import java.io.*;
 import java.sql.ResultSet;
 import java.util.Collection;
+import java.util.Date;
+import java.util.LinkedHashSet;
 import java.util.LinkedList;
 
 public class DatabaseQueries {
@@ -15,15 +17,15 @@ public class DatabaseQueries {
         sample.connect();
 
         Query01();
-		//Query02(12425346);
-		//Query03();
-		//Query04();
-		//Query05();
-		//Query06();
-		//Query07();
-		//Query08();
-		//Query09();
-		//Query10();*/
+        Query02(12425346);
+        Query03(12432655);
+        //Query04();
+        Query05(132445234);
+        Query06(15432443);
+        Query07();
+        //Query08();
+        Query09();
+        //Query10();*/
 
 
         sample.close();
@@ -155,11 +157,44 @@ public class DatabaseQueries {
         }
     }
 
+    void Query03(long requestedDate) {
+        //TODO FIX HREN' with time format
+        long timeConst = 7 * 24 * 60 * 60 * 1000L;
+        //колво машин в определенныйй момент времени/кол-во машин вообще *100
+        //long requestedDate = date.getTime();
+        String SQLStatement0 = "SELECT count(*) FROM car";
 
-    void Query03() {
-        /**/
+        String timeCond0 = "strftime('%s', date(" + requestedDate + ", 'unixepoch'), 'start of day', '+" + 7 + " )" +
+                "<= time_start" +
+                " < strftime('%s', date(" + requestedDate + ", 'unixepoch'), 'start of day', '+" + 10 + ")";
+        String timeCondition = requestedDate + "<= time_start<" + (requestedDate + timeConst) +
+                "AND " + timeCond0;
 
+        //String timeCondition = "date("+ requestedDate +", 'unixepoch') <= date(time_start, 'unixepoch') < (date(requestedDate, 'unixepoch')+7)";
+        String SQLStatement1 = "SELECT car_plates, count(*) AS order_num FROM serves WHERE" + timeCondition + " AND  order_num > 0";
 
+        timeCond0 = "strftime('%s', date(" + requestedDate + ", 'unixepoch'), 'start of day', '+" + 12 + " )" +
+                "<= time_start" +
+                " < strftime('%s', date(" + requestedDate + ", 'unixepoch'), 'start of day', '+" + 14 + ")";
+        timeCondition = requestedDate + "<= time_start<" + (requestedDate + timeConst) +
+                "AND " + timeCond0;
+        String SQLStatement2 = "SELECT car_plates, count(*) AS order_num FROM serves WHERE" + timeCondition + " AND  order_num > 0";
+
+        timeCond0 = "strftime('%s', date(" + requestedDate + ", 'unixepoch'), 'start of day', '+" + 17 + " )" +
+                "<= time_start" +
+                " < strftime('%s', date(" + requestedDate + ", 'unixepoch'), 'start of day', '+" + 19 + ")";
+        timeCondition = requestedDate + "<= time_start<" + (requestedDate + timeConst) +
+                "AND " + timeCond0;
+        String SQLStatement3 = "SELECT car_plates, count(*) AS order_num FROM serves WHERE" + timeCondition + " AND  order_num > 0";
+        //TODO THIS IS PSEUDOCDE: we need to get the corresponding data from the sql query result and do som computations, after create a new table
+        int result_0 = Integer.parseInt((sample.executeQuery(SQLStatement0)).toString());
+        int result_1 = Integer.parseInt((sample.executeQuery(SQLStatement1)).toString());
+        int result_2 = Integer.parseInt((sample.executeQuery(SQLStatement2)).toString());
+        int result_3 = Integer.parseInt((sample.executeQuery(SQLStatement3)).toString());
+
+        int res_1 = 100 * result_1 / result_0;//morning
+        int res_2 = 100 * result_2 / result_0;//afternoon
+        int res_3 = 100 * result_3 / result_0;//evening
     }
 
     void Query04() {
@@ -168,7 +203,7 @@ public class DatabaseQueries {
 
     void Query05(long requestedDate) {
         String SQLStatement1 = "SELECT avg((A_lat-B_lat)*(A_lon-B_lon)) FROM orders WHERE date(order_time,'unixepoch') >= date(" + requestedDate + ",'unixepoch')";
-        String SQLStatement2 = "SELECT avg(t_finish-t_start) FROM serves WHERE date(t_start,'unixepoch') == date(" + requestedDate + ",'unixepoch')";
+        String SQLStatement2 = "SELECT avg(t_finish-t_start) FROM serves WHERE date(t_start,'unixepoch') = date(" + requestedDate + ",'unixepoch')";
 
         double avg_distance = Math.sqrt(Double.parseDouble((sample.executeQuery(SQLStatement1)).toString()));
         double avg_time = Double.parseDouble((sample.executeQuery(SQLStatement2)).toString());
@@ -177,9 +212,9 @@ public class DatabaseQueries {
     void Query06(long requestedDate) {
         //выбрать 3 самые популярнык локации фром и ту на три времени 8-10, 12-2, 5-7
 
-        String timeConditions = "strftime('%s', date("+ requestedDate +", 'unixepoch'), 'start of day', '+7')" +
+        String timeConditions = "strftime('%s', date(" + requestedDate + ", 'unixepoch'), 'start of day', '+7')" +
                 " <= order_start <" +
-                " strftime('%s', date("+ requestedDate +", 'unixepoch'), 'start of day', '+10')";
+                " strftime('%s', date(" + requestedDate + ", 'unixepoch'), 'start of day', '+10')";
         String SQLStatement1_1 = "SELECT A_latitude*A_longitude AS hashed, count(*) AS timesOrdered , A_latitude, A_longitude FROM orders" +
                 "WHERE " + timeConditions +
                 "GROUP BY hashed ORDER BY timesOrdered DESC LIMIT 3";
@@ -201,11 +236,11 @@ public class DatabaseQueries {
                 "GROUP BY hashed ORDER BY timesOrdered DESC LIMIT 3";
 
         ResultSet result2_1 = sample.executeQuery(SQLStatement2_1);
-        ResultSet result2_2= sample.executeQuery(SQLStatement2_2);
+        ResultSet result2_2 = sample.executeQuery(SQLStatement2_2);
 
         timeConditions = "strftime('%s', date(" + requestedDate + ", 'unixepoch'), 'start of day', '+12')" +
                 " <= order_start <" +
-                " strftime('%s', date("+ requestedDate +" , 'unixepoch'), 'start of day', '+14')";
+                " strftime('%s', date(" + requestedDate + " , 'unixepoch'), 'start of day', '+14')";
         String SQLStatement3_1 = "SELECT A_latitude*A_longitude AS hashed, count(*) AS timesOrdered , A_latitude, A_longitude FROM orders" +
                 "WHERE " + timeConditions +
                 "GROUP BY hashed ORDER BY timesOrdered DESC LIMIT 3";
@@ -222,21 +257,34 @@ public class DatabaseQueries {
     }
 
     void Query07() {
-        //выбрать
-        String SQLStatement = "SELECT *";
+        //выбрать 10% худших машиноу
+        String SQLStatement0 = "SELECT count(*) FROM car";
+        int stub = -123;//result of sqlst1 query
+        int carNumber = stub / 10;
+        String SQLStatement = "SELECT car_plate, count(*) AS orderedTimes FROM serves GROUP BY car_plate ORDER BY orderedTimes ASC LIMIT" + carNumber;
 
     }
 
     void Query08() {
-        String SQLStatement = "SELECT * FROM ( SELECT count(CustomerID) AS Lol, Country  FROM Customers GROUP BY Country) ORDER BY Lol";
-
     }
 
     void Query09() {
+        String SQLStatement0 = "SELECT count(*) FROM car";
+        int stub = -123;//result of sqlst1 query
+        int carNumber = stub;
+        //количество деталек для каждого провайдера, необходимое в течение недели
+
+        Collection<String> res = new LinkedList<>();
+        for (int wid = 0; wid < carNumber; wid++) {
+            String SQLStatement = "SELECT WID, sum(number_of_parts) AS partsNumber FROM requests WHERE WID =" + wid + "GROUP BY WID ORDER BY partsNumber";
+            res.add(SQLStatement);
+        }
+        //TODO посчитать количество недель и вывести необходимое количество запчастей в неделю
 
     }
 
     void Query10() {
+        //
 
     }
 
