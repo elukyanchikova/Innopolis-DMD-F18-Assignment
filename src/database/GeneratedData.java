@@ -1,11 +1,9 @@
 package database;
 
 import entities.*;
-import relations.ChargesAt;
-import relations.Fits;
-import relations.Repairs;
-import relations.Serves;
+import relations.*;
 
+import java.util.LinkedList;
 import java.util.List;
 
 public class GeneratedData {
@@ -23,112 +21,78 @@ public class GeneratedData {
 	private List<Fits> fits;
 	private List<Repairs> repairs;
 	private List<Serves> serves;
+	private List<Requests> requests;
 
 	public GeneratedData() {
+		cars = new LinkedList<>();
+		models = new LinkedList<>();
+		parts = new LinkedList<>();
+		stations = new LinkedList<>();
+		customers = new LinkedList<>();
+		orders = new LinkedList<>();
+		providers = new LinkedList<>();
+		sockets = new LinkedList<>();
+		workshops = new LinkedList<>();
 
+		chargesAt = new LinkedList<>();
+		fits = new LinkedList<>();
+		repairs = new LinkedList<>();
+		serves = new LinkedList<>();
 	}
 
 	public List<Car> getCars() {
 		return cars;
 	}
 
-	public void setCars(List<Car> cars) {
-		this.cars = cars;
-	}
-
 	public List<CarModel> getModels() {
 		return models;
-	}
-
-	public void setModels(List<CarModel> models) {
-		this.models = models;
 	}
 
 	public List<CarPart> getParts() {
 		return parts;
 	}
 
-	public void setParts(List<CarPart> parts) {
-		this.parts = parts;
-	}
-
 	public List<ChargingStation> getStations() {
 		return stations;
-	}
-
-	public void setStations(List<ChargingStation> stations) {
-		this.stations = stations;
 	}
 
 	public List<Customer> getCustomers() {
 		return customers;
 	}
 
-	public void setCustomers(List<Customer> customers) {
-		this.customers = customers;
-	}
-
 	public List<Order> getOrders() {
 		return orders;
-	}
-
-	public void setOrders(List<Order> orders) {
-		this.orders = orders;
 	}
 
 	public List<Provider> getProviders() {
 		return providers;
 	}
 
-	public void setProviders(List<Provider> providers) {
-		this.providers = providers;
-	}
-
 	public List<StationSocket> getSockets() {
 		return sockets;
-	}
-
-	public void setSockets(List<StationSocket> sockets) {
-		this.sockets = sockets;
 	}
 
 	public List<Workshop> getWorkshops() {
 		return workshops;
 	}
 
-	public void setWorkshops(List<Workshop> workshops) {
-		this.workshops = workshops;
-	}
-
 	public List<ChargesAt> getChargesAt() {
 		return chargesAt;
-	}
-
-	public void setChargesAt(List<ChargesAt> chargesAt) {
-		this.chargesAt = chargesAt;
 	}
 
 	public List<Fits> getFits() {
 		return fits;
 	}
 
-	public void setFits(List<Fits> fits) {
-		this.fits = fits;
-	}
-
 	public List<Repairs> getRepairs() {
 		return repairs;
-	}
-
-	public void setRepairs(List<Repairs> repairs) {
-		this.repairs = repairs;
 	}
 
 	public List<Serves> getServes() {
 		return serves;
 	}
 
-	public void setServes(List<Serves> serves) {
-		this.serves = serves;
+	public List<Requests> getRequests() {
+		return requests;
 	}
 }
