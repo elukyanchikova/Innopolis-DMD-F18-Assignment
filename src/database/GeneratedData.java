@@ -38,6 +38,7 @@ public class GeneratedData {
 		fits = new LinkedList<>();
 		repairs = new LinkedList<>();
 		serves = new LinkedList<>();
+		requests = new LinkedList<>();
 	}
 
 	public List<Car> getCars() {
