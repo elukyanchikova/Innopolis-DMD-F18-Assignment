@@ -1,21 +1,19 @@
 package relations;
 
-import entities.CarPart;
-
 public class Repairs {
-    private String CarPlate;
-    private int WID;
-    private int TimeStart;
-    private int TimeFinish;
-    private CarPart carPart;
+	private String CarPlate;
+	private int WID;
+	private long TimeStart;
+	private long TimeFinish;
+	private int carPartID;
 
-    public Repairs(String carPlate, int WID, int timeStart, int timeFinish, CarPart carPart) {
-        CarPlate = carPlate;
-        this.WID = WID;
-        TimeStart = timeStart;
-        TimeFinish = timeFinish;
-        this.carPart = carPart;
-    }
+	public Repairs(String carPlate, int WID, long timeStart, long timeFinish, int carPartID) {
+		CarPlate = carPlate;
+		this.WID = WID;
+		TimeStart = timeStart;
+		TimeFinish = timeFinish;
+		this.carPartID = carPartID;
+	}
 
 	public String getCarPlate() {
 		return CarPlate;
@@ -49,11 +47,11 @@ public class Repairs {
 		TimeFinish = timeFinish;
 	}
 
-    public CarPart getCarPart() {
-        return carPart;
-    }
+	public int getCarPartID() {
+		return carPartID;
+	}
 
-    public void setCarPart(CarPart carPart) {
-        this.carPart = carPart;
-    }
+	public void setCarPartID(int carPartID) {
+		this.carPartID = carPartID;
+	}
 }
