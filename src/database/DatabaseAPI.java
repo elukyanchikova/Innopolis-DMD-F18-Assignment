@@ -238,7 +238,7 @@ public class DatabaseAPI {
 
     public void insertIntoRepairs(Repairs repairs){
 		String SQLStatement = "INSERT INTO repairs (WID, car_plate, time_start, time_finish, part_id)\n"
-				+ "VALUES (" + repairs.getWID() + ", '" + repairs.getCarPlate() + "', " + repairs.getTimeStart() + ", " + repairs.getTimeFinish() +  ", " + repairs.getCarPart().getPartID() +");";
+				+ "VALUES (" + repairs.getWID() + ", '" + repairs.getCarPlate() + "', " + repairs.getTimeStart() + ", " + repairs.getTimeFinish() +  ", " + repairs.getCarPartID() +");";
 
 		execute(SQLStatement);
     }

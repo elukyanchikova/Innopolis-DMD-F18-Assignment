@@ -12,7 +12,7 @@ public class DatabaseQueries {
 
     private DatabaseAPI sample;
 
-    public void MainTest() throws SQLException {
+    public void MainTest() {
         createSample();
         FillSample();
         sample.connect();
@@ -126,7 +126,7 @@ public class DatabaseQueries {
         sample.clear();
 
         DataGenerator dataGenerator = new DataGenerator();
-        GeneratedData metaData = dataGenerator.generateData(5, 10, 5, 3, 3, 3, 19, 10, new Date().getTime());
+        GeneratedData metaData = dataGenerator.generateData(5, 10, 5, 3, 3, 3, 19, 10, 5, 4, 2, 9, new Date().getTime() - 3*1000*30*24*3600l);
 
         sample.fillTheCarModel(metaData.getModels());
         sample.fillTheCustomer(metaData.getCustomers());
@@ -146,12 +146,24 @@ public class DatabaseQueries {
     }
 
 
-    void Query01() throws SQLException {
-        String SQLStatement = "SELECT * FROM car WHERE car_color = 'red' AND car_plate LIKE '%AN%'";
-        ResultSet result = sample.executeQuery(SQLStatement);
-        while(result.next())
-            System.out.println(result.getString(1));
-        //TODO: create new table and insert result there (for all queries!)
+    void Query01() {
+        try {
+            //execute your query
+            String SQLStatement = "SELECT * FROM car WHERE car_color = 'red' AND car_plate LIKE '%AN%'";
+            ResultSet result = sample.executeQuery(SQLStatement);
+
+            //look at the fields of result of your query and according to them create new table
+            String Query1Columns[] = {"car_plate", "brand_name", "model_name", "car_color", "car_latitude", "car_longitude", "car_rating", "crash_flag", "battery_percentage"};
+            String Query1Types[] = {"text", "text", "text", "text", "real", "real", "real", "integer", "real"};
+            String Query1F[] = {"PRIMARY KEY", "NOT NULL", "NOT NULL", "NOT NULL", "NOT NULL", "NOT NULL", "NOT NULL", "NOT NULL", "NOT NULL"};
+            sample.createNewTable("car", Query1Columns, Query1Types, Query1F, "");
+
+            //insert results to new table
+            while (result.next())
+                System.out.println(result.getString(1));
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     void Query02(long requestedDate) {
