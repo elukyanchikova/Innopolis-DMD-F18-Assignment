@@ -21,7 +21,7 @@ public class Order {
 		NeedBabySeat = needBabySeat;
 		OrderCost = orderCost;
 		DeparturePoint = departure; // TODO Rename to Departure
-		Destination = destination;
+		Destination = destination; // TODO Or rename to DestinationPoint
 		CustomerUsername = customerUsername;
 	}
 

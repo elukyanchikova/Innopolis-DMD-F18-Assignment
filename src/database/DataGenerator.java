@@ -19,7 +19,6 @@ public class DataGenerator {
 	private final String[] providers = {};
 	private final String[] parts = {};
 	private final String[] manufacturers = {};
-	private final String[] statuses = {"done", "done", "done", "done", "done", "done", "done", "done", "cancelled"};
 
 	private final Random random;
 	private long fromDate;
