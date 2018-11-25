@@ -58,7 +58,7 @@ public class DataGenerator {
 		}
 
 		for (int i = 0; i < nParts; i++) {
-			data.getParts().add(generateCarPart(i, ((CarPart) pickRandomFrom(data.getProviders())).getWID()));
+			data.getParts().add(generateCarPart(i, ((Provider) pickRandomFrom(data.getProviders())).getProviderID()));
 		}
 
 		this.fromDate = fromDate;
