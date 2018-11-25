@@ -6,6 +6,7 @@ import relations.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 public class DataGenerator {
 	private final String[] firstNames = {"Albert", "Andrei", "Nikola", "Alan", "Richard", "Alonzo"};
@@ -108,15 +109,16 @@ public class DataGenerator {
 
 	private int pickUnusedPartID(GeneratedData currentData, String brand, String model) {
 		CarPart part;
-		Fits[] properParts =
-				(Fits[]) currentData.getFits().stream()
+
+		List<Fits> properParts =
+				currentData.getFits().stream()
 						.filter(fit -> fit.getBrandName().equals(brand))
 						.filter(fit -> fit.getModelName().equals(model))
 						.filter(fit -> !partUsed(fit.getCarPartID(), currentData.getFits()))
-						.toArray();
+						.collect(Collectors.toList());
 
-		if (properParts.length > 0) {
-			return properParts[0].getCarPartID();
+		if (properParts.size() > 0) {
+			return properParts.get(0).getCarPartID();
 		}
 
 		CarPart properPart = generateCarPart(currentData.getParts().size(),
