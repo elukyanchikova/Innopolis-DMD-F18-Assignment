@@ -8,18 +8,18 @@ import java.util.List;
 import java.util.Random;
 
 public class DataGenerator {
-	private final String[] firstNames = {};
-	private final String[] lastNames = {};
-	private final String[] colors = {};
-	private final String[] shapes = {};
-	private final String[] carModels = {};
-	private final String[] carBrands = {};
-	private final String[] cities = {};
-	private final String[] countries = {};
-	private final String[] usernames = {};
-	private final String[] providers = {};
-	private final String[] parts = {};
-	private final String[] manufacturers = {};
+	private final String[] firstNames = {"Albert", "Andrei", "Nikola", "Alan", "Richard", "Alonzo"};
+	private final String[] lastNames = {"Sakharov", "Feynman", "Einstein", "Tesla", "Turing", "Church"};
+	private final String[] colors = {"red", "green", "blue", "yellow", "silver", "black"};
+	private final String[] shapes = {"round", "square", "Klenee star"};
+	private final String[] carModels = {"Niva", "Corolla", "Desyatka"};
+	private final String[] carBrands = {"Mitsubishi", "Nissan", "Lada", "Toyota"};
+	private final String[] cities = {"Kazan", "Moscow", "Novosibirsk", "Tbilisi", "Omsk", "Erevan"};
+	private final String[] countries = {"Russia", "Armenia", "Georgia"};
+	private final String[] usernames = {"stalem1", "stalem2", "stalem3", "stalem4", "stalem5", "shakirovrrr1", "shakirovrrr2", "elukyanchikova"};
+	private final String[] providers = {"National Car Rental", "Alamo", "Sixt", "Hertz"};
+	private final String[] parts = {"windshield washer motor", "sparking cable", "wheel disk"};
+	private final String[] manufacturers = {"Audi", "Bentley", "Skoda", "Citroen", "Opel", "BMW"};
 
 	private final Random random;
 	private long fromDate;

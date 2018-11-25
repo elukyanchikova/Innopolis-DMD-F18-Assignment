@@ -17,16 +17,16 @@ public class DatabaseQueries {
         FillSample();
         sample.connect();
 
-        Query01();
-        Query02(12425346);
-        Query03(12432655);
-        Query04();
-        Query05(132445234);
-        Query06(15432443);
-        Query07();
-        Query08();
-        Query09();
-        Query10();
+        //Query01();
+        //Query02(12425346);
+        //Query03(12432655);
+        //Query04();
+        //Query05(132445234);
+        //Query06(15432443);
+        //Query07();
+        //Query08();
+        //Query09();
+        //Query10();
 
 
         sample.close();
@@ -124,20 +124,24 @@ public class DatabaseQueries {
     public void FillSample() {
         sample.connect();
         sample.clear();
-        sample.fillTheCarModel();
-        sample.fillTheCustomer();
-        sample.fillTheCar();
-        sample.fillTheChargingStation();
-        //sample.fillTheWorkshop();
-        //sample.fillTheProvider();
-        //sample.fillTheCarParts();
-        //sample.fillTheOrders();
-        //sample.fillTheSockets();
-        //sample.fillTheChargesAt();
-        //sample.fillTheRepairs();
-        //sample.fillTheRequests();
-        //sample.fillTheServes();
-        //sample.fillTheFits();
+
+        DataGenerator dataGenerator = new DataGenerator();
+        GeneratedData metaData = dataGenerator.generateData(5, 10, 5, 3, 3, 3, 19, 10, new Date().getTime());
+
+        sample.fillTheCarModel(metaData.getModels());
+        sample.fillTheCustomer(metaData.getCustomers());
+        sample.fillTheCar(metaData.getCars());
+        sample.fillTheChargingStation(metaData.getStations());
+        sample.fillTheWorkshop(metaData.getWorkshops());
+        sample.fillTheProvider(metaData.getProviders());
+        sample.fillTheCarParts(metaData.getParts());
+        sample.fillTheOrders(metaData.getOrders());
+        sample.fillTheSockets(metaData.getSockets());
+        sample.fillTheChargesAt(metaData.getChargesAt());
+        sample.fillTheRepairs(metaData.getRepairs());
+        //sample.fillTheRequests(metaData.getRequests);
+        sample.fillTheServes(metaData.getServes());
+        sample.fillTheFits(metaData.getFits());
         sample.close();
     }
 

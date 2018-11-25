@@ -3,6 +3,8 @@ package database;
 
 import entities.*;
 import relations.*;
+import sun.awt.geom.AreaOp;
+
 import java.io.*;
 import java.sql.*;
 import java.util.Collection;
@@ -123,18 +125,10 @@ public class DatabaseAPI {
 		execute(SQLStatement);
 	}
 
-    public void fillTheCar(){
-		try{
-			FileInputStream input = new FileInputStream("SampleData/Cars-Fill.txt");
-			DataFiller filler = new DataFiller(input);
-			Collection <Car> cars = filler.parseCars();
+    public void fillTheCar(Collection<Car> cars){
 			for(Car car: cars){
 				insertIntoCar(car);
 			}
-		} catch (IOException e){
-			e.printStackTrace();
-		}
-
     }
 
     public void insertIntoCarModel(CarModel carModel){
@@ -144,19 +138,10 @@ public class DatabaseAPI {
 		execute(SQLStatement);
     }
 
-    public void fillTheCarModel(){
-		try{
-			FileInputStream input = new FileInputStream("SampleData/CarModel-Fill.txt");
-			DataFiller filler = new DataFiller(input);
-			Collection<CarModel> models = filler.parseCarModels();
-			for (CarModel model : models){
-				insertIntoCarModel(model);
-			}
-
-		} catch (IOException e){
-			e.printStackTrace();
-		}
-
+    public void fillTheCarModel(Collection<CarModel> models){
+	    for (CarModel model : models){
+	        insertIntoCarModel(model);
+	    }
 	}
 
     public void insertIntoCarParts(CarPart carPart){
@@ -166,8 +151,10 @@ public class DatabaseAPI {
 		execute(SQLStatement);
     }
 
-    public void fillTheCarParts(){
-
+    public void fillTheCarParts(Collection<CarPart> carParts){
+        for(CarPart carPart :carParts){
+            insertIntoCarParts(carPart);
+        }
 	}
 
     public void insertIntoChargesAt(ChargesAt chargesAt){
@@ -177,8 +164,10 @@ public class DatabaseAPI {
 		execute(SQLStatement);
     }
 
-    public void fillTheChargesAt(){
-
+    public void fillTheChargesAt(Collection <ChargesAt> chargesAt){
+        for(ChargesAt charge : chargesAt){
+            insertIntoChargesAt(charge);
+        }
 	}
 
     public void insertIntoChargingStation(ChargingStation chargingStation){
@@ -188,18 +177,11 @@ public class DatabaseAPI {
 		execute(SQLStatement);
     }
 
-    public void fillTheChargingStation(){
-        try{
-            FileInputStream input = new FileInputStream("SampleData/ChargingStation-Fill.txt");
-            DataFiller filler = new DataFiller(input);
-            Collection<ChargingStation> stations = filler.parseChargingStations();
-            for (ChargingStation station: stations){
-                insertIntoChargingStation(station);
-            }
+    public void fillTheChargingStation(Collection<ChargingStation> stations){
 
-        } catch (IOException e){
-            e.printStackTrace();
-        }
+	    for (ChargingStation station: stations){
+            insertIntoChargingStation(station);
+	    }
 	}
 
     public void insertIntoCustomer(Customer customer){
@@ -209,18 +191,10 @@ public class DatabaseAPI {
 		execute(SQLStatement);
     }
 
-    public void fillTheCustomer(){
-        try{
-            FileInputStream input = new FileInputStream("SampleData/Customer-Fill.txt");
-            DataFiller filler = new DataFiller(input);
-            Collection<Customer> customers = filler.parseCustomers();
+    public void fillTheCustomer(Collection<Customer> customers){
             for (Customer customer: customers){
                 insertIntoCustomer(customer);
             }
-
-        } catch (IOException e){
-            e.printStackTrace();
-        }
 	}
 
     public void insertIntoFits(Fits fits){
@@ -230,8 +204,10 @@ public class DatabaseAPI {
 		execute(SQLStatement);
 	}
 
-	public void fillTheFits(){
-
+	public void fillTheFits(Collection <Fits> FitList){
+        for(Fits fits: FitList){
+            insertIntoFits(fits);
+        }
 	}
 
     public void insertIntoOrders(Order order){
@@ -241,18 +217,10 @@ public class DatabaseAPI {
 		execute(SQLStatement);
     }
 
-    public void fillTheOrders(){
-		try{
-			FileInputStream input = new FileInputStream("SampleData/Order-Fill.txt");
-			DataFiller filler = new DataFiller(input);
-			Collection<Order> orders = filler.parseOrders();
+    public void fillTheOrders(Collection<Order> orders){
 			for (Order order: orders){
 				insertIntoOrders(order);
 			}
-
-		} catch (IOException e){
-			e.printStackTrace();
-		}
 	}
 
     public void insertIntoProvider(Provider provider){
@@ -262,39 +230,23 @@ public class DatabaseAPI {
 		execute(SQLStatement);
     }
 
-    public void fillTheProvider(){
-		try{
-			FileInputStream input = new FileInputStream("SampleData/Provider-Fill.txt");
-			DataFiller filler = new DataFiller(input);
-			Collection<Provider> providers = filler.parseProviders();
+    public void fillTheProvider(Collection<Provider> providers){
 			for (Provider provider: providers){
 				insertIntoProvider(provider);
 			}
-
-		} catch (IOException e){
-			e.printStackTrace();
-		}
 	}
 
     public void insertIntoRepairs(Repairs repairs){
-		String SQLStatement = "INSERT INTO repairs (WID, car_plate, time_start, time_finish)\n"
-				+ "VALUES (" + repairs.getWID() + ", '" + repairs.getCarPlate() + "', " + repairs.getTimeStart() + ", " + repairs.getTimeFinish() + ");";
+		String SQLStatement = "INSERT INTO repairs (WID, car_plate, time_start, time_finish, part_id)\n"
+				+ "VALUES (" + repairs.getWID() + ", '" + repairs.getCarPlate() + "', " + repairs.getTimeStart() + ", " + repairs.getTimeFinish() +  ", " + repairs.getCarPart().getPartID() +");";
 
 		execute(SQLStatement);
     }
 
-    public void fillTheRepairs(){
-		try{
-			FileInputStream input = new FileInputStream("SampleData/Repairs-Fill.txt");
-			DataFiller filler = new DataFiller(input);
-			Collection<Repairs> repairs = filler.parseRepairs();
+    public void fillTheRepairs(	Collection<Repairs> repairs){
 			for (Repairs repair: repairs){
 				insertIntoRepairs(repair);
 			}
-
-		} catch (IOException e){
-			e.printStackTrace();
-		}
 	}
 
     public void insertIntoRequests(Requests requests){
@@ -304,18 +256,10 @@ public class DatabaseAPI {
 		execute(SQLStatement);
     }
 
-    public void fillTheRequests(){
-		try{
-			FileInputStream input = new FileInputStream("SampleData/Requests-Fill.txt");
-			DataFiller filler = new DataFiller(input);
-			Collection<Requests> requests = filler.parseRequests();
+    public void fillTheRequests(Collection<Requests> requests){
 			for (Requests request: requests){
 				insertIntoRequests(request);
 			}
-
-		} catch (IOException e){
-			e.printStackTrace();
-		}
 	}
 
     public void insertIntoServes(Serves serves){
@@ -325,18 +269,10 @@ public class DatabaseAPI {
 		execute(SQLStatement);
     }
 
-    public void fillTheServes(){
-		try{
-			FileInputStream input = new FileInputStream("SampleData/Serves-Fill.txt");
-			DataFiller filler = new DataFiller(input);
-			Collection<Serves> serves = filler.parseServes();
+    public void fillTheServes(Collection<Serves> serves){
 			for (Serves serve: serves){
 				insertIntoServes(serve);
 			}
-
-		} catch (IOException e){
-			e.printStackTrace();
-		}
 	}
 
     public void insertIntoSockets(StationSocket stationSocket){
@@ -346,18 +282,10 @@ public class DatabaseAPI {
 		execute(SQLStatement);
     }
 
-    public void fillTheSockets(){
-		try{
-			FileInputStream input = new FileInputStream("SampleData/Sockets-Fill.txt");
-			DataFiller filler = new DataFiller(input);
-			Collection<StationSocket> sockets = filler.parseStationSockets();
+    public void fillTheSockets(Collection<StationSocket> sockets){
 			for (StationSocket socket: sockets){
 				insertIntoSockets(socket);
 			}
-
-		} catch (IOException e){
-			e.printStackTrace();
-		}
 	}
 
     public void insertIntoWorkshop(Workshop workshop){
@@ -367,18 +295,10 @@ public class DatabaseAPI {
 		execute(SQLStatement);
     }
 
-    public void fillTheWorkshop(){
-		try{
-			FileInputStream input = new FileInputStream("SampleData/Workshop-Fill.txt");
-			DataFiller filler = new DataFiller(input);
-			Collection<Workshop> workshops = filler.parseWorkshops();
+    public void fillTheWorkshop(Collection<Workshop> workshops ){
 			for (Workshop workshop: workshops){
 				insertIntoWorkshop(workshop);
 			}
-
-		} catch (IOException e){
-			e.printStackTrace();
-		}
 	}
 
 }
