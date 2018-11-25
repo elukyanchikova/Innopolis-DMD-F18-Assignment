@@ -50,6 +50,13 @@ public class DataGenerator {
 			data.getStations().add(generateStation(i));
 		}
 
+		for (ChargingStation station : data.getStations()) {
+			for (int i = 0; i < station.getNumberOfSocketsAvailable(); i++) {
+				data.getSockets().add(new StationSocket(random.nextInt(6) + 5,
+						pickRandomFrom(shapes), i, station.getUID()));
+			}
+		}
+
 		for (int i = 0; i < nProviders; i++) {
 			data.getProviders().add(generateProvider(i));
 		}
