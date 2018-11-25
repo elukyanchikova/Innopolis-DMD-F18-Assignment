@@ -93,10 +93,10 @@ public class DatabaseQueries {
         String chargesAtOthers = "FOREIGN KEY (UID) REFERENCES charging_station(UID) \n FOREIGN KEY (car_plate) references car(car_plate) \n PRIMARY KEY (UID, car_plate, time_start)\n";
         sample.createNewTable("charges_at", chargesAtColumns, chargesAtTypes, chargesAtF, chargesAtOthers);
 
-        String repairsColumns[] = {"WID", "car_plate", "time_start", "time_finish"};
-        String repairsTypes[] = {"integer", "text", "integer", "integer"};
-        String repairsF[] = {"NOT NULL", "NOT NULL", "NOT NULL", ""};
-        String repairsOthers = "FOREIGN KEY (WID) REFERENCES workshop(WID) \n FOREIGN KEY (car_plate) references car(car_plate) \n PRIMARY KEY (WID, car_plate, time_start)\n";
+        String repairsColumns[] = {"WID", "car_plate", "time_start", "time_finish", "part_id"};
+        String repairsTypes[] = {"integer", "text", "integer", "integer", "integer"};
+        String repairsF[] = {"NOT NULL", "NOT NULL", "NOT NULL", "", "NOT NULL"};
+        String repairsOthers = "FOREIGN KEY (WID) REFERENCES workshop(WID) \n FOREIGN KEY (car_plate) references car(car_plate) \n FOREIGN KEY (part_id) references car_parts(part_id) \n PRIMARY KEY (WID, car_plate, time_start)\n";
         sample.createNewTable("repairs", repairsColumns, repairsTypes, repairsF, repairsOthers);
 
         String requestsColumns[] = {"request_id", "part_name", "number_of_parts", "WID", "provider_id"};
@@ -190,14 +190,14 @@ public class DatabaseQueries {
                 "AND " + timeCond0;
         String SQLStatement3 = "SELECT car_plates, count(*) AS order_num FROM serves WHERE" + timeCondition + " AND  order_num > 0";
         //TODO THIS IS PSEUDOCDE: we need to get the corresponding data from the sql query result and do som computations, after create a new table
-        int result_0 = Integer.parseInt((sample.executeQuery(SQLStatement0)).toString());
-        int result_1 = Integer.parseInt((sample.executeQuery(SQLStatement1)).toString());
-        int result_2 = Integer.parseInt((sample.executeQuery(SQLStatement2)).toString());
-        int result_3 = Integer.parseInt((sample.executeQuery(SQLStatement3)).toString());
-
-        int res_1 = 100 * result_1 / result_0;//morning
-        int res_2 = 100 * result_2 / result_0;//afternoon
-        int res_3 = 100 * result_3 / result_0;//evening
+//        int result_0 = Integer.parseInt((sample.executeQuery(SQLStatement0)).toString());
+  //      int result_1 = Integer.parseInt((sample.executeQuery(SQLStatement1)).toString());
+    //    int result_2 = Integer.parseInt((sample.executeQuery(SQLStatement2)).toString());
+      //  int result_3 = Integer.parseInt((sample.executeQuery(SQLStatement3)).toString());
+//
+  //      int res_1 = 100 * result_1 / result_0;//morning
+    //    int res_2 = 100 * result_2 / result_0;//afternoon
+      //  int res_3 = 100 * result_3 / result_0;//evening
     }
 
     void Query04() {
