@@ -20,7 +20,7 @@ public class DatabaseQueries {
         Query01();
         Query02(12425346);
         Query03(12432655);
-        //Query04();
+        Query04();
         Query05(132445234);
         Query06(15432443);
         Query07();
@@ -201,7 +201,9 @@ public class DatabaseQueries {
     }
 
     void Query04() {
-
+        //find users with high activity (more than 16 orders within last month)
+        long constant = 1000*60*60*24*30L;
+        String SQLStatement = "SELECT customer_username, COUNT(*) number_of_orders FROM orders WHERE order_time >= " + Long.toString(new Date().getTime() - constant) +" GROUP BY username ORDER BY number_of_orders";
     }
 
     void Query05(long requestedDate) {
