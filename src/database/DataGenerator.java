@@ -89,9 +89,11 @@ public class DataGenerator {
 
 		for (int i = 0; i < nRepairs; i++) {
 			TimeSlot slot = (TimeSlot) popRandomFrom(slots);
-			data.getRepairs().add(new Repairs(((Car) pickRandomFrom(data.getCars())).getCarPlate(),
+			Car carToRepair = (Car) pickRandomFrom(data.getCars());
+			data.getRepairs().add(new Repairs(carToRepair.getCarPlate(),
 					((Workshop) pickRandomFrom(data.getWorkshops())).getWID(),
-					slot.from, slot.to));
+					slot.from, slot.to, pickUnusedPartID(data, carToRepair.getBrandName(),
+					carToRepair.getModelName())));
 		}
 
 		for (int i = 0; i < nChargesAt; i++) {
@@ -102,6 +104,35 @@ public class DataGenerator {
 		}
 
 		return data;
+	}
+
+	private int pickUnusedPartID(GeneratedData currentData, String brand, String model) {
+		CarPart part;
+		Fits[] properParts =
+				(Fits[]) currentData.getFits().stream()
+						.filter(fit -> fit.getBrandName().equals(brand))
+						.filter(fit -> fit.getModelName().equals(model))
+						.filter(fit -> !partUsed(fit.getCarPartID(), currentData.getFits()))
+						.toArray();
+
+		if (properParts.length > 0) {
+			return properParts[0].getCarPartID();
+		}
+
+		CarPart properPart = generateCarPart(currentData.getParts().size(),
+				((Provider) pickRandomFrom(currentData.getProviders())).getProviderID());
+		currentData.getParts().add(properPart);
+		currentData.getFits().add(new Fits(brand, model, properPart.getPartID()));
+		return properPart.getPartID();
+	}
+
+	private boolean partUsed(int partID, List<Fits> fits) {
+		for (Fits fit : fits) {
+			if (fit.getCarPartID() == partID) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	public CarModel generateCarModel() {
