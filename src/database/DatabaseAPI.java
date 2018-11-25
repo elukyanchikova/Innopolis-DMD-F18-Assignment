@@ -3,12 +3,9 @@ package database;
 
 import entities.*;
 import relations.*;
-import sun.awt.geom.AreaOp;
 
-import java.io.*;
 import java.sql.*;
 import java.util.Collection;
-import java.util.LinkedList;
 
 public class DatabaseAPI {
 
@@ -30,8 +27,8 @@ public class DatabaseAPI {
 			System.out.println("Database already connected!");
 		else
 			try {
-			Connection con = DriverManager.getConnection(URL);
-			if (con != null) {
+				Connection con = DriverManager.getConnection(URL);
+				if (con != null) {
 					connection = con;
 					isConnected = true;
 					System.out.println("Database connected!");
@@ -76,27 +73,28 @@ public class DatabaseAPI {
 	public void createNewTable(String name, String[] column_name, String[] column_type, String[] f, String others) {
 		String SQLStatement = "CREATE TABLE IF NOT EXISTS " + name + " (\n";
 		for (int i = 0; i < column_name.length; i++) {
-			if (i == column_name.length - 1 && others.length() == 0) SQLStatement += column_name[i] + " " + column_type[i] + " " + f[i] + "\n";
+			if (i == column_name.length - 1 && others.length() == 0)
+				SQLStatement += column_name[i] + " " + column_type[i] + " " + f[i] + "\n";
 			else SQLStatement += column_name[i] + " " + column_type[i] + " " + f[i] + ",\n";
 		}
 		SQLStatement += others + ");";
 		execute(SQLStatement);
 	}
 
-	public ResultSet executeQuery(String SQLStatement){
-		if(!isConnected())
+	public ResultSet executeQuery(String SQLStatement) {
+		if (!isConnected())
 			connect();
-		try{
+		try {
 			Statement statement = connection.createStatement();
-			return  statement.executeQuery(SQLStatement);
-		} catch (SQLException e){
+			return statement.executeQuery(SQLStatement);
+		} catch (SQLException e) {
 			e.printStackTrace();
 			return null;
 		}
 	}
 
 
-	public void clear(){
+	public void clear() {
 		execute("DELETE FROM car;");
 		execute("DELETE FROM car_model;");
 		execute("DELETE FROM car_parts;");
@@ -115,190 +113,190 @@ public class DatabaseAPI {
 
 		execute("UPDATE sqlite_sequence SET seq=0;");
 		System.out.println("Indices reset.");
-    }
+	}
 
 
-    public void insertIntoCar(Car car){
+	public void insertIntoCar(Car car) {
 		String SQLStatement = "INSERT INTO car (car_plate, brand_name, model_name, car_color, car_latitude, car_longitude, car_rating, crash_flag, battery_percentage)\n"
 				+ "VALUES ('" + car.getCarPlate() + "', '" + car.getBrandName() + "', '" + car.getModelName() + "', '" + car.getColor() + "', " + car.getCarLocation().getLatitude() + ", " + car.getCarLocation().getLongitude() + ", " + car.getCarRating() + ", " + (car.isCrashFlag() ? 1 : 0) + ", " + car.getBatteryPercentage() + ");";
 
 		execute(SQLStatement);
 	}
 
-    public void fillTheCar(Collection<Car> cars){
-			for(Car car: cars){
-				insertIntoCar(car);
-			}
-    }
+	public void fillTheCar(Collection<Car> cars) {
+		for (Car car : cars) {
+			insertIntoCar(car);
+		}
+	}
 
-    public void insertIntoCarModel(CarModel carModel){
+	public void insertIntoCarModel(CarModel carModel) {
 		String SQLStatement = "INSERT INTO car_model (\nbrand_name, model_name, socket_shape, socket_size, passenger_capacity, luggage_capacity, battery_capacity )\n"
 				+ "VALUES \n (\n'" + carModel.getBrandName() + "', '" + carModel.getModelName() + "', '" + carModel.getModelSocket().getSocketShape() + "', " + carModel.getModelSocket().getSocketSize() + ", " + carModel.getPassengerCapacity() + ", " + carModel.getLuggageCapacity() + ", " + carModel.getBatteryCapacity() + ");";
 
 		execute(SQLStatement);
-    }
-
-    public void fillTheCarModel(Collection<CarModel> models){
-	    for (CarModel model : models){
-	        insertIntoCarModel(model);
-	    }
 	}
 
-    public void insertIntoCarParts(CarPart carPart){
+	public void fillTheCarModel(Collection<CarModel> models) {
+		for (CarModel model : models) {
+			insertIntoCarModel(model);
+		}
+	}
+
+	public void insertIntoCarParts(CarPart carPart) {
 		String SQLStatement = "INSERT INTO car_parts (part_name, part_price, part_manufacturer, provider_id, WID)\n"
-				+ "VALUES ('" + carPart.getPartName() + "', "+ carPart.getPartPrice() + ", '"+ carPart.getPartManufacturer()+ "', " + carPart.getProviderID()+ ", " + carPart.getWID() +");";
+				+ "VALUES ('" + carPart.getPartName() + "', " + carPart.getPartPrice() + ", '" + carPart.getPartManufacturer() + "', " + carPart.getProviderID() + ", " + carPart.getWID() + ");";
 
 		execute(SQLStatement);
-    }
-
-    public void fillTheCarParts(Collection<CarPart> carParts){
-        for(CarPart carPart :carParts){
-            insertIntoCarParts(carPart);
-        }
 	}
 
-    public void insertIntoChargesAt(ChargesAt chargesAt){
+	public void fillTheCarParts(Collection<CarPart> carParts) {
+		for (CarPart carPart : carParts) {
+			insertIntoCarParts(carPart);
+		}
+	}
+
+	public void insertIntoChargesAt(ChargesAt chargesAt) {
 		String SQLStatement = "INSERT INTO charges_at (UID, car_plate, time_start, time_finish)\n"
 				+ "VALUES (" + chargesAt.getUID() + ", '" + chargesAt.getCarPlate() + "', " + chargesAt.getTimeStart() + ", " + chargesAt.getTimeFinish() + ");";
 
 		execute(SQLStatement);
-    }
-
-    public void fillTheChargesAt(Collection <ChargesAt> chargesAt){
-        for(ChargesAt charge : chargesAt){
-            insertIntoChargesAt(charge);
-        }
 	}
 
-    public void insertIntoChargingStation(ChargingStation chargingStation){
+	public void fillTheChargesAt(Collection<ChargesAt> chargesAt) {
+		for (ChargesAt charge : chargesAt) {
+			insertIntoChargesAt(charge);
+		}
+	}
+
+	public void insertIntoChargingStation(ChargingStation chargingStation) {
 		String SQLStatement = "INSERT INTO charging_station (station_latitude, station_longitude, electrical_power, number_of_available_sockets, charging_amount_price)\n"
 				+ "VALUES (" + chargingStation.getStationLocation().getLatitude() + ", " + chargingStation.getStationLocation().getLongitude() + ", " + chargingStation.getElectricalPower() + ", " + chargingStation.getNumberOfSocketsAvailable() + ", " + chargingStation.getChargingAmountPrice() + ");";
 
 		execute(SQLStatement);
-    }
-
-    public void fillTheChargingStation(Collection<ChargingStation> stations){
-
-	    for (ChargingStation station: stations){
-            insertIntoChargingStation(station);
-	    }
 	}
 
-    public void insertIntoCustomer(Customer customer){
+	public void fillTheChargingStation(Collection<ChargingStation> stations) {
+
+		for (ChargingStation station : stations) {
+			insertIntoChargingStation(station);
+		}
+	}
+
+	public void insertIntoCustomer(Customer customer) {
 		String SQLStatement = "INSERT INTO customer (username, customer_name, customer_phone, customer_email, payment_info, zip_code, city, country)\n"
-				+ "VALUES ('" +customer.getUsername() + "', '" + customer.getCustomerName() + "', '" + customer.getCustomerPhone() + "', '" + customer.getCustomerEmail() + "', '" + customer.getPaymentInfo() + "', " + customer.getCustomerResidence().getZIPCode() + ", '" + customer.getCustomerResidence().getCity() + "', '" + customer.getCustomerResidence().getCountry() + "');";
+				+ "VALUES ('" + customer.getUsername() + "', '" + customer.getCustomerName() + "', '" + customer.getCustomerPhone() + "', '" + customer.getCustomerEmail() + "', '" + customer.getPaymentInfo() + "', " + customer.getCustomerResidence().getZIPCode() + ", '" + customer.getCustomerResidence().getCity() + "', '" + customer.getCustomerResidence().getCountry() + "');";
 
 		execute(SQLStatement);
-    }
-
-    public void fillTheCustomer(Collection<Customer> customers){
-            for (Customer customer: customers){
-                insertIntoCustomer(customer);
-            }
 	}
 
-    public void insertIntoFits(Fits fits){
+	public void fillTheCustomer(Collection<Customer> customers) {
+		for (Customer customer : customers) {
+			insertIntoCustomer(customer);
+		}
+	}
+
+	public void insertIntoFits(Fits fits) {
 		String SQLStatement = "INSERT INTO fits (part_id, model_name, brand_name)\n"
 				+ "VALUES (" + fits.getCarPartID() + ", '" + fits.getModelName() + "', '" + fits.getBrandName() + "');";
 
 		execute(SQLStatement);
 	}
 
-	public void fillTheFits(Collection <Fits> FitList){
-        for(Fits fits: FitList){
-            insertIntoFits(fits);
-        }
+	public void fillTheFits(Collection<Fits> FitList) {
+		for (Fits fits : FitList) {
+			insertIntoFits(fits);
+		}
 	}
 
-    public void insertIntoOrders(Order order){
+	public void insertIntoOrders(Order order) {
 		String SQLStatement = "INSERT INTO orders (order_status, order_time, A_latitude, A_longitude, B_latitude, B_longitude, number_of_adult_passengers, need_babyseat, luggage_volume, customer_username)\n"
-				+ "VALUES ('" + order.getOrderStatus() + "', " + order.getOrderTime() + ", " + order.getDeparturePoint().getLatitude() + ", " + order.getDeparturePoint().getLongitude() + ", " + order.getDestination().getLatitude() + ", " + order.getDestination().getLongitude() + ", " + order.getNumberOfAdultPassengers() + ", " + ((order.isNeedBabySeat())? 1 : 0) + ", " + order.getLuggageVolume() + ", '" + order.getCustomerUsername() + "');";
+				+ "VALUES ('" + order.getOrderStatus() + "', " + order.getOrderTime() + ", " + order.getDeparturePoint().getLatitude() + ", " + order.getDeparturePoint().getLongitude() + ", " + order.getDestination().getLatitude() + ", " + order.getDestination().getLongitude() + ", " + order.getNumberOfAdultPassengers() + ", " + ((order.isNeedBabySeat()) ? 1 : 0) + ", " + order.getLuggageVolume() + ", '" + order.getCustomerUsername() + "');";
 
 		execute(SQLStatement);
-    }
-
-    public void fillTheOrders(Collection<Order> orders){
-			for (Order order: orders){
-				insertIntoOrders(order);
-			}
 	}
 
-    public void insertIntoProvider(Provider provider){
+	public void fillTheOrders(Collection<Order> orders) {
+		for (Order order : orders) {
+			insertIntoOrders(order);
+		}
+	}
+
+	public void insertIntoProvider(Provider provider) {
 		String SQLStatement = "INSERT INTO provider (provider_name, provider_phone, payment_info, zip_code, city, country)\n"
-				+ "VALUES ('" + provider.getProviderName() +"', '"+provider.getProviderPhone()+"', '"+provider.getProviderPaymentInfo()+"', "+provider.getProviderAddress().getZIPCode()+", '"+provider.getProviderAddress().getCity()+"', '"+provider.getProviderAddress().getCountry()+"');";
+				+ "VALUES ('" + provider.getProviderName() + "', '" + provider.getProviderPhone() + "', '" + provider.getProviderPaymentInfo() + "', " + provider.getProviderAddress().getZIPCode() + ", '" + provider.getProviderAddress().getCity() + "', '" + provider.getProviderAddress().getCountry() + "');";
 
 		execute(SQLStatement);
-    }
-
-    public void fillTheProvider(Collection<Provider> providers){
-			for (Provider provider: providers){
-				insertIntoProvider(provider);
-			}
 	}
 
-    public void insertIntoRepairs(Repairs repairs){
+	public void fillTheProvider(Collection<Provider> providers) {
+		for (Provider provider : providers) {
+			insertIntoProvider(provider);
+		}
+	}
+
+	public void insertIntoRepairs(Repairs repairs) {
 		String SQLStatement = "INSERT INTO repairs (WID, car_plate, time_start, time_finish, part_id)\n"
-				+ "VALUES (" + repairs.getWID() + ", '" + repairs.getCarPlate() + "', " + repairs.getTimeStart() + ", " + repairs.getTimeFinish() +  ", " + repairs.getCarPartID() +");";
+				+ "VALUES (" + repairs.getWID() + ", '" + repairs.getCarPlate() + "', " + repairs.getTimeStart() + ", " + repairs.getTimeFinish() + ", " + repairs.getCarPartID() + ");";
 
 		execute(SQLStatement);
-    }
-
-    public void fillTheRepairs(	Collection<Repairs> repairs){
-			for (Repairs repair: repairs){
-				insertIntoRepairs(repair);
-			}
 	}
 
-    public void insertIntoRequests(Requests requests){
+	public void fillTheRepairs(Collection<Repairs> repairs) {
+		for (Repairs repair : repairs) {
+			insertIntoRepairs(repair);
+		}
+	}
+
+	public void insertIntoRequests(Requests requests) {
 		String SQLStatement = "INSERT INTO requests (part_name, number_of_parts, WID, provider_id)\n"
 				+ "VALUES ('" + requests.getPartName() + "', " + requests.getNumberOfParts() + ", " + requests.getWID() + ", " + requests.getProviderID() + ");";
 
 		execute(SQLStatement);
-    }
-
-    public void fillTheRequests(Collection<Requests> requests){
-			for (Requests request: requests){
-				insertIntoRequests(request);
-			}
 	}
 
-    public void insertIntoServes(Serves serves){
+	public void fillTheRequests(Collection<Requests> requests) {
+		for (Requests request : requests) {
+			insertIntoRequests(request);
+		}
+	}
+
+	public void insertIntoServes(Serves serves) {
 		String SQLStatement = "INSERT INTO serves (order_id, car_plate, time_start, time_finish)\n"
-				+ "VALUES (" +serves.getOrderID() + ", '"+ serves.getCarPlate() + "', " + serves.getTimeStart() + ", " + serves.getTimeFinish() + ");";
+				+ "VALUES (" + serves.getOrderID() + ", '" + serves.getCarPlate() + "', " + serves.getTimeStart() + ", " + serves.getTimeFinish() + ");";
 
 		execute(SQLStatement);
-    }
-
-    public void fillTheServes(Collection<Serves> serves){
-			for (Serves serve: serves){
-				insertIntoServes(serve);
-			}
 	}
 
-    public void insertIntoSockets(StationSocket stationSocket){
+	public void fillTheServes(Collection<Serves> serves) {
+		for (Serves serve : serves) {
+			insertIntoServes(serve);
+		}
+	}
+
+	public void insertIntoSockets(StationSocket stationSocket) {
 		String SQLStatement = "INSERT INTO sockets (UID, socket_shape, socket_size)\n"
-				+ "VALUES (" + stationSocket.getStationUID()  + ", '" + stationSocket.getSocketShape() + "', '" + stationSocket.getSocketSize()+ "');";
+				+ "VALUES (" + stationSocket.getStationUID() + ", '" + stationSocket.getSocketShape() + "', '" + stationSocket.getSocketSize() + "');";
 
 		execute(SQLStatement);
-    }
-
-    public void fillTheSockets(Collection<StationSocket> sockets){
-			for (StationSocket socket: sockets){
-				insertIntoSockets(socket);
-			}
 	}
 
-    public void insertIntoWorkshop(Workshop workshop){
+	public void fillTheSockets(Collection<StationSocket> sockets) {
+		for (StationSocket socket : sockets) {
+			insertIntoSockets(socket);
+		}
+	}
+
+	public void insertIntoWorkshop(Workshop workshop) {
 		String SQLStatement = "INSERT INTO workshop (number_of_available_places, zip_code, city, country)\n"
 				+ "VALUES (" + workshop.getNumberOfPlacesAvailable() + ", " + workshop.getWorkshopLocation().getZIPCode() + ", '" + workshop.getWorkshopLocation().getCity() + "', '" + workshop.getWorkshopLocation().getCountry() + "');";
 
 		execute(SQLStatement);
-    }
+	}
 
-    public void fillTheWorkshop(Collection<Workshop> workshops ){
-			for (Workshop workshop: workshops){
-				insertIntoWorkshop(workshop);
-			}
+	public void fillTheWorkshop(Collection<Workshop> workshops) {
+		for (Workshop workshop : workshops) {
+			insertIntoWorkshop(workshop);
+		}
 	}
 
 }
