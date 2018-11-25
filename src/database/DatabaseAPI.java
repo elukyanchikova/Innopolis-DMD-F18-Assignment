@@ -86,9 +86,7 @@ public class DatabaseAPI {
 			connect();
 		try{
 			Statement statement = connection.createStatement();
-			ResultSet resultSet = statement.executeQuery(SQLStatement);
-			statement.close();
-			return  resultSet;
+			return  statement.executeQuery(SQLStatement);
 		} catch (SQLException e){
 			e.printStackTrace();
 			return null;

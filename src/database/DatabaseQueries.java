@@ -2,6 +2,7 @@ package database;
 
 import java.io.*;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Collection;
 import java.util.Date;
 import java.util.LinkedHashSet;
@@ -11,7 +12,7 @@ public class DatabaseQueries {
 
     private DatabaseAPI sample;
 
-    public void MainTest() {
+    public void MainTest() throws SQLException {
         createSample();
         FillSample();
         sample.connect();
@@ -127,23 +128,25 @@ public class DatabaseQueries {
         sample.fillTheCustomer();
         sample.fillTheCar();
         sample.fillTheChargingStation();
-        sample.fillTheWorkshop();
-        sample.fillTheProvider();
-        sample.fillTheCarParts();
-        sample.fillTheOrders();
-        sample.fillTheSockets();
-        sample.fillTheChargesAt();
-        sample.fillTheRepairs();
-        sample.fillTheRequests();
-        sample.fillTheServes();
-        sample.fillTheFits();
+        //sample.fillTheWorkshop();
+        //sample.fillTheProvider();
+        //sample.fillTheCarParts();
+        //sample.fillTheOrders();
+        //sample.fillTheSockets();
+        //sample.fillTheChargesAt();
+        //sample.fillTheRepairs();
+        //sample.fillTheRequests();
+        //sample.fillTheServes();
+        //sample.fillTheFits();
         sample.close();
     }
 
 
-    void Query01() {
-        String SQLStatement = "SELECT * FROM car WHERE car_color='red' AND car_plate LIKE 'AN%'";
+    void Query01() throws SQLException {
+        String SQLStatement = "SELECT * FROM car WHERE car_color = 'red' AND car_plate LIKE '%AN%'";
         ResultSet result = sample.executeQuery(SQLStatement);
+        while(result.next())
+            System.out.println(result.getString(1));
         //TODO: create new table and insert result there (for all queries!)
     }
 
