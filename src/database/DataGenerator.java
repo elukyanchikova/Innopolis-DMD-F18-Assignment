@@ -19,14 +19,18 @@ public class DataGenerator {
 	private final String[] providers = {};
 	private final String[] parts = {};
 	private final String[] manufacturers = {};
+	private final String[] statuses = {"done", "done", "done", "done", "done", "done", "done", "done", "cancelled"};
 
 	private final Random random;
+	private long fromDate;
 
 	public DataGenerator() {
 		random = new Random();
 	}
 
-	public GeneratedData generateData(int nModels, int nCars, int nCustomers) {
+	public GeneratedData generateData(int nModels, int nCars, int nCustomers,
+	                                  int nStations, int nWorkshops, int nProviders,
+	                                  int nParts, int nOrders, long fromDate) {
 		GeneratedData data = new GeneratedData();
 		data.setModels(new LinkedList<>());
 		for (int i = 0; i < nModels; i++) {
@@ -43,6 +47,32 @@ public class DataGenerator {
 			data.getCustomers().add(generateCustomer());
 		}
 
+		data.setStations(new LinkedList<>());
+		for (int i = 0; i < nStations; i++) {
+			data.getStations().add(generateStation(i));
+		}
+
+		data.setProviders(new LinkedList<>());
+		for (int i = 0; i < nProviders; i++) {
+			data.getProviders().add(generateProvider(i));
+		}
+
+		data.setWorkshops(new LinkedList<>());
+		for (int i = 0; i < nWorkshops; i++) {
+			data.getWorkshops().add(generateWorkshop(i));
+		}
+
+		data.setParts(new LinkedList<>());
+		for (int i = 0; i < nParts; i++) {
+			data.getParts().add(generateCarPart(i, ((CarPart) pickRandomFrom(data.getProviders())).getWID()));
+		}
+
+		this.fromDate = fromDate;
+		data.setOrders(new LinkedList<>());
+		for (int i = 0; i < nOrders; i++) {
+			data.getOrders().add(generateOrder(i, ((Customer) pickRandomFrom(data.getCustomers())).getUsername()));
+		}
+
 		return data;
 	}
 
@@ -50,7 +80,7 @@ public class DataGenerator {
 		CarSocket socket = new CarSocket(random.nextInt(10) + 1, pickRandomFrom(shapes));
 
 		return new CarModel(pickRandomFrom(carBrands), pickRandomFrom(carModels),
-				random.nextInt(5) + 2, random.nextInt(100) + 20,
+				random.nextInt(6) + 2, random.nextInt(100) + 20,
 				random.nextInt(40) + 10, socket);
 	}
 
@@ -91,6 +121,19 @@ public class DataGenerator {
 	public CarPart generateCarPart(int partID, int providerID) {
 		return new CarPart(partID, pickRandomFrom(parts), random.nextInt(20000) + 500,
 				pickRandomFrom(manufacturers), providerID);
+	}
+
+	public Order generateOrder(int orderID, String customerUsername) {
+		String status = random.nextInt(15) < 2 ? "cancelled" : "done";
+		GPSLocation departure = generateLocation();
+		GPSLocation destination = generateLocation();
+		float cost = (float) Math.sqrt((destination.getLatitude() - departure.getLatitude()) *
+				(destination.getLatitude() - departure.getLatitude()) +
+				(destination.getLongitude() - departure.getLongitude()) *
+						(destination.getLongitude() - departure.getLongitude())) * 5 * 120;
+		return new Order(orderID, status, randomTime(fromDate),
+				random.nextInt(6) + 2, random.nextInt(100) + 20,
+				random.nextInt(10) < 2, cost, departure, destination, customerUsername);
 	}
 
 	public GPSLocation generateLocation() {
@@ -139,5 +182,10 @@ public class DataGenerator {
 		}
 
 		return builder.toString();
+	}
+
+	private long randomTime(long startsFrom) {
+		long adds = random.nextLong() % startsFrom;
+		return startsFrom + adds;
 	}
 }
