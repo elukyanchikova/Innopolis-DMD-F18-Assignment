@@ -56,28 +56,28 @@ public class DatabaseQueries {
 
         String chargingStationColumns[] = {"UID", "station_latitude", "station_longitude", "electrical_power", "number_of_available_sockets", "charging_amount_price"};
         String chargingStationTypes[] = {"integer", "real", "real", "real", "integer", "real"};
-        String chargingStationF[] = {"PRIMARY KEY AUTOINCREMENT", "NOT NULL", "NOT NULL", "", "NOT NULL", ""};
+        String chargingStationF[] = {"PRIMARY KEY", "NOT NULL", "NOT NULL", "", "NOT NULL", ""};
         sample.createNewTable("charging_station", chargingStationColumns, chargingStationTypes, chargingStationF, "");
 
         String workshopColumns[] = {"WID", "number_of_available_places", "zip_code", "city", "country"};
         String workshopTypes[] = {"integer", "integer", "integer", "text", "text"};
-        String workshopF[] = {"PRIMARY KEY AUTOINCREMENT", "NOT NULL", "NOT NULL", "NOT NULL", "NOT NULL"};
+        String workshopF[] = {"PRIMARY KEY", "NOT NULL", "NOT NULL", "NOT NULL", "NOT NULL"};
         sample.createNewTable("workshop", workshopColumns, workshopTypes, workshopF, "");
 
         String providerColumns[] = {"provider_id", "provider_name", "provider_phone", "payment_info", "zip_code", "city", "country"};
         String providerTypes[] = {"integer", "text", "text", "text", "integer", "text", "text"};
-        String providerF[] = {"PRIMARY KEY AUTOINCREMENT", "NOT NULL", "NOT NULL", "NOT NULL", "NOT NULL", "NOT NULL", "NOT NULL"};
+        String providerF[] = {"PRIMARY KEY", "NOT NULL", "NOT NULL", "NOT NULL", "NOT NULL", "NOT NULL", "NOT NULL"};
         sample.createNewTable("provider", providerColumns, providerTypes, providerF, "");
 
         String carPartColumns[] = {"part_id", "part_name", "part_price", "part_manufacturer", "provider_id", "WID"};
         String carPartTypes[] = {"integer", "text", "real", "text", "integer", "integer"};
-        String carPartF[] = {"PRIMARY KEY AUTOINCREMENT", "NOT NULL", "NOT NULL", "NOT NULL", "NOT NULL", ""};
+        String carPartF[] = {"PRIMARY KEY", "NOT NULL", "NOT NULL", "NOT NULL", "NOT NULL", ""};
         String carPartOthers = "FOREIGN KEY (provider_id) REFERENCES provider (provider_id) \n FOREIGN KEY (WID) REFERENCES workshop(WID)\n";
         sample.createNewTable("car_parts", carPartColumns, carPartTypes, carPartF, carPartOthers);
 
         String orderColumns[] = {"order_id", "order_status", "order_time", "A_latitude", "A_longitude", "B_latitude", "B_longitude", "number_of_adult_passengers", "need_babyseat", "luggage_volume", "customer_username"};
         String orderTypes[] = {"integer", "text", "integer", "real", "real", "real", "real", "integer", "integer", "real", "text"};
-        String orderF[] = {"PRIMARY KEY AUTOINCREMENT", "NOT NULL", "NOT NULL", "NOT NULL", "NOT NULL", "NOT NULL", "NOT NULL", "NOT NULL", "NOT NULL", "NOT NULL", "NOT NULL"};
+        String orderF[] = {"PRIMARY KEY", "NOT NULL", "NOT NULL", "NOT NULL", "NOT NULL", "NOT NULL", "NOT NULL", "NOT NULL", "NOT NULL", "NOT NULL", "NOT NULL"};
         String orderOthers = "FOREIGN KEY (customer_username) REFERENCES customer (username)\n";
         sample.createNewTable("orders", orderColumns, orderTypes, orderF, orderOthers);
 
@@ -101,7 +101,7 @@ public class DatabaseQueries {
 
         String requestsColumns[] = {"request_id", "part_name", "number_of_parts", "WID", "provider_id"};
         String requestsTypes[] = {"integer", "text", "integer", "integer", "integer"};
-        String requestsF[] = {"PRIMARY KEY AUTOINCREMENT", "NOT NULL", "NOT NULL", "NOT NULL", "NOT NULL"};
+        String requestsF[] = {"PRIMARY KEY", "NOT NULL", "NOT NULL", "NOT NULL", "NOT NULL"};
         String requestOthers = "FOREIGN KEY (provider_id) REFERENCES provider (provider_id) \n FOREIGN KEY (WID) REFERENCES workshop(WID)\n";
         sample.createNewTable("requests", requestsColumns, requestsTypes, requestsF, requestOthers);
 
@@ -139,7 +139,7 @@ public class DatabaseQueries {
         sample.fillTheSockets(metaData.getSockets());
         sample.fillTheChargesAt(metaData.getChargesAt());
         sample.fillTheRepairs(metaData.getRepairs());
-        //sample.fillTheRequests(metaData.getRequests);
+        sample.fillTheRequests(metaData.getRequests());
         sample.fillTheServes(metaData.getServes());
         sample.fillTheFits(metaData.getFits());
         sample.close();
@@ -156,7 +156,7 @@ public class DatabaseQueries {
             String Query1Columns[] = {"car_plate", "brand_name", "model_name", "car_color", "car_latitude", "car_longitude", "car_rating", "crash_flag", "battery_percentage"};
             String Query1Types[] = {"text", "text", "text", "text", "real", "real", "real", "integer", "real"};
             String Query1F[] = {"PRIMARY KEY", "NOT NULL", "NOT NULL", "NOT NULL", "NOT NULL", "NOT NULL", "NOT NULL", "NOT NULL", "NOT NULL"};
-            sample.createNewTable("car", Query1Columns, Query1Types, Query1F, "");
+            sample.createNewTable("Query1", Query1Columns, Query1Types, Query1F, "");
 
             //insert results to new table
             while (result.next())
@@ -312,9 +312,29 @@ public class DatabaseQueries {
     }
 
     void Query10() {
-        // cartype(1) с самой высокой стоимостью содержани в день(все дни с начала) зарядка+ремонт
-        String SQLStatementRepairs = "SELECT (car.brand_name + ' ' + car.model_name) AS type, sum(price) as total_cost FROM  car INNER JOIN ( SELECT repairs.car_plate, SUM (car_parts.part_price) AS price FROM (repairs INNER JOIN car_parts ON repairs.part_id = car_parts.part_id)  ) ON repairs.car_plate = car.car_plate GROUP BY type ORDER BY total_cost";
-        String SQLStatementCharges = "SELECT (car.brand_name + ' ' + car.model_name) AS type, sum(price) as total_cost FROM car INNER JOIN ( SELECT charges_at.car_plate, SUM (charging_station.charging_amount_price*(charges_at.time_finish - charges_at.time_start)/" + 3600000l + " ) as price FROM ( charges_at INNER JOIN charging_station ON charges_at.UID = charging_station.UID) ) ON car.car_plate = charges_at.car_plate GROUP BY type ORDER BY total_cost";
+        try {
+            // cartype(1) с самой высокой стоимостью содержани в день(все дни с начала) зарядка+ремонт
+            String SQLStatementRepairs = "SELECT (car.brand_name + ' ' + car.model_name) AS type, sum(price) as total_cost FROM  car INNER JOIN ( SELECT repairs.car_plate, SUM (car_parts.part_price) AS price FROM (repairs INNER JOIN car_parts ON repairs.part_id = car_parts.part_id)  ) ON repairs.car_plate = car.car_plate GROUP BY type ORDER BY total_cost";
+            String SQLStatementCharges = "SELECT (car.brand_name + ' ' + car.model_name) AS type, sum(price) as total_cost FROM car INNER JOIN ( SELECT charges_at.car_plate, SUM (charging_station.charging_amount_price*(charges_at.time_finish - charges_at.time_start)/" + 3600000l + " ) as price FROM ( charges_at INNER JOIN charging_station ON charges_at.UID = charging_station.UID) ) ON car.car_plate = charges_at.car_plate GROUP BY type ORDER BY total_cost";
+            ResultSet resultRepairs = sample.executeQuery(SQLStatementRepairs);
+            ResultSet resultCharges = sample.executeQuery(SQLStatementCharges);
+
+            //create table
+
+
+            //fill table
+            while(resultRepairs.next()){
+
+            }
+
+
+            while(resultCharges.next()){
+
+            }
+        } catch (SQLException e){
+            e.printStackTrace();
+        }
+
     }
 
 
