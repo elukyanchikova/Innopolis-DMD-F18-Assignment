@@ -81,9 +81,9 @@ public class DataGenerator {
 
 		List<TimeSlot> slots = generateTimeSlots(nServes + nRepairs + nChargesAt, fromDate);
 
+		List<Order> ordersCopy = new ArrayList<>(data.getOrders());
 		for (int i = 0; i < nServes; i++) {
 			TimeSlot slot = (TimeSlot) popRandomFrom(slots);
-			List<Order> ordersCopy = new ArrayList<>(data.getOrders());
 			data.getServes().add(new Serves(((Car) pickRandomFrom(data.getCars())).getCarPlate(),
 					((Order) popRandomFrom(ordersCopy)).getOrderID(),
 					slot.from, slot.to));
