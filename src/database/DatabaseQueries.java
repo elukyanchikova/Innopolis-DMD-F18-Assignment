@@ -23,7 +23,7 @@ public class DatabaseQueries {
         //TODO 6 - не выводится ничего
 
         //TODO 8  - выводится только один with inadequate number of charges, должно быть больше
-        //TODO 9 - sums everything not distinct
+
         //TODO 10 - only one model in output
         //Query01();
         //Query02(1540578565);
@@ -33,7 +33,7 @@ public class DatabaseQueries {
         //Query06(1527034582);
         //Query07();
         //Query08();
-        Query09();
+        //Query09();
         //Query10();
 
 
@@ -157,7 +157,7 @@ public class DatabaseQueries {
     }
 
     //done
-    void Query01() {
+    public ResultSet Query01() {
         try {
             //execute your query
             String SQLStatement = "SELECT * FROM car WHERE car_color = 'red' AND car_plate LIKE '%AN%'";
@@ -175,12 +175,14 @@ public class DatabaseQueries {
                         + "VALUES ('" + result.getString(1) + "', '" + result.getString(2) + "', '" + result.getString(3) + "', '" + result.getString(4) + "', " + result.getFloat(5) + ", " + result.getFloat(6) + ", " + result.getFloat(7) + ", " + result.getInt(8) + ", " + result.getFloat(9) + ")";
                 sample.execute(SQLStatementInsert);
             }
+            return result;
         } catch (SQLException e) {
             e.printStackTrace();
+            return null;
         }
     }
 
-    void Query02(long requestedDate) {
+    public void Query02(long requestedDate) {
         try {
             Collection<ResultSet> results = new LinkedList<>();
             //Collection<ResultSet> result = new LinkedList<>();
@@ -213,7 +215,7 @@ public class DatabaseQueries {
 
     }
 
-    void Query03(long requestedDate) {
+    public void Query03(long requestedDate) {
         //TODO FIX HREN' with time format
         try {
             long timeConst = 7 * 24 * 60 * 60 ;
@@ -274,7 +276,7 @@ public class DatabaseQueries {
     }
 
     //done
-    void Query04(long requestedDate) {
+    public ResultSet Query04(long requestedDate) {
         try {
             long constant = 60 * 60 * 24 * 30L;
             String SQLStatement = "SELECT customer_username, COUNT(*) AS number_of_orders FROM orders WHERE order_time >= " + Long.toString(requestedDate - constant) + " GROUP BY customer_username ORDER BY number_of_orders DESC";
@@ -291,12 +293,14 @@ public class DatabaseQueries {
                         + "VALUES ('" + result.getString(1) + "', " + result.getInt(2) + ")";
                 sample.execute(SQLStatementInsert);
             }
+            return  result;
         } catch (SQLException e) {
             e.printStackTrace();
+            return null;
         }
     }
 
-    void Query05(long requestedDate) {
+    public void Query05(long requestedDate) {
         try {
             String SQLStatement1 = "SELECT avg((A_latitude-B_latitude)*(A_latitude-B_latitude)+(A_longitude-B_longitude)*(A_longitude-B_longitude)) AS avg_distance FROM orders WHERE date(order_time,'unixepoch') >= date(" + requestedDate + ",'unixepoch')";
             String SQLStatement2 = "SELECT avg(time_finish-time_start) AS avg_trip_time FROM serves WHERE date(time_start,'unixepoch') = date(" + requestedDate + ",'unixepoch')";
@@ -319,7 +323,7 @@ public class DatabaseQueries {
 
     }
 
-    void Query06(long requestedDate) {
+    public void Query06(long requestedDate) {
         //выбрать 3 самые популярнык локации фром и ту на три времени 8-10, 12-2, 5-7
         try {
             String QueryColumns[] = {"morning_loc_from", "morning_loc_to", "afternoon_loc_from", "afternoon_loc_to", "evening_loc_from", "evening_loc_to"};
@@ -410,7 +414,7 @@ public class DatabaseQueries {
         }
     }
 
-    void Query07() {
+    public void Query07() {
         try {
             String SQLStatement0 = "SELECT count(*) FROM car";
             ResultSet result0 = sample.executeQuery(SQLStatement0);
@@ -437,7 +441,7 @@ public class DatabaseQueries {
         }
     }
 
-    void Query08() {
+    public void Query08() {
         // для каждого юзера посчитать количество зарядок, которые за месяц прошли машины, обслужившие его в этом месяце
         try {
             String QueryColumns[] = {"username", "charges_amount"};
@@ -463,7 +467,7 @@ public class DatabaseQueries {
         }
     }
 
-    void Query09() {
+    public Collection <ResultSet> Query09() {
         try {
             String SQLStatement0 = "SELECT * FROM workshop";
             ResultSet res1 = sample.executeQuery(SQLStatement0);
@@ -484,6 +488,7 @@ public class DatabaseQueries {
             String SQLStatement2 = "SELECT max(time_start) - min(time_finish) AS delta FROM repairs";
             ResultSet result2 = sample.executeQuery(SQLStatement2);
             int weeksNumber = (int)(result2.getLong(1)/weekConst);
+            if(weeksNumber < 1) weeksNumber = 1;
 
             String[] Query9Columns = {"WID", "part_name", "number_of_parts"};
             String[] Query9Types = {"integer", "text", "integer"};
@@ -493,17 +498,20 @@ public class DatabaseQueries {
 
             for(ResultSet result: res){
                 String insert = "INSERT INTO query9 (WID, part_name, number_of_parts)"
-                        + "VALUES (" + result.getInt(1) + ", '" + result.getString(2) + "',  " + (int)result.getInt(3) + " )";
+                        + "VALUES (" + result.getInt(1) + ", '" + result.getString(2) + "',  " + (int)result.getInt(3)/weeksNumber + " )";
                 sample.execute(insert);
             }
 
+            return res;
+
         } catch (SQLException e) {
             e.printStackTrace();
+            return null;
         }
 
     }
 
-    void Query10() {
+    public void Query10() {
         try {
             // cartype(1) с самой высокой стоимостью содержани в день(все дни с начала) зарядка+ремонт
             String SQLStatementRepairs = "SELECT (car.brand_name || ' ' || car.model_name) AS type, sum(price) as total_cost FROM  car INNER JOIN ( SELECT repairs.car_plate AS plate, SUM (car_parts.part_price) AS price FROM (repairs INNER JOIN car_parts ON repairs.part_id = car_parts.part_id)  ) ON plate = car.car_plate GROUP BY type ORDER BY total_cost";
