@@ -267,6 +267,7 @@ public class DatabaseQueries {
             while (result.next()) {
                 String SQLStatementInsert = "INSERT INTO query4 (costumer_username, number_of_orders)"
                         + "VALUES ('" + result.getString(1) + "', '" + result.getInt(2) + ")";
+                sample.execute(SQLStatementInsert);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -287,7 +288,8 @@ public class DatabaseQueries {
             sample.createNewTable("Query5", QueryColumns, QueryTypes, QueryF, "");
 
             while (result1.next())
-                System.out.println(result1.getString(1));
+                /*String SQLStatementInsert1 = "INSERT INTO query4 (costumer_username, number_of_orders)"
+                        + "VALUES ('" + result.getString(1) + "', '" + result.getInt(2) + ")";*/
             while (result2.next())
                 System.out.println(result2.getString(2));
         } catch (SQLException e) {
