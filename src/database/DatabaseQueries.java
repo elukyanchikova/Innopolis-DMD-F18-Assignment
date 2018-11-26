@@ -16,15 +16,14 @@ public class DatabaseQueries {
         createSample();
         FillSample();
         sample.connect();
-        //TODO 2 - no output, exceptions
         //TODO 3 - broken completely
 
-        //TODO 5 - fix distance
+
         //TODO 6 - не выводится ничего
 
         //TODO 8  - выводится только один with inadequate number of charges, должно быть больше
 
-        //TODO 10 - only one model in output
+
         //Query01();
         //Query02(1538073592);
         //Query03(1540578565);
@@ -34,7 +33,7 @@ public class DatabaseQueries {
         //Query07();
        // Query08(1538073592);
         //ResultSet set = Query09();
-        Query10();
+        //Query10();
 
 
         sample.close();
@@ -151,9 +150,6 @@ public class DatabaseQueries {
         sample.fillTheServes(metaData.getServes());
         sample.fillTheFits(metaData.getFits());
         sample.close();*/
-
-        //use this method only ONCE ....
-        //TODO:  wid in car_parts and repairs differs ...
     }
 
     //done
@@ -182,7 +178,7 @@ public class DatabaseQueries {
         }
     }
 
-    public void Query02(long requestedDate) {
+    public ResultSet Query02(long requestedDate) {
         try {
             Collection<ResultSet> results = new LinkedList<>();
 
@@ -193,28 +189,26 @@ public class DatabaseQueries {
             sample.createNewTable("Query2", QueryColumns, QueryTypes, QueryF, "");
             sample.execute("DELETE FROM query2");
 
-
             String timeFrom = "";
             String timeTo = "";
             for (int hour = 0; hour <= 23; hour++) {
                 timeFrom = "strftime('%s', date(" + requestedDate + ", 'unixepoch'), 'start of day', '+" + hour + " hour')";
                 timeTo = "strftime('%s', date(" + requestedDate + ", 'unixepoch'), 'start of day', '+" + hour + 1 + " hour')";
-                String SQLStatement = "SELECT UID, " + timeFrom + " AS time_start, " + timeTo + " AS time_finish, count(car_plate) AS sockets_occupied FROM charges_at WHERE " +
+                String SQLStatement = "SELECT " + timeFrom + " AS time_start, " + timeTo + " AS time_finish, count(*) FROM charges_at WHERE " +
                         "strftime('%s', date(" + requestedDate + ", 'unixepoch'), 'start of day', '+" + hour + " hour') <= time_start < strftime('%s', date(" + requestedDate + ", 'unixepoch'), 'start of day', '+" + hour + "+1 hour') OR " +
-                        "strftime('%s', date(" + requestedDate + ", 'unixepoch'), 'start of day', '+" + hour + " hour') <= time_finish < strftime('%s', date(" + requestedDate + ", 'unixepoch'), 'start of day', '+" + hour + "+1 hour') GROUP BY UID";
-                ResultSet res = sample.executeQuery(SQLStatement);
-                results.add(res);
-
+                        "strftime('%s', date(" + requestedDate + ", 'unixepoch'), 'start of day', '+" + hour + " hour') <= time_finish < strftime('%s', date(" + requestedDate + ", 'unixepoch'), 'start of day', '+" + hour + "+1 hour')";
+                results.add(sample.executeQuery(SQLStatement));
             }
-            for (ResultSet res : results){
-                String SQLStatementInsert = "INSERT INTO query2 (UID, time_start, time_finish, sockets_occupied) "
-                        + "VALUES(" + res.getInt(1) + ", '" + res.getString(2)+ "', '" + res.getString(3) +"', "+ res.getInt(4) + ")";
+
+            for (ResultSet result : results){
+                String SQLStatementInsert = "INSERT INTO query2 (time_start, time_finish, sockets_occupied) "
+                        + "VALUES( '" + result.getString(1) + "', '" + result.getString(2) +"', "+ result.getInt(3) + ")";
                 sample.execute(SQLStatementInsert);
             }
-            //return results;
+            return sample.executeQuery("SELECT * FROM query2");
         } catch (SQLException e)        {
          e.printStackTrace();
-         //return null;
+         return null;
         }
 
     }
@@ -306,7 +300,7 @@ public class DatabaseQueries {
 
     public ResultSet Query05(long requestedDate) {
         try {
-            String SQLStatement1 = "SELECT avg(A_latitude-B_latitude) AS d_lat, avg(A_longitude-B_longitude) AS d_lon) AS avg_distance FROM orders WHERE date(order_time,'unixepoch') >= date(" + requestedDate + ",'unixepoch')";
+            String SQLStatement1 = "SELECT avg((A_latitude-B_latitude)*(A_latitude-B_latitude) + (A_longitude-B_longitude)*(A_longitude-B_longitude)) AS avg_distance FROM orders WHERE date(order_time,'unixepoch') >= date(" + requestedDate + ",'unixepoch')";
             String SQLStatement2 = "SELECT avg(time_finish-time_start) AS avg_trip_time FROM serves WHERE date(time_start,'unixepoch') = date(" + requestedDate + ",'unixepoch')";
             ResultSet result1 = sample.executeQuery(SQLStatement1);
             ResultSet result2 = sample.executeQuery(SQLStatement2);
@@ -321,9 +315,6 @@ public class DatabaseQueries {
                         + "VALUES (" +  Math.sqrt(result1.getFloat(1)) + ", " + result2.getFloat(1)/60 + ")";
                 sample.execute(SQLStatementInsert1);
 
-                Collection <ResultSet> res = new LinkedList<>();
-                res.add(result1);
-                res.add(result2);
                 return sample.executeQuery("SELECT * FROM query5");
         } catch (SQLException e) {
             e.printStackTrace();
@@ -423,11 +414,11 @@ public class DatabaseQueries {
         }
     }
 
-    public void Query07() {
+    public ResultSet Query07() {
         try {
             String SQLStatement0 = "SELECT count(*) FROM car";
             ResultSet result0 = sample.executeQuery(SQLStatement0);
-            //TODO ОНО ТАК РАБОТАЕТ?
+
             int carNumber = result0.getInt(1) / 10;
             String SQLStatement1 = "SELECT car_plate, count(*) AS orderedTimes FROM serves GROUP BY car_plate ORDER BY orderedTimes ASC LIMIT " + carNumber;
             ResultSet result1 = sample.executeQuery(SQLStatement1);
@@ -444,9 +435,10 @@ public class DatabaseQueries {
                         + " VALUES ('" + result1.getString(1) + "', '" + result1.getString(2) + "')";
                 sample.execute(SQLStatementInsert1);
             }
-
+            return sample.executeQuery("SELECT * FROM query7");
         } catch (SQLException e) {
             e.printStackTrace();
+            return null;
         }
     }
 
