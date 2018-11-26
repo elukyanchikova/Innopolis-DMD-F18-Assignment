@@ -1,5 +1,7 @@
 package database;
 
+import entities.Car;
+
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
@@ -16,7 +18,7 @@ public class DatabaseQueries {
         FillSample();
         sample.connect();
 
-        //Query01();
+        Query01();
         //Query02(12425346);
         //Query03(12432655);
         //Query04();
@@ -24,7 +26,7 @@ public class DatabaseQueries {
         //Query06(15432443);
         //Query07();
         //Query08();
-        Query09();
+        //Query09();
         //Query10();
 
 
@@ -125,7 +127,7 @@ public class DatabaseQueries {
         sample.clear();
 
         DataGenerator dataGenerator = new DataGenerator();
-        GeneratedData metaData = dataGenerator.generateData(9, 50, 80, 5, 5, 5, 33, 120, 12, 110, 78, 107, new Date().getTime() - 4 * 1000 * 30 * 24 * 3600l);
+        GeneratedData metaData = dataGenerator.generateData(5, 10, 20, 2, 2, 2, 10, 24, 3, 12, 8, 21, new Date().getTime() - 4 * 1000 * 30 * 24 * 3600l);
 
         sample.fillTheCarModel(metaData.getModels());
         sample.fillTheCustomer(metaData.getCustomers());
@@ -161,8 +163,9 @@ public class DatabaseQueries {
             sample.createNewTable("Query1", Query1Columns, Query1Types, Query1F, "");
 
             //insert results to new table
-            while (result.next())
-                System.out.println(result.getString(1));
+            while (result.next()) {
+                //String SQLStatementInsert = "INS"
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -172,6 +175,7 @@ public class DatabaseQueries {
         //try {
         Collection<ResultSet> result = new LinkedList<>();
         //Collection<ResultSet> result = new LinkedList<>();
+        ResultSet resultSet;
 
         String QueryColumns[] = {"time_start", "time_finish", "sockets_occupied"};
         //TODO is the type of time "TEXT"?
@@ -187,6 +191,7 @@ public class DatabaseQueries {
                     "strftime('%s', date(" + requestedDate + ", 'unixepoch'), 'start of day', '+" + hour + " hour') <= time_start < strftime('%s', date(" + requestedDate + ", 'unixepoch'), 'start of day', '+" + hour + "+1 hour') OR " +
                     "strftime('%s', date(" + requestedDate + ", 'unixepoch'), 'start of day', '+" + hour + " hour') <= time_finish < strftime('%s', date(" + requestedDate + ", 'unixepoch'), 'start of day', '+" + hour + "+1 hour')";
             result.add(sample.executeQuery(SQLStatement));
+            //resultSet.
         }
 //TODO вывести в таблицу
 //        for (int i = 0; i <=23 ; i++) {
@@ -360,7 +365,7 @@ public class DatabaseQueries {
     }
 
     //TODO CHECK
-        void Query07() {
+    void Query07() {
         //выбрать 10% худших машиноу
         try {
             String SQLStatement0 = "SELECT count(*) FROM car";
@@ -392,11 +397,11 @@ public class DatabaseQueries {
             String QueryTypes[] = {"string", "integer"};
             String QueryF[] = {"PRIMARY KEY", "NOT NULL"};
             sample.createNewTable("Query8", QueryColumns, QueryTypes, QueryF, "");
-        Date date = new Date();
-        long constant = 30 * 24 * 60 * 60 * 1000L;
-        long timeCondition = date.getTime() - constant;
-        String SQLStatement = "SELECT orders.customer_username, count(*) FROM (orders INNER JOIN serves ON orders.order_id = serves.order_id) " +
-                "INNER JOIN charges_at ON serves.car_plate = charges_at.car_plate WHERE order_time >= " + timeCondition;
+            Date date = new Date();
+            long constant = 30 * 24 * 60 * 60 * 1000L;
+            long timeCondition = date.getTime() - constant;
+            String SQLStatement = "SELECT orders.customer_username, count(*) FROM (orders INNER JOIN serves ON orders.order_id = serves.order_id) " +
+                    "INNER JOIN charges_at ON serves.car_plate = charges_at.car_plate WHERE order_time >= " + timeCondition;
 
             ResultSet result = sample.executeQuery(SQLStatement);
             while (result.next())

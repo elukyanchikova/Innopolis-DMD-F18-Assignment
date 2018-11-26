@@ -111,7 +111,7 @@ public class DatabaseAPI {
         execute("DELETE FROM workshop;");
         System.out.println("Records cleared.");
 
-        execute("UPDATE sqlite_sequence SET seq=0;");
+        //execute("UPDATE sqlite_sequence SET seq=0;");
         System.out.println("Indices reset.");
     }
 
