@@ -226,28 +226,28 @@ public class DatabaseQueries {
             ResultSet result0 = sample.executeQuery(SQLStatement0);
             int coeff = (int) (100 / result0.getInt(1));
 
-            String timeCond0 = "strftime('%s', date(" + requestedDate + ", 'unixepoch'), 'start of day', '+" + 7 + "hour')" +
+            String timeCond0 = "strftime('%s', date(" + requestedDate + ", 'unixepoch'), 'start of day', '+" + 7 + " hour')" +
                     "<= time_start" +
                     " < strftime('%s', date(" + requestedDate + ", 'unixepoch'), 'start of day', '+" + 10 + " hour')";
-            String timeCondition = requestedDate + "<= time_start<" + (requestedDate + timeConst) +
-                    "AND " + timeCond0;
+            String timeCondition = requestedDate + " <= time_start < " + (requestedDate + timeConst) +
+                    " AND " + timeCond0;
 
             //String timeCondition = "date("+ requestedDate +", 'unixepoch') <= date(time_start, 'unixepoch') < (date(requestedDate, 'unixepoch')+7)";
-            String SQLStatement1 = "SELECT car_plates, count(*) AS order_num FROM serves WHERE" + timeCondition + " AND  order_num > 0";
+            String SQLStatement1 = "SELECT car_plate, count(*) AS order_num FROM serves WHERE " + timeCondition + " AND  order_num > 0";
 
             timeCond0 = "strftime('%s', date(" + requestedDate + ", 'unixepoch'), 'start of day', '+" + 12 + " hour')" +
                     "<= time_start" +
                     " < strftime('%s', date(" + requestedDate + ", 'unixepoch'), 'start of day', '+" + 14 + " hour')";
             timeCondition = requestedDate + "<= time_start<" + (requestedDate + timeConst) +
                     "AND " + timeCond0;
-            String SQLStatement2 = "SELECT car_plates, count(*) AS order_num FROM serves WHERE" + timeCondition + " AND  order_num > 0";
+            String SQLStatement2 = "SELECT car_plate, count(*) AS order_num FROM serves WHERE" + timeCondition + " AND  order_num > 0";
 
             timeCond0 = "strftime('%s', date(" + requestedDate + ", 'unixepoch'), 'start of day', '+" + 17 + " hour')" +
                     "<= time_start" +
                     " < strftime('%s', date(" + requestedDate + ", 'unixepoch'), 'start of day', '+" + 19 + " hour')";
             timeCondition = requestedDate + "<= time_start<" + (requestedDate + timeConst) +
                     "AND " + timeCond0;
-            String SQLStatement3 = "SELECT car_plates, count(*) AS order_num FROM serves WHERE" + timeCondition + " AND  order_num > 0";
+            String SQLStatement3 = "SELECT car_plate, count(*) AS order_num FROM serves WHERE" + timeCondition + " AND  order_num > 0";
 
             ResultSet result1 = sample.executeQuery(SQLStatement1);
             ResultSet result2 = sample.executeQuery(SQLStatement2);
