@@ -1,13 +1,12 @@
 package database;
 
-import entities.Car;
-
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.Collection;
 import java.util.Date;
 import java.util.LinkedList;
+import entities.*;
 
 public class DatabaseQueries {
 
@@ -26,7 +25,7 @@ public class DatabaseQueries {
         //Query06(15432443);
         //Query07();
         //Query08();
-        //Query09();
+        Query09();
         //Query10();
 
 
@@ -163,8 +162,9 @@ public class DatabaseQueries {
             sample.createNewTable("Query1", Query1Columns, Query1Types, Query1F, "");
 
             //insert results to new table
-            while (result.next()) {
-                //String SQLStatementInsert = "INS"
+            while (result.next()){
+                String SQLStatementInsert = "INSERT INTO query1 (car_plate, brand_name, model_name, car_color, car_latitude, car_longitude, car_rating, crash_flag, battery_percentage)\n"
+                        + "VALUES ('" + result.getString(1) + "', '" + result.getString(2)+ "', '" + result.getString(3)+ "', '" + result.getString(4) + "', "+ result.getFloat(5) + ", " + result.getFloat(6) +", "+ result.getFloat(7) + ", " + result.getInt(8) + ", "+ result.getFloat(9) + ")";
             }
         } catch (SQLException e) {
             e.printStackTrace();
