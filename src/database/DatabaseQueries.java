@@ -16,20 +16,20 @@ public class DatabaseQueries {
         createSample();
         FillSample();
         sample.connect();
-        //TODO 2 - no output
-        //TODO 3
+        //TODO 2 - no output, exceptions
+        //TODO 3 - broken completely
 
         //TODO 5 - fix distance
         //TODO 6 - не выводится ничего
-        //TODO 7 - возможно, ошибка, тк 10% от 20 =1 выводится только один, должно быть больше
-        //TODO 8  - выводится только один, должно быть больше
-        //TODO 9
-        //TODO 10
+
+        //TODO 8  - выводится только один with inadequate number of charges, должно быть больше
+
+        //TODO 10 - only one model in output
         //Query01();
         //Query02(1540578565);
         //Query03(1540578565);
         //Query04(1527614904);
-        //Query05(1536435922);
+        //Query05(1538419044);
         //Query06(1527034582);
         //Query07();
         //Query08();
@@ -134,7 +134,7 @@ public class DatabaseQueries {
        /*sample.clear();
 
         DataGenerator dataGenerator = new DataGenerator();
-        GeneratedData metaData = dataGenerator.generateData(5, 10, 20, 2, 2, 2, 10, 24, 3, 12, 8, 21, new Date().getTime()/1000 - 4  * 30 * 24 * 3600l);
+        GeneratedData metaData = dataGenerator.generateData(5, 30, 20, 2, 2, 2, 10, 24, 3, 12, 8, 21, new Date().getTime()/1000 - 4  * 30 * 24 * 3600l);
 
         sample.fillTheCarModel(metaData.getModels());
         sample.fillTheCustomer(metaData.getCustomers());
@@ -156,8 +156,8 @@ public class DatabaseQueries {
         //TODO:  wid in car_parts and repairs differs ...
     }
 
-//  done!
-    void Query01() {
+    //done
+    public ResultSet Query01() {
         try {
             //execute your query
             String SQLStatement = "SELECT * FROM car WHERE car_color = 'red' AND car_plate LIKE '%AN%'";
@@ -175,12 +175,14 @@ public class DatabaseQueries {
                         + "VALUES ('" + result.getString(1) + "', '" + result.getString(2) + "', '" + result.getString(3) + "', '" + result.getString(4) + "', " + result.getFloat(5) + ", " + result.getFloat(6) + ", " + result.getFloat(7) + ", " + result.getInt(8) + ", " + result.getFloat(9) + ")";
                 sample.execute(SQLStatementInsert);
             }
+            return result;
         } catch (SQLException e) {
             e.printStackTrace();
+            return null;
         }
     }
 
-    void Query02(long requestedDate) {
+    public void Query02(long requestedDate) {
         try {
             Collection<ResultSet> results = new LinkedList<>();
             //Collection<ResultSet> result = new LinkedList<>();
@@ -194,12 +196,10 @@ public class DatabaseQueries {
             sample.execute("DELETE FROM query2");
 
 
-        String timeFrom = "";
-        String timeTo = "";
         for (int hour = 0; hour <= 23; hour++) {
-            timeFrom = "strftime('%s', date(" + requestedDate + ", 'unixepoch'), 'start of day', '+" + Integer.toString(hour) + " hour')";
-            timeTo = "strftime('%s', date(" + requestedDate + ", 'unixepoch'), 'start of day', '+" + Integer.toString(hour + 1 )+ " hour')";
-            String SQLStatement = "SELECT time_start, time_finish, count(*) FROM charges_at WHERE" + timeTo + " >= time_start >= " + timeFrom  + " OR " + timeTo + " >= time_finish >= " + timeFrom ;
+            String timeFrom = "";
+            String timeTo = "";
+            String SQLStatement = "SELECT time_start, time_finish, count(*) as sockets_occupied FROM charges_at WHERE (" + timeFrom + " >= time_start AND time_start <= " + timeTo +") OR (" + timeFrom + " >= time_finish AND time_finish <= " + timeTo + ")";
             results.add(sample.executeQuery(SQLStatement));
         }
 
@@ -215,8 +215,7 @@ public class DatabaseQueries {
 
     }
 
-
-    void Query03(long requestedDate) {
+    public void Query03(long requestedDate) {
         //TODO FIX HREN' with time format
         try {
             long timeConst = 7 * 24 * 60 * 60 ;
@@ -277,7 +276,7 @@ public class DatabaseQueries {
     }
 
     //done
-    void Query04(long requestedDate) {
+    public ResultSet Query04(long requestedDate) {
         try {
             long constant = 60 * 60 * 24 * 30L;
             String SQLStatement = "SELECT customer_username, COUNT(*) AS number_of_orders FROM orders WHERE order_time >= " + Long.toString(requestedDate - constant) + " GROUP BY customer_username ORDER BY number_of_orders DESC";
@@ -294,12 +293,14 @@ public class DatabaseQueries {
                         + "VALUES ('" + result.getString(1) + "', " + result.getInt(2) + ")";
                 sample.execute(SQLStatementInsert);
             }
+            return  result;
         } catch (SQLException e) {
             e.printStackTrace();
+            return null;
         }
     }
 
-    void Query05(long requestedDate) {
+    public Collection<ResultSet> Query05(long requestedDate) {
         try {
             String SQLStatement1 = "SELECT avg((A_latitude-B_latitude)*(A_latitude-B_latitude)+(A_longitude-B_longitude)*(A_longitude-B_longitude)) AS avg_distance FROM orders WHERE date(order_time,'unixepoch') >= date(" + requestedDate + ",'unixepoch')";
             String SQLStatement2 = "SELECT avg(time_finish-time_start) AS avg_trip_time FROM serves WHERE date(time_start,'unixepoch') = date(" + requestedDate + ",'unixepoch')";
@@ -316,13 +317,18 @@ public class DatabaseQueries {
                         + "VALUES (" +  Math.sqrt(result1.getFloat(1)) + ", " + result2.getFloat(1)/60 + ")";
                 sample.execute(SQLStatementInsert1);
 
+                Collection <ResultSet> res = new LinkedList<>();
+                res.add(result1);
+                res.add(result2);
+                return res;
         } catch (SQLException e) {
             e.printStackTrace();
+            return null;
         }
 
     }
 
-    void Query06(long requestedDate) {
+    public void Query06(long requestedDate) {
         //выбрать 3 самые популярнык локации фром и ту на три времени 8-10, 12-2, 5-7
         try {
             String QueryColumns[] = {"morning_loc_from", "morning_loc_to", "afternoon_loc_from", "afternoon_loc_to", "evening_loc_from", "evening_loc_to"};
@@ -413,8 +419,7 @@ public class DatabaseQueries {
         }
     }
 
-    void Query07() {
-        //выбрать 10% худших машиноу
+    public void Query07() {
         try {
             String SQLStatement0 = "SELECT count(*) FROM car";
             ResultSet result0 = sample.executeQuery(SQLStatement0);
@@ -441,7 +446,7 @@ public class DatabaseQueries {
         }
     }
 
-    void Query08() {
+    public void Query08() {
         // для каждого юзера посчитать количество зарядок, которые за месяц прошли машины, обслужившие его в этом месяце
         try {
             String QueryColumns[] = {"username", "charges_amount"};
@@ -454,7 +459,7 @@ public class DatabaseQueries {
             long constant = 30 * 24 * 60 * 60 ;
             long timeCondition = date.getTime()/1000 - constant;
             String SQLStatement = "SELECT orders.customer_username, count(*) FROM (orders INNER JOIN serves ON orders.order_id = serves.order_id) " +
-                    "INNER JOIN charges_at ON serves.car_plate = charges_at.car_plate "/*WHERE order_time >= " + timeCondition*/;
+                    "INNER JOIN charges_at ON serves.car_plate = charges_at.car_plate WHERE order_time >= " + timeCondition;
 
             ResultSet result = sample.executeQuery(SQLStatement);
             while (result.next()) {
@@ -467,8 +472,7 @@ public class DatabaseQueries {
         }
     }
 
-    //TODO inner todo
-    void Query09() {
+    public Collection <ResultSet> Query09() {
         try {
             String SQLStatement0 = "SELECT * FROM workshop";
             ResultSet res1 = sample.executeQuery(SQLStatement0);
@@ -477,21 +481,19 @@ public class DatabaseQueries {
                 WIDs.add(res1.getInt(1));
             }
 
-            //количество деталек для каждого workshopa, необходимое в течение недели
-            //for every workshop count
-
             Collection<ResultSet> res = new LinkedList<>();
             for (int wid : WIDs) {
-                String SQLStatement = "SELECT repairs.wid, car_parts.part_name, count(repairs.part_id) as parts_number FROM repairs INNER JOIN car_parts ON repairs.part_id = car_parts.part_id WHERE repairs.wid = " + wid + " GROUP BY repairs.wid ORDER BY parts_number LIMIT 1";
+                //String SQLStatement = "SELECT repairs.wid, car_parts.part_name, count(car_parts.part_name) as parts_number FROM repairs INNER JOIN car_parts ON repairs.part_id = car_parts.part_id WHERE repairs.wid = " + wid + " GROUP BY repairs.wid ORDER BY parts_number DESC LIMIT 1";
+                String  SQLStatement = "SELECT wid, part_name, COUNT(part_name) as number_of_parts FROM car_parts WHERE WID = " + wid + " GROUP BY part_name ORDER BY number_of_parts DESC";
                 res.add(sample.executeQuery(SQLStatement));
             }
-
 
 
             long weekConst = 7 * 24 * 60 * 60 ;
             String SQLStatement2 = "SELECT max(time_start) - min(time_finish) AS delta FROM repairs";
             ResultSet result2 = sample.executeQuery(SQLStatement2);
             int weeksNumber = (int)(result2.getLong(1)/weekConst);
+            if(weeksNumber < 1) weeksNumber = 1;
 
             String[] Query9Columns = {"WID", "part_name", "number_of_parts"};
             String[] Query9Types = {"integer", "text", "integer"};
@@ -501,21 +503,24 @@ public class DatabaseQueries {
 
             for(ResultSet result: res){
                 String insert = "INSERT INTO query9 (WID, part_name, number_of_parts)"
-                        + "VALUES (" + result.getInt(1) + ", '" + result.getString(2) + "',  " + (int)result.getInt(3) + " )";
+                        + "VALUES (" + result.getInt(1) + ", '" + result.getString(2) + "',  " + (int)result.getInt(3)/weeksNumber + " )";
                 sample.execute(insert);
             }
 
+            return res;
+
         } catch (SQLException e) {
             e.printStackTrace();
+            return null;
         }
 
     }
 
-    void Query10() {
-        try {//todo: string concatenation in sql
+    public void Query10() {
+        try {
             // cartype(1) с самой высокой стоимостью содержани в день(все дни с начала) зарядка+ремонт
-            String SQLStatementRepairs = "SELECT (car.brand_name + ' ' + car.model_name) AS type, sum(price) as total_cost FROM  car INNER JOIN ( SELECT repairs.car_plate AS plate, SUM (car_parts.part_price) AS price FROM (repairs INNER JOIN car_parts ON repairs.part_id = car_parts.part_id)  ) ON plate = car.car_plate GROUP BY type ORDER BY total_cost";
-            String SQLStatementCharges = "SELECT (car.brand_name + ' ' + car.model_name) AS type, sum(price) as total_cost FROM car INNER JOIN ( SELECT charges_at.car_plate AS plate, SUM (charging_station.charging_amount_price*(charges_at.time_finish - charges_at.time_start)/" + 3600000l + " ) as price FROM ( charges_at INNER JOIN charging_station ON charges_at.UID = charging_station.UID) ) ON car.car_plate = plate GROUP BY type ORDER BY total_cost";
+            String SQLStatementRepairs = "SELECT (car.brand_name || ' ' || car.model_name) AS type, sum(price) as total_cost FROM  car INNER JOIN ( SELECT repairs.car_plate AS plate, SUM (car_parts.part_price) AS price FROM (repairs INNER JOIN car_parts ON repairs.part_id = car_parts.part_id)  ) ON plate = car.car_plate GROUP BY type ORDER BY total_cost";
+            String SQLStatementCharges = "SELECT (car.brand_name || ' ' || car.model_name) AS type, sum(price) as total_cost FROM car INNER JOIN ( SELECT charges_at.car_plate AS plate, SUM (charging_station.charging_amount_price*(charges_at.time_finish - charges_at.time_start)/" + 3600l + " ) as price FROM ( charges_at INNER JOIN charging_station ON charges_at.UID = charging_station.UID) ) ON car.car_plate = plate GROUP BY type ORDER BY total_cost";
             ResultSet resultRepairs = sample.executeQuery(SQLStatementRepairs);
             ResultSet resultCharges = sample.executeQuery(SQLStatementCharges);
 
@@ -550,6 +555,5 @@ public class DatabaseQueries {
         }
 
     }
-
 
 }
