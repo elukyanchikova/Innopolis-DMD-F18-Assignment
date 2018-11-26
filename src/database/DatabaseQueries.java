@@ -30,9 +30,9 @@ public class DatabaseQueries {
         Query05(132445);
         Query06(154324);
         Query07();
-        //Query08();
+        Query08();
         //Query09();
-        //Query10();
+        Query10();
 
 
         sample.close();
@@ -219,29 +219,29 @@ public class DatabaseQueries {
     void Query03(long requestedDate) {
         //TODO FIX HREN' with time format
         long timeConst = 7 * 24 * 60 * 60 * 1000L;
-        //колво машин в определенныйй момент времени/кол-во машин вообще *100
+        //колво машин в определенныйй промежуток времени/кол-во машин вообще *100
         //long requestedDate = date.getTime();
         String SQLStatement0 = "SELECT count(*) FROM car";
 
-        String timeCond0 = "strftime('%s', date(" + requestedDate + ", 'unixepoch'), 'start of day', '+" + 7 + " )" +
+        String timeCond0 = "strftime('%s', date(" + requestedDate + ", 'unixepoch'), 'start of day', '+" + 7 + " hour' )" +
                 "<= time_start" +
-                " < strftime('%s', date(" + requestedDate + ", 'unixepoch'), 'start of day', '+" + 10 + ")";
+                " < strftime('%s', date(" + requestedDate + ", 'unixepoch'), 'start of day', '+" + 10 + " hour')";
         String timeCondition = requestedDate + "<= time_start<" + (requestedDate + timeConst) +
                 "AND " + timeCond0;
 
         //String timeCondition = "date("+ requestedDate +", 'unixepoch') <= date(time_start, 'unixepoch') < (date(requestedDate, 'unixepoch')+7)";
         String SQLStatement1 = "SELECT car_plates, count(*) AS order_num FROM serves WHERE" + timeCondition + " AND  order_num > 0";
 
-        timeCond0 = "strftime('%s', date(" + requestedDate + ", 'unixepoch'), 'start of day', '+" + 12 + " )" +
+        timeCond0 = "strftime('%s', date(" + requestedDate + ", 'unixepoch'), 'start of day', '+" + 12 + " hour')" +
                 "<= time_start" +
-                " < strftime('%s', date(" + requestedDate + ", 'unixepoch'), 'start of day', '+" + 14 + ")";
+                " < strftime('%s', date(" + requestedDate + ", 'unixepoch'), 'start of day', '+" + 14 + " hour')";
         timeCondition = requestedDate + "<= time_start<" + (requestedDate + timeConst) +
                 "AND " + timeCond0;
         String SQLStatement2 = "SELECT car_plates, count(*) AS order_num FROM serves WHERE" + timeCondition + " AND  order_num > 0";
 
-        timeCond0 = "strftime('%s', date(" + requestedDate + ", 'unixepoch'), 'start of day', '+" + 17 + " )" +
+        timeCond0 = "strftime('%s', date(" + requestedDate + ", 'unixepoch'), 'start of day', '+" + 17 + " hour')" +
                 "<= time_start" +
-                " < strftime('%s', date(" + requestedDate + ", 'unixepoch'), 'start of day', '+" + 19 + ")";
+                " < strftime('%s', date(" + requestedDate + ", 'unixepoch'), 'start of day', '+" + 19 + " hour')";
         timeCondition = requestedDate + "<= time_start<" + (requestedDate + timeConst) +
                 "AND " + timeCond0;
         String SQLStatement3 = "SELECT car_plates, count(*) AS order_num FROM serves WHERE" + timeCondition + " AND  order_num > 0";
@@ -438,7 +438,7 @@ public class DatabaseQueries {
 
             ResultSet result = sample.executeQuery(SQLStatement);
             while (result.next()) {
-                String SQLStatementInsert = "INSERT INTO query8 (username, trips_amount)"
+                String SQLStatementInsert = "INSERT INTO query8 (username, charges_amount)"
                         + " VALUES ('" + result.getString(1) + "'," + result.getInt(2) + ")";
                 sample.execute(SQLStatementInsert);
             }
