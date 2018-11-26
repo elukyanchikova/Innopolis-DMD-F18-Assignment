@@ -26,7 +26,7 @@ public class DatabaseQueries {
         Query07();
         Query08();
         //Query09();
-        //Query10();
+        Query10();
 
 
         sample.close();
@@ -179,7 +179,7 @@ public class DatabaseQueries {
         ResultSet resultSet;
 
         String QueryColumns[] = {"time_start", "time_finish", "sockets_occupied"};
-        //TODO is the type of time "TEXT"?
+        //TODO is the type of time "TEXT"? - convert to normal format!!!
         String QueryTypes[] = {"text", "text", "integer"};
         String QueryF[] = {"NOT NULL", "NOT NULL", "NOT NULL"};
         sample.createNewTable("Query2", QueryColumns, QueryTypes, QueryF, "");
@@ -441,7 +441,6 @@ public class DatabaseQueries {
         }
     }
 
-    //TODO inner todo
     void Query09() {
         try {
             String SQLStatement0 = "SELECT count(*) FROM car";
@@ -476,16 +475,30 @@ public class DatabaseQueries {
             ResultSet resultCharges = sample.executeQuery(SQLStatementCharges);
 
             //create table
+            String[] Query1Columns = {"type", "total_cost_repair"};
+            String[] Query1Types = {"text", "real"};
+            String[] Query1F = {"PRIMARY KEY", "NOT NULL"};
+            sample.createNewTable("Query10_1", Query1Columns, Query1Types, Query1F, "");
+            sample.execute("DELETE FROM query10_1");
 
+            String[] Query2Columns = {"type", "total_cost_charge"};
+            String[] Query2Types = {"text", "real"};
+            String[] Query2F = {"PRIMARY KEY", "NOT NULL"};
+            sample.createNewTable("Query10_2", Query2Columns, Query2Types, Query2F, "");
+            sample.execute("DELETE FROM query10_2");
 
             //fill table
             while (resultRepairs.next()) {
-
+                String insertion = "INSERT INTO query10_1 (type, total_cost_repair)\n" +
+                        "VALUES ('" + resultRepairs.getString(1) + "', " + resultRepairs.getFloat(2) + " )";
+                sample.execute(insertion);
             }
 
 
             while (resultCharges.next()) {
-
+                String insertion = "INSERT INTO query10_2 (type, total_cost_charge)\n" +
+                        "VALUES ('" + resultCharges.getString(1) + "', " + resultCharges.getFloat(2) +" ";
+                sample.execute(insertion);
             }
         } catch (SQLException e) {
             e.printStackTrace();
