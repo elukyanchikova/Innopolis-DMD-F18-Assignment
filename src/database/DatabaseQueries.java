@@ -266,9 +266,11 @@ public class DatabaseQueries {
         }
     }
 
-    //done
+    //as far as our system is very defend from stupid users it does not collect information about number of payments (it is always unique!!)
+    //we decided to collect statistic about customers activity: number of orders each customer made last month
     public ResultSet Query04(long requestedDate) {
         try {
+
             long constant = 60 * 60 * 24 * 30L;
             String SQLStatement = "SELECT customer_username, COUNT(*) AS number_of_orders FROM orders WHERE order_time >= " + Long.toString(requestedDate - constant) + " GROUP BY customer_username ORDER BY number_of_orders DESC";
             ResultSet result = sample.executeQuery(SQLStatement);
