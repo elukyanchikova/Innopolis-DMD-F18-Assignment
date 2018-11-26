@@ -16,24 +16,24 @@ public class DatabaseQueries {
         createSample();
         FillSample();
         sample.connect();
-        //TODO 2 - no output
-        //TODO 3
+        //TODO 2 - no output, exceptions
+        //TODO 3 - broken completely
 
         //TODO 5 - fix distance
         //TODO 6 - не выводится ничего
-        //TODO 7 - возможно, ошибка, тк 10% от 20 =1 выводится только один, должно быть больше
-        //TODO 8  - выводится только один, должно быть больше
-        //TODO 9
-        //TODO 10
+
+        //TODO 8  - выводится только один with inadequate number of charges, должно быть больше
+        //TODO 9 - sums everything not distinct
+        //TODO 10 - only one model in output
         //Query01();
         //Query02(1540578565);
         //Query03(1540578565);
         //Query04(1527614904);
-        //Query05(1536435922);
+        //Query05(1538419044);
         //Query06(1527034582);
         //Query07();
         //Query08();
-        //Query09();
+        Query09();
         //Query10();
 
 
@@ -134,7 +134,7 @@ public class DatabaseQueries {
        /*sample.clear();
 
         DataGenerator dataGenerator = new DataGenerator();
-        GeneratedData metaData = dataGenerator.generateData(5, 10, 20, 2, 2, 2, 10, 24, 3, 12, 8, 21, new Date().getTime()/1000 - 4  * 30 * 24 * 3600l);
+        GeneratedData metaData = dataGenerator.generateData(5, 30, 20, 2, 2, 2, 10, 24, 3, 12, 8, 21, new Date().getTime()/1000 - 4  * 30 * 24 * 3600l);
 
         sample.fillTheCarModel(metaData.getModels());
         sample.fillTheCustomer(metaData.getCustomers());
@@ -156,7 +156,7 @@ public class DatabaseQueries {
         //TODO:  wid in car_parts and repairs differs ...
     }
 
-//  done!
+    //done
     void Query01() {
         try {
             //execute your query
@@ -194,12 +194,10 @@ public class DatabaseQueries {
             sample.execute("DELETE FROM query2");
 
 
-        String timeFrom = "";
-        String timeTo = "";
         for (int hour = 0; hour <= 23; hour++) {
-            timeFrom = "strftime('%s', date(" + requestedDate + ", 'unixepoch'), 'start of day', '+" + Integer.toString(hour) + " hour')";
-            timeTo = "strftime('%s', date(" + requestedDate + ", 'unixepoch'), 'start of day', '+" + Integer.toString(hour + 1 )+ " hour')";
-            String SQLStatement = "SELECT time_start, time_finish, count(*) FROM charges_at WHERE" + timeTo + " >= time_start >= " + timeFrom  + " OR " + timeTo + " >= time_finish >= " + timeFrom ;
+            String timeFrom = "";
+            String timeTo = "";
+            String SQLStatement = "SELECT time_start, time_finish, count(*) as sockets_occupied FROM charges_at WHERE (" + timeFrom + " >= time_start AND time_start <= " + timeTo +") OR (" + timeFrom + " >= time_finish AND time_finish <= " + timeTo + ")";
             results.add(sample.executeQuery(SQLStatement));
         }
 
@@ -214,7 +212,6 @@ public class DatabaseQueries {
         }
 
     }
-
 
     void Query03(long requestedDate) {
         //TODO FIX HREN' with time format
@@ -414,7 +411,6 @@ public class DatabaseQueries {
     }
 
     void Query07() {
-        //выбрать 10% худших машиноу
         try {
             String SQLStatement0 = "SELECT count(*) FROM car";
             ResultSet result0 = sample.executeQuery(SQLStatement0);
@@ -454,7 +450,7 @@ public class DatabaseQueries {
             long constant = 30 * 24 * 60 * 60 ;
             long timeCondition = date.getTime()/1000 - constant;
             String SQLStatement = "SELECT orders.customer_username, count(*) FROM (orders INNER JOIN serves ON orders.order_id = serves.order_id) " +
-                    "INNER JOIN charges_at ON serves.car_plate = charges_at.car_plate "/*WHERE order_time >= " + timeCondition*/;
+                    "INNER JOIN charges_at ON serves.car_plate = charges_at.car_plate WHERE order_time >= " + timeCondition;
 
             ResultSet result = sample.executeQuery(SQLStatement);
             while (result.next()) {
@@ -467,7 +463,6 @@ public class DatabaseQueries {
         }
     }
 
-    //TODO inner todo
     void Query09() {
         try {
             String SQLStatement0 = "SELECT * FROM workshop";
@@ -477,15 +472,12 @@ public class DatabaseQueries {
                 WIDs.add(res1.getInt(1));
             }
 
-            //количество деталек для каждого workshopa, необходимое в течение недели
-            //for every workshop count
-
             Collection<ResultSet> res = new LinkedList<>();
             for (int wid : WIDs) {
-                String SQLStatement = "SELECT repairs.wid, car_parts.part_name, count(repairs.part_id) as parts_number FROM repairs INNER JOIN car_parts ON repairs.part_id = car_parts.part_id WHERE repairs.wid = " + wid + " GROUP BY repairs.wid ORDER BY parts_number LIMIT 1";
+                //String SQLStatement = "SELECT repairs.wid, car_parts.part_name, count(car_parts.part_name) as parts_number FROM repairs INNER JOIN car_parts ON repairs.part_id = car_parts.part_id WHERE repairs.wid = " + wid + " GROUP BY repairs.wid ORDER BY parts_number DESC LIMIT 1";
+                String  SQLStatement = "SELECT wid, part_name, COUNT(part_name) as number_of_parts FROM car_parts WHERE WID = " + wid + " GROUP BY part_name ORDER BY number_of_parts DESC";
                 res.add(sample.executeQuery(SQLStatement));
             }
-
 
 
             long weekConst = 7 * 24 * 60 * 60 ;
@@ -512,10 +504,10 @@ public class DatabaseQueries {
     }
 
     void Query10() {
-        try {//todo: string concatenation in sql
+        try {
             // cartype(1) с самой высокой стоимостью содержани в день(все дни с начала) зарядка+ремонт
-            String SQLStatementRepairs = "SELECT (car.brand_name + ' ' + car.model_name) AS type, sum(price) as total_cost FROM  car INNER JOIN ( SELECT repairs.car_plate AS plate, SUM (car_parts.part_price) AS price FROM (repairs INNER JOIN car_parts ON repairs.part_id = car_parts.part_id)  ) ON plate = car.car_plate GROUP BY type ORDER BY total_cost";
-            String SQLStatementCharges = "SELECT (car.brand_name + ' ' + car.model_name) AS type, sum(price) as total_cost FROM car INNER JOIN ( SELECT charges_at.car_plate AS plate, SUM (charging_station.charging_amount_price*(charges_at.time_finish - charges_at.time_start)/" + 3600000l + " ) as price FROM ( charges_at INNER JOIN charging_station ON charges_at.UID = charging_station.UID) ) ON car.car_plate = plate GROUP BY type ORDER BY total_cost";
+            String SQLStatementRepairs = "SELECT (car.brand_name || ' ' || car.model_name) AS type, sum(price) as total_cost FROM  car INNER JOIN ( SELECT repairs.car_plate AS plate, SUM (car_parts.part_price) AS price FROM (repairs INNER JOIN car_parts ON repairs.part_id = car_parts.part_id)  ) ON plate = car.car_plate GROUP BY type ORDER BY total_cost";
+            String SQLStatementCharges = "SELECT (car.brand_name || ' ' || car.model_name) AS type, sum(price) as total_cost FROM car INNER JOIN ( SELECT charges_at.car_plate AS plate, SUM (charging_station.charging_amount_price*(charges_at.time_finish - charges_at.time_start)/" + 3600000l + " ) as price FROM ( charges_at INNER JOIN charging_station ON charges_at.UID = charging_station.UID) ) ON car.car_plate = plate GROUP BY type ORDER BY total_cost";
             ResultSet resultRepairs = sample.executeQuery(SQLStatementRepairs);
             ResultSet resultCharges = sample.executeQuery(SQLStatementCharges);
 
@@ -550,6 +542,5 @@ public class DatabaseQueries {
         }
 
     }
-
 
 }
