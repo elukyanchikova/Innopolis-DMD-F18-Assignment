@@ -24,7 +24,7 @@ public class DatabaseQueries {
         Query04();
         Query05(132445234);
         Query06(15432443);
-        //Query07();
+        Query07();
         Query08();
         //Query09();
         //Query10();
@@ -298,7 +298,6 @@ public class DatabaseQueries {
 
     }
 
-    //TODO DONE
     void Query06(long requestedDate) {
         //выбрать 3 самые популярнык локации фром и ту на три времени 8-10, 12-2, 5-7
         try {
@@ -390,36 +389,38 @@ public class DatabaseQueries {
         }
     }
 
-    //TODO CHECK
     void Query07() {
-        //выбрать 10% худших машиноу
         try {
             String SQLStatement0 = "SELECT count(*) FROM car";
             ResultSet result0 = sample.executeQuery(SQLStatement0);
             //TODO ОНО ТАК РАБОТАЕТ?
             int carNumber = result0.getInt(1) / 10;
-            String SQLStatement1 = "SELECT car_plate, count(*) AS orderedTimes FROM serves GROUP BY car_plate ORDER BY orderedTimes ASC LIMIT" + carNumber;
+            String SQLStatement1 = "SELECT car_plate, count(*) AS orderedTimes FROM serves GROUP BY car_plate ORDER BY orderedTimes ASC LIMIT " + carNumber;
             ResultSet result1 = sample.executeQuery(SQLStatement1);
 
 
             String QueryColumns[] = {"car_plate", "times_ordered"};
             String QueryTypes[] = {"string", "integer"};
-            String QueryF[] = {"PRIMARY KEY", "PRIMARY KEY"};
+            String QueryF[] = {"PRIMARY KEY", "NOT NULL"};
             sample.createNewTable("Query7", QueryColumns, QueryTypes, QueryF, "");
+            sample.execute("DELETE FROM Query7;");
 
             while (result1.next())
-                System.out.println(result1.getString(1));
+            {
+                String SQLStatementInsert1 = "INSERT INTO query7 (car_plate, times_ordered)"
+                        + " VALUES ('" + result1.getString(1) + "', '"+ result1.getString(2)+ "')";
+                sample.execute(SQLStatementInsert1);
+            }
 
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
-
-    //TODO DONE
+    
     void Query08() {
         // для каждого юзера посчитать количество зарядок, которые за месяц прошли машины, обслужившие его в этом месяце
         try {
-            String QueryColumns[] = {"username", "trips_amount"};
+            String QueryColumns[] = {"username", "charges_amount"};
             String QueryTypes[] = {"string", "integer"};
             String QueryF[] = {"PRIMARY KEY", "NOT NULL"};
             sample.createNewTable("Query8", QueryColumns, QueryTypes, QueryF, "");
@@ -429,7 +430,7 @@ public class DatabaseQueries {
             long constant = 30 * 24 * 60 * 60 * 1000L;
             long timeCondition = date.getTime() - constant;
             String SQLStatement = "SELECT orders.customer_username, count(*) FROM (orders INNER JOIN serves ON orders.order_id = serves.order_id) " +
-                    "INNER JOIN charges_at ON serves.car_plate = charges_at.car_plate WHERE order_time >= " + timeCondition;
+                    "INNER JOIN charges_at ON serves.car_plate = charges_at.car_plate "/*WHERE order_time >= " + timeCondition*/;
 
             ResultSet result = sample.executeQuery(SQLStatement);
             while (result.next()) {
