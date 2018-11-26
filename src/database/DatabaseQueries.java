@@ -26,15 +26,15 @@ public class DatabaseQueries {
 
         //TODO 10 - only one model in output
         //Query01();
-        Query02(1538073592);
+        //Query02(1538073592);
         //Query03(1540578565);
         //Query04(1527614904);
         //Query05(1538419044);
         //Query06(1527034582);
         //Query07();
-        //Query08();
-        //Collection <ResultSet> set = Query09();
-        //Query10();
+       // Query08(1538073592);
+        //ResultSet set = Query09();
+        Query10();
 
 
         sample.close();
@@ -186,10 +186,10 @@ public class DatabaseQueries {
         try {
             Collection<ResultSet> results = new LinkedList<>();
 
-            String QueryColumns[] = {"time_start", "time_finish", "sockets_occupied"};
+            String QueryColumns[] = {"UID", "time_start", "time_finish", "sockets_occupied"};
             //TODO is the type of time "TEXT"?
-            String QueryTypes[] = {"text", "text", "integer"};
-            String QueryF[] = {"NOT NULL", "NOT NULL", "NOT NULL"};
+            String QueryTypes[] = {"integer", "text", "text", "integer"};
+            String QueryF[] = {"NOT NULL", "NOT NULL", "NOT NULL", "NOT NULL"};
             sample.createNewTable("Query2", QueryColumns, QueryTypes, QueryF, "");
             sample.execute("DELETE FROM query2");
 
@@ -199,13 +199,16 @@ public class DatabaseQueries {
             for (int hour = 0; hour <= 23; hour++) {
                 timeFrom = "strftime('%s', date(" + requestedDate + ", 'unixepoch'), 'start of day', '+" + hour + " hour')";
                 timeTo = "strftime('%s', date(" + requestedDate + ", 'unixepoch'), 'start of day', '+" + hour + 1 + " hour')";
-                String SQLStatement = "SELECT " + timeFrom + " AS time_start, " + timeTo + " AS time_finish, count(car_plate) AS sockets_occupied FROM charges_at WHERE " +
+                String SQLStatement = "SELECT UID, " + timeFrom + " AS time_start, " + timeTo + " AS time_finish, count(car_plate) AS sockets_occupied FROM charges_at WHERE " +
                         "strftime('%s', date(" + requestedDate + ", 'unixepoch'), 'start of day', '+" + hour + " hour') <= time_start < strftime('%s', date(" + requestedDate + ", 'unixepoch'), 'start of day', '+" + hour + "+1 hour') OR " +
                         "strftime('%s', date(" + requestedDate + ", 'unixepoch'), 'start of day', '+" + hour + " hour') <= time_finish < strftime('%s', date(" + requestedDate + ", 'unixepoch'), 'start of day', '+" + hour + "+1 hour') GROUP BY UID";
                 ResultSet res = sample.executeQuery(SQLStatement);
                 results.add(res);
-                String SQLStatementInsert = "INSERT INTO query2 (time_start, time_finish, sockets_occupied) "
-                        + "VALUES('" + res.getString(1) + "', '" + res.getString(2) +"', "+ res.getInt(3) + ")";
+
+            }
+            for (ResultSet res : results){
+                String SQLStatementInsert = "INSERT INTO query2 (UID, time_start, time_finish, sockets_occupied) "
+                        + "VALUES(" + res.getInt(1) + ", '" + res.getString(2)+ "', '" + res.getString(3) +"', "+ res.getInt(4) + ")";
                 sample.execute(SQLStatementInsert);
             }
             //return results;
@@ -447,7 +450,7 @@ public class DatabaseQueries {
         }
     }
 
-    public void Query08() {
+    public void Query08(long requestedDate) {
         // для каждого юзера посчитать количество зарядок, которые за месяц прошли машины, обслужившие его в этом месяце
         try {
             String QueryColumns[] = {"username", "charges_amount"};
@@ -456,9 +459,8 @@ public class DatabaseQueries {
             sample.createNewTable("Query8", QueryColumns, QueryTypes, QueryF, "");
             sample.execute("DELETE FROM Query8;");
 
-            Date date = new Date();
             long constant = 30 * 24 * 60 * 60 ;
-            long timeCondition = date.getTime()/1000 - constant;
+            long timeCondition = requestedDate - constant;
             String SQLStatement = "SELECT orders.customer_username, count(*) FROM (orders INNER JOIN serves ON orders.order_id = serves.order_id) " +
                     "INNER JOIN charges_at ON serves.car_plate = charges_at.car_plate WHERE order_time >= " + timeCondition;
 
@@ -517,7 +519,7 @@ public class DatabaseQueries {
 
     }
 
-    public void Query10() {
+    public ResultSet Query10() {
         try {
             // cartype(1) с самой высокой стоимостью содержани в день(все дни с начала) зарядка+ремонт
             String SQLStatementRepairs = "SELECT (car.brand_name || ' ' || car.model_name) AS type, sum(price) as total_cost FROM  car INNER JOIN ( SELECT repairs.car_plate AS plate, SUM (car_parts.part_price) AS price FROM (repairs INNER JOIN car_parts ON repairs.part_id = car_parts.part_id)  ) ON plate = car.car_plate GROUP BY type ORDER BY total_cost";
@@ -538,6 +540,13 @@ public class DatabaseQueries {
             sample.createNewTable("Query10_2", Query2Columns, Query2Types, Query2F, "");
             sample.execute("DELETE FROM query10_2");
 
+            String[] resTableCol = {"type", "total_cost_charge", "total_cost_repair"};
+            String[] resTableTypes = {"text", "real", "real"};
+            String[] F = {"Primary Key", "NOT NULL", "NOT NULL"};
+            sample.createNewTable("Query10", resTableCol, resTableTypes, F, "");
+            sample.execute("DELETE FROM query10");
+
+
             //fill table
             while (resultRepairs.next()) {
                 String insertion = "INSERT INTO query10_1 (type, total_cost_repair)\n" +
@@ -551,8 +560,20 @@ public class DatabaseQueries {
                         "VALUES ('" + resultCharges.getString(1) + "', " + resultCharges.getFloat(2) +" )";
                 sample.execute(insertion);
             }
+
+            String res = "SELECT query10_1.type, query10_2.total_cost_charge, query10_1.total_cost_repair FROM query10_1 INNER JOIN query10_2 On query10_1.type = query10_2.type";
+            ResultSet result = sample.executeQuery(res);
+
+            while(result.next()){
+                String insertion = "INSERT INTO query10 (type, total_cost_charge, total_cost_repair)\n" +
+                        "VALUES ('" + result.getString(1) + "', " + result.getFloat(2) +", " + result.getFloat(3) +" )";
+                sample.execute(insertion);
+            }
+
+        return result;
         } catch (SQLException e) {
             e.printStackTrace();
+            return null;
         }
 
     }
