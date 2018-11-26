@@ -232,7 +232,7 @@ public class DataGenerator {
 			long from = timestamps[i];
 			long to = timestamps[i + 1];
 
-			if ((to - from) / 1000 > 60) {
+			if ((to - from) / 60 > 60) {
 				to = from + (random.nextInt(60) + 15) * 1000;
 			}
 
