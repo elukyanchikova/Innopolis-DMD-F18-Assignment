@@ -123,7 +123,7 @@ public class DatabaseQueries {
 
     public void FillSample() {
         sample.connect();
-        sample.clear();
+        /*sample.clear();
 
         DataGenerator dataGenerator = new DataGenerator();
         GeneratedData metaData = dataGenerator.generateData(5, 10, 20, 2, 2, 2, 10, 24, 3, 12, 8, 21, new Date().getTime() - 4 * 1000 * 30 * 24 * 3600l);
@@ -141,7 +141,7 @@ public class DatabaseQueries {
         sample.fillTheRepairs(metaData.getRepairs());
         sample.fillTheRequests(metaData.getRequests());
         sample.fillTheServes(metaData.getServes());
-        sample.fillTheFits(metaData.getFits());
+        sample.fillTheFits(metaData.getFits());*/
         sample.close();
 
         //use this method only ONCE ....
@@ -160,12 +160,12 @@ public class DatabaseQueries {
             String Query1Types[] = {"text", "text", "text", "text", "real", "real", "real", "integer", "real"};
             String Query1F[] = {"PRIMARY KEY", "NOT NULL", "NOT NULL", "NOT NULL", "NOT NULL", "NOT NULL", "NOT NULL", "NOT NULL", "NOT NULL"};
             sample.createNewTable("Query1", Query1Columns, Query1Types, Query1F, "");
-
+            sample.execute("DELETE FROM Query1;");
             //insert results to new table
             while (result.next()){
                 String SQLStatementInsert = "INSERT INTO query1 (car_plate, brand_name, model_name, car_color, car_latitude, car_longitude, car_rating, crash_flag, battery_percentage)\n"
                         + "VALUES ('" + result.getString(1) + "', '" + result.getString(2)+ "', '" + result.getString(3)+ "', '" + result.getString(4) + "', "+ result.getFloat(5) + ", " + result.getFloat(6) +", "+ result.getFloat(7) + ", " + result.getInt(8) + ", "+ result.getFloat(9) + ")";
-            sample.execute(SQLStatementInsert);
+                sample.execute(SQLStatementInsert);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -182,7 +182,7 @@ public class DatabaseQueries {
         //TODO is the type of time "TEXT"?
         String QueryTypes[] = {"text", "text", "integer"};
         String QueryF[] = {"PRIMARY KEY", "PRIMARY KEY"};
-        sample.createNewTable("Query1", QueryColumns, QueryTypes, QueryF, "");
+        sample.createNewTable("Query2", QueryColumns, QueryTypes, QueryF, "");
         String timeFrom = "";
         String timeTo = "";
         for (int hour = 0; hour <= 23; hour++) {
@@ -255,7 +255,7 @@ public class DatabaseQueries {
         //find users with high activity (more than 16 orders within last month)
         try {
             long constant = 1000 * 60 * 60 * 24 * 30L;
-            String SQLStatement = "SELECT customer_username, COUNT(*) number_of_orders FROM orders WHERE order_time >= " + Long.toString(new Date().getTime() - constant) + " GROUP BY customer_username ORDER BY number_of_orders";
+            String SQLStatement = "SELECT customer_username, COUNT(*) AS number_of_orders FROM orders WHERE order_time >= " + Long.toString(new Date().getTime() - constant) + " GROUP BY customer_username ORDER BY number_of_orders DESC";
             ResultSet result = sample.executeQuery(SQLStatement);
 
             //look at the fields of result of your query and according to them create new table
@@ -263,7 +263,7 @@ public class DatabaseQueries {
             String QueryTypes[] = {"text", "integer"};
             String QueryF[] = {"PRIMARY KEY", "NOT NULL"};
             sample.createNewTable("Query4", QueryColumns, QueryTypes, QueryF, "");
-
+            sample.execute("DELETE FROM query4");
             while (result.next()) {
                 String SQLStatementInsert = "INSERT INTO query4 (costumer_username, number_of_orders)"
                         + "VALUES ('" + result.getString(1) + "', " + result.getInt(2) + ")";
