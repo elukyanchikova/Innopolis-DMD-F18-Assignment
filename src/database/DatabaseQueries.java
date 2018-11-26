@@ -16,23 +16,25 @@ public class DatabaseQueries {
         createSample();
         FillSample();
         sample.connect();
+        //TODO 2 - no output
+        //TODO 3
 
-        //TODO 5 - ошибка в average time
-        // TODO 6 - не выводится ничего
+        //TODO 5 - fix distance
+        //TODO 6 - не выводится ничего
         //TODO 7 - возможно, ошибка, тк 10% от 20 =1 выводится только один, должно быть больше
         //TODO 8  - выводится только один, должно быть больше
         //TODO 9
-        // TODO 10
-        Query01();
-        Query02(124253);
-        //Query03(124326);
-        Query04();
-        Query05(1536435922);
-        Query06(154324);
-        Query07();
-        Query08();
-        Query09();
-        Query10();
+        //TODO 10
+        //Query01();
+        //Query02(1540578565);
+        //Query03(1540578565);
+        //Query04(1527614904);
+        //Query05(1536435922);
+        //Query06(1527034582);
+        //Query07();
+        //Query08();
+        //Query09();
+        //Query10();
 
 
         sample.close();
@@ -129,7 +131,7 @@ public class DatabaseQueries {
 
     public void FillSample() {
         sample.connect();
-       sample.clear();
+       /*sample.clear();
 
         DataGenerator dataGenerator = new DataGenerator();
         GeneratedData metaData = dataGenerator.generateData(5, 10, 20, 2, 2, 2, 10, 24, 3, 12, 8, 21, new Date().getTime()/1000 - 4  * 30 * 24 * 3600l);
@@ -147,14 +149,14 @@ public class DatabaseQueries {
         sample.fillTheRepairs(metaData.getRepairs());
         sample.fillTheRequests(metaData.getRequests());
         sample.fillTheServes(metaData.getServes());
-        sample.fillTheFits(metaData.getFits());
+        sample.fillTheFits(metaData.getFits());*/
         sample.close();
 
         //use this method only ONCE ....
         //TODO:  wid in car_parts and repairs differs ...
     }
 
-
+//  done!
     void Query01() {
         try {
             //execute your query
@@ -195,11 +197,9 @@ public class DatabaseQueries {
         String timeFrom = "";
         String timeTo = "";
         for (int hour = 0; hour <= 23; hour++) {
-            timeFrom = "strftime('%s', date(" + requestedDate + ", 'unixepoch'), 'start of day', '+" + hour + " hour')";
-            timeTo = "strftime('%s', date(" + requestedDate + ", 'unixepoch'), 'start of day', '+" + hour + " hour')";
-            String SQLStatement = "SELECT " + timeFrom + " AS time_start, " + timeTo + " AS time_finish, count(*) FROM charges_at WHERE " +
-                    "strftime('%s', date(" + requestedDate + ", 'unixepoch'), 'start of day', '+" + hour + " hour') <= time_start < strftime('%s', date(" + requestedDate + ", 'unixepoch'), 'start of day', '+" + hour + "+1 hour') OR " +
-                    "strftime('%s', date(" + requestedDate + ", 'unixepoch'), 'start of day', '+" + hour + " hour') <= time_finish < strftime('%s', date(" + requestedDate + ", 'unixepoch'), 'start of day', '+" + hour + "+1 hour')";
+            timeFrom = "strftime('%s', date(" + requestedDate + ", 'unixepoch'), 'start of day', '+" + Integer.toString(hour) + " hour')";
+            timeTo = "strftime('%s', date(" + requestedDate + ", 'unixepoch'), 'start of day', '+" + Integer.toString(hour + 1 )+ " hour')";
+            String SQLStatement = "SELECT time_start, time_finish, count(*) FROM charges_at WHERE" + timeTo + " >= time_start >= " + timeFrom  + " OR " + timeTo + " >= time_finish >= " + timeFrom ;
             results.add(sample.executeQuery(SQLStatement));
         }
 
@@ -276,11 +276,11 @@ public class DatabaseQueries {
         }
     }
 
-    void Query04() {
-        //find users with high activity (more than 16 orders within last month)
+    //done
+    void Query04(long requestedDate) {
         try {
             long constant = 60 * 60 * 24 * 30L;
-            String SQLStatement = "SELECT customer_username, COUNT(*) AS number_of_orders FROM orders WHERE order_time >= " + Long.toString(new Date().getTime()/1000 - constant) + " GROUP BY customer_username ORDER BY number_of_orders DESC";
+            String SQLStatement = "SELECT customer_username, COUNT(*) AS number_of_orders FROM orders WHERE order_time >= " + Long.toString(requestedDate - constant) + " GROUP BY customer_username ORDER BY number_of_orders DESC";
             ResultSet result = sample.executeQuery(SQLStatement);
 
             //look at the fields of result of your query and according to them create new table
@@ -313,7 +313,7 @@ public class DatabaseQueries {
             sample.execute("DELETE FROM query5");
 
                 String SQLStatementInsert1 = "INSERT INTO query5 (avg_distance, avg_trip_time)"
-                        + "VALUES (" +  Math.sqrt(result1.getFloat(1)) + ", " + result2.getFloat(1) + ")";
+                        + "VALUES (" +  Math.sqrt(result1.getFloat(1)) + ", " + result2.getFloat(1)/60 + ")";
                 sample.execute(SQLStatementInsert1);
 
         } catch (SQLException e) {
