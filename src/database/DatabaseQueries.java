@@ -29,7 +29,7 @@ public class DatabaseQueries {
         //Query03(1540578565);
         //Query04(1527614904);
         //Query05(1538419044);
-        //Query06(1527034582);
+        Query06(1527034582);
         //Query07();
        // Query08(1538073592);
         //ResultSet set = Query09();
@@ -287,7 +287,7 @@ public class DatabaseQueries {
             sample.createNewTable("Query4", QueryColumns, QueryTypes, QueryF, "");
             sample.execute("DELETE FROM query4");
             while (result.next()) {
-                String SQLStatementInsert = "INSERT INTO query4 (costumer_username, number_of_orders)"
+                String SQLStatementInsert = "INSERT INTO query4 (customer_username, number_of_orders)"
                         + "VALUES ('" + result.getString(1) + "', " + result.getInt(2) + ")";
                 sample.execute(SQLStatementInsert);
             }
@@ -335,10 +335,10 @@ public class DatabaseQueries {
             String timeConditions = "strftime('%s', date(" + requestedDate + ", 'unixepoch'), 'start of day', '+ 7 hour')" +
                     " <= order_time <" +
                     " strftime('%s', date(" + requestedDate + ", 'unixepoch'), 'start of day', '+ 10 hour')";
-            String SQLStatement1_1 = "SELECT A_latitude*A_longitude AS hashed, count(*) AS timesOrdered , A_latitude, A_longitude FROM orders" +
+            String SQLStatement1_1 = "SELECT (A_latitude*A_longitude) AS hashed, count(*) AS timesOrdered , A_latitude, A_longitude FROM orders" +
                     " WHERE " + timeConditions +
                     " GROUP BY hashed ORDER BY timesOrdered DESC LIMIT 3";
-            String SQLStatement1_2 = "SELECT B_latitude*B_longitude AS hashed, count(*) AS timesOrdered, B_latitude, B_longitude FROM orders " +
+            String SQLStatement1_2 = "SELECT (B_latitude*B_longitude) AS hashed, count(*) AS timesOrdered, B_latitude, B_longitude FROM orders " +
                     " WHERE " + timeConditions +
                     " GROUP BY hashed ORDER BY timesOrdered DESC LIMIT 3";
 
@@ -347,8 +347,8 @@ public class DatabaseQueries {
             while (result1_1.next()) {
                 String SQLStatementInsert1_1 = "INSERT INTO query6 (morning_loc_from)"
                         + "VALUES ('" + result1_1.getString(1) + "')";
-                sample.execute(SQLStatementInsert1_1);
-            }
+                sample.execute(SQLStatementInsert1_1);}
+
             while (result1_2.next()) {
                 String SQLStatementInsert1_2 = "INSERT INTO query6 (morning_loc_to)"
                         + "VALUES ('" + result1_2.getString(1) + "')";
@@ -401,13 +401,6 @@ public class DatabaseQueries {
                         + " VALUES ('" + result3_2.getString(1) + "')";
                 sample.execute(SQLStatementInsert3_2);
             }
-
-        /* If doesn't work, use this string as timeConditions "WHERE
-
-
-       " + " \"strftime('%s', date(\" + requestedDate + \", 'unixepoch'), 'start of day', '+\" + 8')" +
-                " <= order_start <" +
-                " strftime('%s', date(\" + requestedDate + \", 'unixepoch'), 'start of day', '+\" +10')"*/
 
         } catch (SQLException e) {
             e.printStackTrace();
