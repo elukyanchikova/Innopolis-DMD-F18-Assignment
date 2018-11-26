@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import java.util.Collection;
 import java.util.Date;
 import java.util.LinkedList;
+
 import entities.*;
 
 public class DatabaseQueries {
@@ -24,7 +25,7 @@ public class DatabaseQueries {
         Query05(132445234);
         Query06(15432443);
         //Query07();
-        //Query08();
+        Query08();
         //Query09();
         //Query10();
 
@@ -162,9 +163,9 @@ public class DatabaseQueries {
             sample.createNewTable("Query1", Query1Columns, Query1Types, Query1F, "");
             sample.execute("DELETE FROM Query1;");
             //insert results to new table
-            while (result.next()){
+            while (result.next()) {
                 String SQLStatementInsert = "INSERT INTO query1 (car_plate, brand_name, model_name, car_color, car_latitude, car_longitude, car_rating, crash_flag, battery_percentage)\n"
-                        + "VALUES ('" + result.getString(1) + "', '" + result.getString(2)+ "', '" + result.getString(3)+ "', '" + result.getString(4) + "', "+ result.getFloat(5) + ", " + result.getFloat(6) +", "+ result.getFloat(7) + ", " + result.getInt(8) + ", "+ result.getFloat(9) + ")";
+                        + "VALUES ('" + result.getString(1) + "', '" + result.getString(2) + "', '" + result.getString(3) + "', '" + result.getString(4) + "', " + result.getFloat(5) + ", " + result.getFloat(6) + ", " + result.getFloat(7) + ", " + result.getInt(8) + ", " + result.getFloat(9) + ")";
                 sample.execute(SQLStatementInsert);
             }
         } catch (SQLException e) {
@@ -204,7 +205,7 @@ public class DatabaseQueries {
                     System.out.println(result.getString(1));
             }*/
 
-        //} /*catch (SQLException e)        {
+       // } /*catch (SQLException e)        {
         // e.printStackTrace();
         //}*/
 
@@ -287,9 +288,9 @@ public class DatabaseQueries {
             sample.createNewTable("Query5", QueryColumns, QueryTypes, QueryF, "");
             sample.execute("DELETE FROM query5");
 
-                String SQLStatementInsert1 = "INSERT INTO query5 (avg_distance, avg_trip_time)"
-                        + "VALUES (" +  Math.sqrt(result1.getFloat(1)) + ", " + result2.getFloat(1) + ")";
-                sample.execute(SQLStatementInsert1);
+            String SQLStatementInsert1 = "INSERT INTO query5 (avg_distance, avg_trip_time)"
+                    + "VALUES (" + Math.sqrt(result1.getFloat(1)) + ", " + result2.getFloat(1) + ")";
+            sample.execute(SQLStatementInsert1);
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -305,6 +306,7 @@ public class DatabaseQueries {
             String QueryTypes[] = {"real", "real", "real", "real", "real", "real"};
             String QueryF[] = {"PRIMARY KEY", "NOT NULL", "NOT NULL", "NOT NULL", "NOT NULL", "NOT NULL"};
             sample.createNewTable("Query6", QueryColumns, QueryTypes, QueryF, "");
+            sample.execute("DELETE FROM Query6;");
 
             String timeConditions = "strftime('%s', date(" + requestedDate + ", 'unixepoch'), 'start of day', '+ 7 hour')" +
                     " <= order_time <" +
@@ -318,12 +320,12 @@ public class DatabaseQueries {
 
             ResultSet result1_1 = sample.executeQuery(SQLStatement1_1);
             ResultSet result1_2 = sample.executeQuery(SQLStatement1_2);
-            while (result1_1.next()){
+            while (result1_1.next()) {
                 String SQLStatementInsert1_1 = "INSERT INTO query6 (morning_loc_from)"
                         + "VALUES ('" + result1_1.getString(1) + "')";
                 sample.execute(SQLStatementInsert1_1);
             }
-            while (result1_2.next()){
+            while (result1_2.next()) {
                 String SQLStatementInsert1_2 = "INSERT INTO query6 (morning_loc_to)"
                         + "VALUES ('" + result1_2.getString(1) + "')";
                 sample.execute(SQLStatementInsert1_2);
@@ -341,12 +343,12 @@ public class DatabaseQueries {
 
             ResultSet result2_1 = sample.executeQuery(SQLStatement2_1);
             ResultSet result2_2 = sample.executeQuery(SQLStatement2_2);
-            while (result2_1.next()){
+            while (result2_1.next()) {
                 String SQLStatementInsert2_1 = "INSERT INTO query6 (afternoon_loc_from)"
                         + " VALUES ('" + result2_1.getString(1) + "')";
                 sample.execute(SQLStatementInsert2_1);
             }
-            while (result2_2.next()){
+            while (result2_2.next()) {
                 String SQLStatementInsert2_2 = "INSERT INTO query6 (afternoon_loc_to)"
                         + " VALUES ('" + result2_2.getString(1) + "')";
                 sample.execute(SQLStatementInsert2_2);
@@ -365,12 +367,12 @@ public class DatabaseQueries {
 
             ResultSet result3_1 = sample.executeQuery(SQLStatement3_1);
             ResultSet result3_2 = sample.executeQuery(SQLStatement3_2);
-            while (result3_1.next()){
+            while (result3_1.next()) {
                 String SQLStatementInsert3_1 = "INSERT INTO query6 (evening_loc_from)"
                         + " VALUES ('" + result3_1.getString(1) + "')";
                 sample.execute(SQLStatementInsert3_1);
             }
-            while (result3_2.next()){
+            while (result3_2.next()) {
                 String SQLStatementInsert3_2 = "INSERT INTO query6 (evening_loc_to)"
                         + " VALUES ('" + result3_2.getString(1) + "')";
                 sample.execute(SQLStatementInsert3_2);
@@ -421,6 +423,8 @@ public class DatabaseQueries {
             String QueryTypes[] = {"string", "integer"};
             String QueryF[] = {"PRIMARY KEY", "NOT NULL"};
             sample.createNewTable("Query8", QueryColumns, QueryTypes, QueryF, "");
+            sample.execute("DELETE FROM Query8;");
+
             Date date = new Date();
             long constant = 30 * 24 * 60 * 60 * 1000L;
             long timeCondition = date.getTime() - constant;
@@ -428,8 +432,11 @@ public class DatabaseQueries {
                     "INNER JOIN charges_at ON serves.car_plate = charges_at.car_plate WHERE order_time >= " + timeCondition;
 
             ResultSet result = sample.executeQuery(SQLStatement);
-            while (result.next())
-                System.out.println(result.getString(1));
+            while (result.next()) {
+                String SQLStatementInsert = "INSERT INTO query8 (username, trips_amount)"
+                        + " VALUES ('" + result.getString(1) + "'," + result.getInt(2) + ")";
+                sample.execute(SQLStatementInsert);
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
