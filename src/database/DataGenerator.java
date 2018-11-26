@@ -229,7 +229,14 @@ public class DataGenerator {
 
 		List<TimeSlot> slots = new ArrayList<>();
 		for (int i = 0; i + 1 < timestamps.length; i += 2) {
-			slots.add(new TimeSlot(timestamps[i], timestamps[i + 1]));
+			long from = timestamps[i];
+			long to = timestamps[i + 1];
+
+			if ((to - from) / 1000 > 60) {
+				to = from + (random.nextInt(60) + 15) * 1000;
+			}
+
+			slots.add(new TimeSlot(from, to));
 		}
 
 		return slots;
