@@ -30,9 +30,9 @@ public class DatabaseQueries {
         Query05(132445);
         Query06(154324);
         Query07();
-        Query08();
+        //Query08();
         //Query09();
-        Query10();
+        //Query10();
 
 
         sample.close();
@@ -218,42 +218,62 @@ public class DatabaseQueries {
 
     void Query03(long requestedDate) {
         //TODO FIX HREN' with time format
-        long timeConst = 7 * 24 * 60 * 60 * 1000L;
-        //колво машин в определенныйй промежуток времени/кол-во машин вообще *100
-        //long requestedDate = date.getTime();
-        String SQLStatement0 = "SELECT count(*) FROM car";
+        try {
+            long timeConst = 7 * 24 * 60 * 60 * 1000L;
+            //колво машин в определенныйй момент времени/кол-во машин вообще *100
+            //long requestedDate = date.getTime();
+            String SQLStatement0 = "SELECT count(*) FROM car";
+            ResultSet result0 = sample.executeQuery(SQLStatement0);
+            int coeff = (int) (100 / result0.getInt(1));
 
-        String timeCond0 = "strftime('%s', date(" + requestedDate + ", 'unixepoch'), 'start of day', '+" + 7 + " hour' )" +
-                "<= time_start" +
-                " < strftime('%s', date(" + requestedDate + ", 'unixepoch'), 'start of day', '+" + 10 + " hour')";
-        String timeCondition = requestedDate + "<= time_start<" + (requestedDate + timeConst) +
-                "AND " + timeCond0;
+            String timeCond0 = "strftime('%s', date(" + requestedDate + ", 'unixepoch'), 'start of day', '+" + 7 + "hour')" +
+                    "<= time_start" +
+                    " < strftime('%s', date(" + requestedDate + ", 'unixepoch'), 'start of day', '+" + 10 + " hour')";
+            String timeCondition = requestedDate + "<= time_start<" + (requestedDate + timeConst) +
+                    "AND " + timeCond0;
 
-        //String timeCondition = "date("+ requestedDate +", 'unixepoch') <= date(time_start, 'unixepoch') < (date(requestedDate, 'unixepoch')+7)";
-        String SQLStatement1 = "SELECT car_plates, count(*) AS order_num FROM serves WHERE" + timeCondition + " AND  order_num > 0";
+            //String timeCondition = "date("+ requestedDate +", 'unixepoch') <= date(time_start, 'unixepoch') < (date(requestedDate, 'unixepoch')+7)";
+            String SQLStatement1 = "SELECT car_plates, count(*) AS order_num FROM serves WHERE" + timeCondition + " AND  order_num > 0";
 
-        timeCond0 = "strftime('%s', date(" + requestedDate + ", 'unixepoch'), 'start of day', '+" + 12 + " hour')" +
-                "<= time_start" +
-                " < strftime('%s', date(" + requestedDate + ", 'unixepoch'), 'start of day', '+" + 14 + " hour')";
-        timeCondition = requestedDate + "<= time_start<" + (requestedDate + timeConst) +
-                "AND " + timeCond0;
-        String SQLStatement2 = "SELECT car_plates, count(*) AS order_num FROM serves WHERE" + timeCondition + " AND  order_num > 0";
+            timeCond0 = "strftime('%s', date(" + requestedDate + ", 'unixepoch'), 'start of day', '+" + 12 + " hour')" +
+                    "<= time_start" +
+                    " < strftime('%s', date(" + requestedDate + ", 'unixepoch'), 'start of day', '+" + 14 + " hour')";
+            timeCondition = requestedDate + "<= time_start<" + (requestedDate + timeConst) +
+                    "AND " + timeCond0;
+            String SQLStatement2 = "SELECT car_plates, count(*) AS order_num FROM serves WHERE" + timeCondition + " AND  order_num > 0";
 
-        timeCond0 = "strftime('%s', date(" + requestedDate + ", 'unixepoch'), 'start of day', '+" + 17 + " hour')" +
-                "<= time_start" +
-                " < strftime('%s', date(" + requestedDate + ", 'unixepoch'), 'start of day', '+" + 19 + " hour')";
-        timeCondition = requestedDate + "<= time_start<" + (requestedDate + timeConst) +
-                "AND " + timeCond0;
-        String SQLStatement3 = "SELECT car_plates, count(*) AS order_num FROM serves WHERE" + timeCondition + " AND  order_num > 0";
-        //TODO THIS IS PSEUDOCDE: we need to get the corresponding data from the sql query result and do som computations, after create a new table
-//        int result_0 = Integer.parseInt((sample.executeQuery(SQLStatement0)).toString());
-        //      int result_1 = Integer.parseInt((sample.executeQuery(SQLStatement1)).toString());
-        //    int result_2 = Integer.parseInt((sample.executeQuery(SQLStatement2)).toString());
-        //  int result_3 = Integer.parseInt((sample.executeQuery(SQLStatement3)).toString());
-//
-        //      int res_1 = 100 * result_1 / result_0;//morning
-        //    int res_2 = 100 * result_2 / result_0;//afternoon
-        //  int res_3 = 100 * result_3 / result_0;//evening
+            timeCond0 = "strftime('%s', date(" + requestedDate + ", 'unixepoch'), 'start of day', '+" + 17 + " hour')" +
+                    "<= time_start" +
+                    " < strftime('%s', date(" + requestedDate + ", 'unixepoch'), 'start of day', '+" + 19 + " hour')";
+            timeCondition = requestedDate + "<= time_start<" + (requestedDate + timeConst) +
+                    "AND " + timeCond0;
+            String SQLStatement3 = "SELECT car_plates, count(*) AS order_num FROM serves WHERE" + timeCondition + " AND  order_num > 0";
+
+            ResultSet result1 = sample.executeQuery(SQLStatement1);
+            ResultSet result2 = sample.executeQuery(SQLStatement2);
+            ResultSet result3 = sample.executeQuery(SQLStatement3);
+
+
+            while (result1.next()) {
+                String SQLStatementInsert1 = "INSERT INTO query3 (morning)"
+                        + "VALUES ("+ (coeff*result1.getInt(2))+")";
+                sample.execute(SQLStatementInsert1);
+            }
+
+            while (result2.next()) {
+                String SQLStatementInsert2 = "INSERT INTO query3 (afternoon)"
+                        + "VALUES ("+ (coeff*result2.getInt(2))+")";
+                sample.execute(SQLStatementInsert2);
+            }
+
+            while (result1.next()) {
+                String SQLStatementInsert3 = "INSERT INTO query3 (evening)"
+                        + "VALUES ("+ (coeff*result3.getInt(2))+")";
+                sample.execute(SQLStatementInsert3);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     void Query04() {
@@ -438,7 +458,7 @@ public class DatabaseQueries {
 
             ResultSet result = sample.executeQuery(SQLStatement);
             while (result.next()) {
-                String SQLStatementInsert = "INSERT INTO query8 (username, charges_amount)"
+                String SQLStatementInsert = "INSERT INTO query8 (username, trips_amount)"
                         + " VALUES ('" + result.getString(1) + "'," + result.getInt(2) + ")";
                 sample.execute(SQLStatementInsert);
             }
