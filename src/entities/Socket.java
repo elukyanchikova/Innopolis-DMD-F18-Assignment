@@ -4,7 +4,7 @@ public class Socket {
     private float SocketSize;
     private String SocketShape;
 
-    public Socket(float socketSize, String socketShape){
+    public Socket(float socketSize, String socketShape) {
         setSocketSize(socketSize);
         setSocketShape(socketShape);
     }

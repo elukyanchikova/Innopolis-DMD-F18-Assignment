@@ -5,7 +5,7 @@ public class Residence {
     private String Country;
     private int ZIPCode;
 
-    public Residence(String city, String country, int zipCode){
+    public Residence(String city, String country, int zipCode) {
         setCity(city);
         setCountry(country);
         setZIPCode(zipCode);
@@ -27,15 +27,16 @@ public class Residence {
         Country = country;
     }
 
+    public int getZIPCode() {
+        return ZIPCode;
+    }
+
     public void setZIPCode(int ZIPCode) {
         this.ZIPCode = ZIPCode;
     }
 
-    public int getZIPCode() {
-        return ZIPCode;
-    }
-    public String toString(){
-        return getCity() + ", " + getCountry() +", " + getZIPCode();
+    public String toString() {
+        return getCity() + ", " + getCountry() + ", " + getZIPCode();
     }
 
 

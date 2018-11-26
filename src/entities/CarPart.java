@@ -9,7 +9,7 @@ public class CarPart {
     private int ProviderID;
     private int WID;
 
-    public CarPart(int partID, String partName, float partPrice, String partManufacturer, int providerID){
+    public CarPart(int partID, String partName, float partPrice, String partManufacturer, int providerID) {
         setPartID(partID);
         setPartName(partName);
         setPartPrice(partPrice);
@@ -57,11 +57,11 @@ public class CarPart {
         ProviderID = providerID;
     }
 
-    public void setWID(int WID) {
-        this.WID = WID;
-    }
-
     public int getWID() {
         return WID;
+    }
+
+    public void setWID(int WID) {
+        this.WID = WID;
     }
 }

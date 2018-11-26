@@ -8,7 +8,7 @@ public class Customer {
     private String PaymentInfo;
     private Residence CustomerResidence;
 
-    public Customer(String username, String customerName, String customerPhone, String customerEmail, String paymentInfo, Residence customerResidence){
+    public Customer(String username, String customerName, String customerPhone, String customerEmail, String paymentInfo, Residence customerResidence) {
         setUsername(username);
         setCustomerName(customerName);
         setCustomerPhone(customerPhone);

@@ -8,7 +8,7 @@ public class CarModel {
     private float BatteryCapacity;
     private CarSocket ModelSocket;
 
-    public CarModel(String brandName, String modelName, int passengerCapacity, float luggageCapacity, float batteryCapacity, CarSocket modelSocket){
+    public CarModel(String brandName, String modelName, int passengerCapacity, float luggageCapacity, float batteryCapacity, CarSocket modelSocket) {
         setBrandName(brandName);
         setModelName(modelName);
         setPassengerCapacity(passengerCapacity);

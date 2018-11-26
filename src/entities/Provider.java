@@ -7,7 +7,7 @@ public class Provider {
     private String ProviderPaymentInfo;
     private Residence ProviderAddress;
 
-    public Provider(int providerID, String providerName, String providerPhone, String providerPaymentInfo, Residence providerAddress){
+    public Provider(int providerID, String providerName, String providerPhone, String providerPaymentInfo, Residence providerAddress) {
         setProviderID(providerID);
         setProviderName(providerName);
         setProviderPhone(providerPhone);

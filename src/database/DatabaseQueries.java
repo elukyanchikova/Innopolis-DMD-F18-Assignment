@@ -1,11 +1,9 @@
 package database;
 
-import java.io.*;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Collection;
 import java.util.Date;
-import java.util.LinkedHashSet;
 import java.util.LinkedList;
 
 public class DatabaseQueries {
@@ -126,7 +124,7 @@ public class DatabaseQueries {
         sample.clear();
 
         DataGenerator dataGenerator = new DataGenerator();
-        GeneratedData metaData = dataGenerator.generateData(5, 10, 5, 3, 3, 3, 19, 10, 5, 4, 2, 9, new Date().getTime() - 3*1000*30*24*3600l);
+        GeneratedData metaData = dataGenerator.generateData(5, 10, 5, 3, 3, 3, 19, 10, 5, 4, 2, 9, new Date().getTime() - 3 * 1000 * 30 * 24 * 3600l);
 
         sample.fillTheCarModel(metaData.getModels());
         sample.fillTheCustomer(metaData.getCustomers());
@@ -207,19 +205,19 @@ public class DatabaseQueries {
         String SQLStatement3 = "SELECT car_plates, count(*) AS order_num FROM serves WHERE" + timeCondition + " AND  order_num > 0";
         //TODO THIS IS PSEUDOCDE: we need to get the corresponding data from the sql query result and do som computations, after create a new table
 //        int result_0 = Integer.parseInt((sample.executeQuery(SQLStatement0)).toString());
-  //      int result_1 = Integer.parseInt((sample.executeQuery(SQLStatement1)).toString());
-    //    int result_2 = Integer.parseInt((sample.executeQuery(SQLStatement2)).toString());
-      //  int result_3 = Integer.parseInt((sample.executeQuery(SQLStatement3)).toString());
+        //      int result_1 = Integer.parseInt((sample.executeQuery(SQLStatement1)).toString());
+        //    int result_2 = Integer.parseInt((sample.executeQuery(SQLStatement2)).toString());
+        //  int result_3 = Integer.parseInt((sample.executeQuery(SQLStatement3)).toString());
 //
-  //      int res_1 = 100 * result_1 / result_0;//morning
-    //    int res_2 = 100 * result_2 / result_0;//afternoon
-      //  int res_3 = 100 * result_3 / result_0;//evening
+        //      int res_1 = 100 * result_1 / result_0;//morning
+        //    int res_2 = 100 * result_2 / result_0;//afternoon
+        //  int res_3 = 100 * result_3 / result_0;//evening
     }
 
     void Query04() {
         //find users with high activity (more than 16 orders within last month)
-        long constant = 1000*60*60*24*30L;
-        String SQLStatement = "SELECT customer_username, COUNT(*) number_of_orders FROM orders WHERE order_time >= " + Long.toString(new Date().getTime() - constant) +" GROUP BY username ORDER BY number_of_orders";
+        long constant = 1000 * 60 * 60 * 24 * 30L;
+        String SQLStatement = "SELECT customer_username, COUNT(*) number_of_orders FROM orders WHERE order_time >= " + Long.toString(new Date().getTime() - constant) + " GROUP BY username ORDER BY number_of_orders";
     }
 
     void Query05(long requestedDate) {
@@ -288,7 +286,7 @@ public class DatabaseQueries {
 
     void Query08() {
         // для каждого юзера посчитать количество зарядок, которые за месяц прошли машины, обслужившие его в этом месяце
-        Date date  = new Date();
+        Date date = new Date();
         long constant = 30 * 24 * 60 * 60 * 1000L;
         long timeCondition = date.getTime() - constant;
         String SQLStatement = "SELECT orders.customer_username, count(*) FROM (orders INNER JOIN serves ON orders.order_id = serves.order_id) " +
@@ -323,15 +321,15 @@ public class DatabaseQueries {
 
 
             //fill table
-            while(resultRepairs.next()){
+            while (resultRepairs.next()) {
 
             }
 
 
-            while(resultCharges.next()){
+            while (resultCharges.next()) {
 
             }
-        } catch (SQLException e){
+        } catch (SQLException e) {
             e.printStackTrace();
         }
 

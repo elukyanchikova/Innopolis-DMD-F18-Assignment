@@ -1,3 +1,0 @@
-CarModel
-Desyatka;Lada;5;40;800;5;square
-Corolla;Toyota;5;50;1000;6;circle
