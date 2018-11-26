@@ -300,7 +300,7 @@ public class DatabaseQueries {
         }
     }
 
-    public void Query05(long requestedDate) {
+    public Collection<ResultSet> Query05(long requestedDate) {
         try {
             String SQLStatement1 = "SELECT avg((A_latitude-B_latitude)*(A_latitude-B_latitude)+(A_longitude-B_longitude)*(A_longitude-B_longitude)) AS avg_distance FROM orders WHERE date(order_time,'unixepoch') >= date(" + requestedDate + ",'unixepoch')";
             String SQLStatement2 = "SELECT avg(time_finish-time_start) AS avg_trip_time FROM serves WHERE date(time_start,'unixepoch') = date(" + requestedDate + ",'unixepoch')";
@@ -317,8 +317,13 @@ public class DatabaseQueries {
                         + "VALUES (" +  Math.sqrt(result1.getFloat(1)) + ", " + result2.getFloat(1)/60 + ")";
                 sample.execute(SQLStatementInsert1);
 
+                Collection <ResultSet> res = new LinkedList<>();
+                res.add(result1);
+                res.add(result2);
+                return res;
         } catch (SQLException e) {
             e.printStackTrace();
+            return null;
         }
 
     }
@@ -515,7 +520,7 @@ public class DatabaseQueries {
         try {
             // cartype(1) с самой высокой стоимостью содержани в день(все дни с начала) зарядка+ремонт
             String SQLStatementRepairs = "SELECT (car.brand_name || ' ' || car.model_name) AS type, sum(price) as total_cost FROM  car INNER JOIN ( SELECT repairs.car_plate AS plate, SUM (car_parts.part_price) AS price FROM (repairs INNER JOIN car_parts ON repairs.part_id = car_parts.part_id)  ) ON plate = car.car_plate GROUP BY type ORDER BY total_cost";
-            String SQLStatementCharges = "SELECT (car.brand_name || ' ' || car.model_name) AS type, sum(price) as total_cost FROM car INNER JOIN ( SELECT charges_at.car_plate AS plate, SUM (charging_station.charging_amount_price*(charges_at.time_finish - charges_at.time_start)/" + 3600000l + " ) as price FROM ( charges_at INNER JOIN charging_station ON charges_at.UID = charging_station.UID) ) ON car.car_plate = plate GROUP BY type ORDER BY total_cost";
+            String SQLStatementCharges = "SELECT (car.brand_name || ' ' || car.model_name) AS type, sum(price) as total_cost FROM car INNER JOIN ( SELECT charges_at.car_plate AS plate, SUM (charging_station.charging_amount_price*(charges_at.time_finish - charges_at.time_start)/" + 3600l + " ) as price FROM ( charges_at INNER JOIN charging_station ON charges_at.UID = charging_station.UID) ) ON car.car_plate = plate GROUP BY type ORDER BY total_cost";
             ResultSet resultRepairs = sample.executeQuery(SQLStatementRepairs);
             ResultSet resultCharges = sample.executeQuery(SQLStatementCharges);
 
