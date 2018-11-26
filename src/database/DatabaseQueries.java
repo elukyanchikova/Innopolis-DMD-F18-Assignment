@@ -22,7 +22,7 @@ public class DatabaseQueries {
         //Query03(12432655);
         Query04();
         Query05(132445234);
-        //Query06(15432443);
+        Query06(15432443);
         //Query07();
         //Query08();
         //Query09();
@@ -306,63 +306,80 @@ public class DatabaseQueries {
             String QueryF[] = {"PRIMARY KEY", "NOT NULL", "NOT NULL", "NOT NULL", "NOT NULL", "NOT NULL"};
             sample.createNewTable("Query6", QueryColumns, QueryTypes, QueryF, "");
 
-            String timeConditions = "strftime('%s', date(" + requestedDate + ", 'unixepoch'), 'start of day', '+7')" +
+            String timeConditions = "strftime('%s', date(" + requestedDate + ", 'unixepoch'), 'start of day', '+ 7 hour')" +
                     " <= order_time <" +
-                    " strftime('%s', date(" + requestedDate + ", 'unixepoch'), 'start of day', '+10')";
+                    " strftime('%s', date(" + requestedDate + ", 'unixepoch'), 'start of day', '+ 10 hour')";
             String SQLStatement1_1 = "SELECT A_latitude*A_longitude AS hashed, count(*) AS timesOrdered , A_latitude, A_longitude FROM orders" +
-                    "WHERE " + timeConditions +
-                    "GROUP BY hashed ORDER BY timesOrdered DESC LIMIT 3";
-            String SQLStatement1_2 = "SELECT B_latitude*B_longitude AS hashed, count(*) AS timesOrdered FROM orders, B_latitude, B_longitude " +
-                    "WHERE " + timeConditions +
-                    "GROUP BY hashed ORDER BY timesOrdered DESC LIMIT 3";
+                    " WHERE " + timeConditions +
+                    " GROUP BY hashed ORDER BY timesOrdered DESC LIMIT 3";
+            String SQLStatement1_2 = "SELECT B_latitude*B_longitude AS hashed, count(*) AS timesOrdered, B_latitude, B_longitude FROM orders " +
+                    " WHERE " + timeConditions +
+                    " GROUP BY hashed ORDER BY timesOrdered DESC LIMIT 3";
 
             ResultSet result1_1 = sample.executeQuery(SQLStatement1_1);
             ResultSet result1_2 = sample.executeQuery(SQLStatement1_2);
             while (result1_1.next()){
-                String SQLStatementInsert = "INSERT INTO query4 ()"
+                String SQLStatementInsert1_1 = "INSERT INTO query6 (morning_loc_from)"
                         + "VALUES ('" + result1_1.getString(1) + "')";
-                sample.execute(SQLStatementInsert);
+                sample.execute(SQLStatementInsert1_1);
             }
-                System.out.println(result1_1.getString(1));
-            while (result1_2.next())
-                System.out.println(result1_2.getString(2));
+            while (result1_2.next()){
+                String SQLStatementInsert1_2 = "INSERT INTO query6 (morning_loc_to)"
+                        + "VALUES ('" + result1_2.getString(1) + "')";
+                sample.execute(SQLStatementInsert1_2);
+            }
 
-            timeConditions = "strftime('%s', date(" + requestedDate + ", 'unixepoch'), 'start of day', '+12')" +
-                    " <= order_start <" +
-                    " strftime('%s', date(" + requestedDate + ", 'unixepoch'), 'start of day', '+14')";
+            timeConditions = "strftime('%s', date(" + requestedDate + ", 'unixepoch'), 'start of day', '+ 12 hour')" +
+                    " <= order_time <" +
+                    " strftime('%s', date(" + requestedDate + ", 'unixepoch'), 'start of day', '+ 14 hour')";
             String SQLStatement2_1 = "SELECT A_latitude*A_longitude AS hashed, count(*) AS timesOrdered , A_latitude, A_longitude FROM orders" +
-                    "WHERE " + timeConditions +
-                    "GROUP BY hashed ORDER BY timesOrdered DESC LIMIT 3";
-            String SQLStatement2_2 = "SELECT B_latitude*B_longitude AS hashed, count(*) AS timesOrdered FROM orders, B_latitude, B_longitude " +
-                    "WHERE " + timeConditions +
-                    "GROUP BY hashed ORDER BY timesOrdered DESC LIMIT 3";
+                    " WHERE " + timeConditions +
+                    " GROUP BY hashed ORDER BY timesOrdered DESC LIMIT 3";
+            String SQLStatement2_2 = "SELECT B_latitude*B_longitude AS hashed, count(*) AS timesOrdered, B_latitude, B_longitude FROM orders" +
+                    " WHERE " + timeConditions +
+                    " GROUP BY hashed ORDER BY timesOrdered DESC LIMIT 3";
 
             ResultSet result2_1 = sample.executeQuery(SQLStatement2_1);
             ResultSet result2_2 = sample.executeQuery(SQLStatement2_2);
-            while (result2_1.next())
-                System.out.println(result2_1.getString(3));
-            while (result2_2.next())
-                System.out.println(result2_2.getString(4));
+            while (result2_1.next()){
+                String SQLStatementInsert2_1 = "INSERT INTO query6 (afternoon_loc_from)"
+                        + " VALUES ('" + result2_1.getString(1) + "')";
+                sample.execute(SQLStatementInsert2_1);
+            }
+            while (result2_2.next()){
+                String SQLStatementInsert2_2 = "INSERT INTO query6 (afternoon_loc_to)"
+                        + " VALUES ('" + result2_2.getString(1) + "')";
+                sample.execute(SQLStatementInsert2_2);
+            }
 
 
-            timeConditions = "strftime('%s', date(" + requestedDate + ", 'unixepoch'), 'start of day', '+12')" +
-                    " <= order_start <" +
-                    " strftime('%s', date(" + requestedDate + " , 'unixepoch'), 'start of day', '+14')";
+            timeConditions = "strftime('%s', date(" + requestedDate + ", 'unixepoch'), 'start of day', '+ 12 hour')" +
+                    " <= order_time <" +
+                    " strftime('%s', date(" + requestedDate + " , 'unixepoch'), 'start of day', '+ 14 hour')";
             String SQLStatement3_1 = "SELECT A_latitude*A_longitude AS hashed, count(*) AS timesOrdered , A_latitude, A_longitude FROM orders" +
-                    "WHERE " + timeConditions +
-                    "GROUP BY hashed ORDER BY timesOrdered DESC LIMIT 3";
-            String SQLStatement3_2 = "SELECT B_latitude*B_longitude AS hashed, count(*) AS timesOrdered FROM orders, B_latitude, B_longitude " +
-                    "WHERE " + timeConditions +
-                    "GROUP BY hashed ORDER BY timesOrdered DESC LIMIT 3";
+                    " WHERE " + timeConditions +
+                    " GROUP BY hashed ORDER BY timesOrdered DESC LIMIT 3";
+            String SQLStatement3_2 = "SELECT B_latitude*B_longitude AS hashed, count(*) AS timesOrdered, B_latitude, B_longitude FROM orders " +
+                    " WHERE " + timeConditions +
+                    " GROUP BY hashed ORDER BY timesOrdered DESC LIMIT 3";
 
             ResultSet result3_1 = sample.executeQuery(SQLStatement3_1);
             ResultSet result3_2 = sample.executeQuery(SQLStatement3_2);
-            while (result3_1.next())
-                System.out.println(result3_1.getString(5));
-            while (result3_2.next())
-                System.out.println(result3_2.getString(6));
+            while (result3_1.next()){
+                String SQLStatementInsert3_1 = "INSERT INTO query6 (evening_loc_from)"
+                        + " VALUES ('" + result3_1.getString(1) + "')";
+                sample.execute(SQLStatementInsert3_1);
+            }
+            while (result3_2.next()){
+                String SQLStatementInsert3_2 = "INSERT INTO query6 (evening_loc_to)"
+                        + " VALUES ('" + result3_2.getString(1) + "')";
+                sample.execute(SQLStatementInsert3_2);
+            }
 
-        /* If doesn't work, use this string as timeConditions "WHERE " + " \"strftime('%s', date(\" + requestedDate + \", 'unixepoch'), 'start of day', '+\" + 8')" +
+        /* If doesn't work, use this string as timeConditions "WHERE
+
+
+       " + " \"strftime('%s', date(\" + requestedDate + \", 'unixepoch'), 'start of day', '+\" + 8')" +
                 " <= order_start <" +
                 " strftime('%s', date(\" + requestedDate + \", 'unixepoch'), 'start of day', '+\" +10')"*/
 
