@@ -16,24 +16,18 @@ public class DatabaseQueries {
         createSample();
         FillSample();
         sample.connect();
-        //TODO 3 - broken completely
 
 
-        //TODO 6 - не выводится ничего
-
-        //TODO 8  - выводится только один with inadequate number of charges, должно быть больше
-
-
-        //Query01();
-        //Query02(1538073592);
+        ResultSet set1 = Query01();
+        ResultSet set2 = Query02(1538073592);
         //Query03(1540578565);
-        //Query04(1527614904);
-        //Query05(1538419044);
-        Query06(1527034582);
-        //Query07();
-       // Query08(1538073592);
-        //ResultSet set = Query09();
-        //Query10();
+        ResultSet set4 = Query04(1527614904);
+        ResultSet set5 = Query05(1538419044);
+        Query06(1530892400);
+        ResultSet set7 = Query07();
+        Query08(1538073592);
+        ResultSet set9 = Query09();
+        ResultSet set10 = Query10();
 
 
         sample.close();
@@ -130,10 +124,10 @@ public class DatabaseQueries {
 
     public void FillSample() {
         sample.connect();
-       /*sample.clear();
+       sample.clear();
 
         DataGenerator dataGenerator = new DataGenerator();
-        GeneratedData metaData = dataGenerator.generateData(5, 30, 20, 2, 2, 2, 124, 24, 3, 12, 123, 21, new Date().getTime()/1000 - 4  * 30 * 24 * 3600l);
+        GeneratedData metaData = dataGenerator.generateData(5, 30, 40, 2, 2, 2, 124, 120, 3, 12, 123, 110, new Date().getTime()/1000 - 2  * 30 * 24 * 3600l);
 
         sample.fillTheCarModel(metaData.getModels());
         sample.fillTheCustomer(metaData.getCustomers());
@@ -149,7 +143,7 @@ public class DatabaseQueries {
         sample.fillTheRequests(metaData.getRequests());
         sample.fillTheServes(metaData.getServes());
         sample.fillTheFits(metaData.getFits());
-        sample.close();*/
+        sample.close();
     }
 
     //done
@@ -214,7 +208,6 @@ public class DatabaseQueries {
     }
 
     public void Query03(long requestedDate) {
-        //TODO FIX HREN' with time format
         try {
             long timeConst = 7 * 24 * 60 * 60 ;
             //колво машин в определенныйй момент времени/кол-во машин вообще *100

@@ -23,6 +23,6 @@ app/**
 
 .idea/**
 *.iml
-*.db
+
 
 src/Main.java
