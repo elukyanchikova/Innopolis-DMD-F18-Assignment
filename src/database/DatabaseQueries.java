@@ -17,16 +17,22 @@ public class DatabaseQueries {
         FillSample();
         sample.connect();
 
+        //TODO 5 - ошибка в average time
+        // TODO 6 - не выводится ничего
+        //TODO 7 - возможно, ошибка, тк 10% от 20 =1 выводится только один, должно быть больше
+        //TODO 8  - выводится только один, должно быть больше
+        //TODO 9
+        // TODO 10
         Query01();
-        Query02(12425346);
-        //Query03(12432655);
+        Query02(124253);
+        Query03(124326);
         Query04();
-        Query05(132445234);
-        Query06(15432443);
+        Query05(132445);
+        Query06(154324);
         Query07();
         //Query08();
         //Query09();
-        Query10();
+        //Query10();
 
 
         sample.close();
@@ -174,16 +180,16 @@ public class DatabaseQueries {
 
     void Query02(long requestedDate) {
         try {
-        Collection<ResultSet> results = new LinkedList<>();
-        //Collection<ResultSet> result = new LinkedList<>();
-        ResultSet resultSet;
+            Collection<ResultSet> results = new LinkedList<>();
+            //Collection<ResultSet> result = new LinkedList<>();
+            ResultSet resultSet;
 
-        String QueryColumns[] = {"time_start", "time_finish", "sockets_occupied"};
-        //TODO is the type of time "TEXT"? - convert to normal format!!!
-        String QueryTypes[] = {"text", "text", "integer"};
-        String QueryF[] = {"NOT NULL", "NOT NULL", "NOT NULL"};
-        sample.createNewTable("Query2", QueryColumns, QueryTypes, QueryF, "");
-        sample.execute("DELETE FROM query2");
+            String QueryColumns[] = {"time_start", "time_finish", "sockets_occupied"};
+            //TODO is the type of time "TEXT"?
+            String QueryTypes[] = {"text", "text", "integer"};
+            String QueryF[] = {"NOT NULL", "NOT NULL", "NOT NULL"};
+            sample.createNewTable("Query2", QueryColumns, QueryTypes, QueryF, "");
+            sample.execute("DELETE FROM query2");
 
 
         String timeFrom = "";
@@ -441,6 +447,7 @@ public class DatabaseQueries {
         }
     }
 
+    //TODO inner todo
     void Query09() {
         try {
             String SQLStatement0 = "SELECT count(*) FROM car";
