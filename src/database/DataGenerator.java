@@ -218,12 +218,14 @@ public class DataGenerator {
 	}
 
 	private List<TimeSlot> generateTimeSlots(int n, long fromDate) {
-		long bounds = System.currentTimeMillis() / 1000 - fromDate;
-		long[] timestamps = random.longs(n * 2)
-				.map(x -> x % bounds)
-				.map(x -> x + fromDate)
-				.sorted()
-				.toArray();
+		int bounds = (int) ((System.currentTimeMillis() / 1000 - fromDate) / 60);
+		long[] timestamps =
+				random.ints(n * 2, 1, bounds)
+						.sorted()
+						.asLongStream()
+						.map(x -> x * 60)
+						.map(x -> x + fromDate)
+						.toArray();
 
 		List<TimeSlot> slots = new ArrayList<>();
 		for (int i = 0; i + 1 < timestamps.length; i += 2) {
