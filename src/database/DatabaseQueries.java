@@ -24,9 +24,9 @@ public class DatabaseQueries {
 
         //TODO 8  - выводится только один with inadequate number of charges, должно быть больше
 
-        //TODO 10 - only one model in output
+
         //Query01();
-        //Query02(1538073592);
+        Query02(1538073592);
         //Query03(1540578565);
         //Query04(1527614904);
         //Query05(1538419044);
@@ -34,7 +34,7 @@ public class DatabaseQueries {
         //Query07();
        // Query08(1538073592);
         //ResultSet set = Query09();
-        Query10();
+        //Query10();
 
 
         sample.close();
@@ -208,8 +208,12 @@ public class DatabaseQueries {
             }
             for (ResultSet res : results){
                 String SQLStatementInsert = "INSERT INTO query2 (UID, time_start, time_finish, sockets_occupied) "
-                        + "VALUES(" + res.getInt(1) + ", '" + res.getString(2)+ "', '" + res.getString(3) +"', "+ res.getInt(4) + ")";
+                        + "VALUES (" + res.getInt(1) + ", '"
+                        + res.getString(2)+ "', '"
+                        + res.getString(3) +"', "+ res.getInt(4) + ")";
+
                 sample.execute(SQLStatementInsert);
+
             }
             //return results;
         } catch (SQLException e)        {
@@ -306,7 +310,7 @@ public class DatabaseQueries {
 
     public ResultSet Query05(long requestedDate) {
         try {
-            String SQLStatement1 = "SELECT avg(A_latitude-B_latitude) AS d_lat, avg(A_longitude-B_longitude) AS d_lon) AS avg_distance FROM orders WHERE date(order_time,'unixepoch') >= date(" + requestedDate + ",'unixepoch')";
+            String SQLStatement1 = "SELECT avg((A_latitude-B_latitude)*(A_latitude-B_latitude) + (A_longitude-B_longitude)*(A_longitude-B_longitude)) AS avg_distance FROM orders WHERE date(order_time,'unixepoch') >= date(" + requestedDate + ",'unixepoch')";
             String SQLStatement2 = "SELECT avg(time_finish-time_start) AS avg_trip_time FROM serves WHERE date(time_start,'unixepoch') = date(" + requestedDate + ",'unixepoch')";
             ResultSet result1 = sample.executeQuery(SQLStatement1);
             ResultSet result2 = sample.executeQuery(SQLStatement2);
@@ -321,9 +325,6 @@ public class DatabaseQueries {
                         + "VALUES (" +  Math.sqrt(result1.getFloat(1)) + ", " + result2.getFloat(1)/60 + ")";
                 sample.execute(SQLStatementInsert1);
 
-                Collection <ResultSet> res = new LinkedList<>();
-                res.add(result1);
-                res.add(result2);
                 return sample.executeQuery("SELECT * FROM query5");
         } catch (SQLException e) {
             e.printStackTrace();
