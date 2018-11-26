@@ -276,7 +276,7 @@ public class DatabaseQueries {
 
     void Query05(long requestedDate) {
         try {
-            String SQLStatement1 = "SELECT avg((A_latitude-B_latitude)*(A_longitude-B_longitude)) AS avg_distance FROM orders WHERE date(order_time,'unixepoch') >= date(" + requestedDate + ",'unixepoch')";
+            String SQLStatement1 = "SELECT avg((A_latitude-B_latitude)*(A_latitude-B_latitude)+(A_longitude-B_longitude)*(A_longitude-B_longitude)) AS avg_distance FROM orders WHERE date(order_time,'unixepoch') >= date(" + requestedDate + ",'unixepoch')";
             String SQLStatement2 = "SELECT avg(time_finish-time_start) AS avg_trip_time FROM serves WHERE date(time_start,'unixepoch') = date(" + requestedDate + ",'unixepoch')";
             ResultSet result1 = sample.executeQuery(SQLStatement1);
             ResultSet result2 = sample.executeQuery(SQLStatement2);
@@ -285,12 +285,12 @@ public class DatabaseQueries {
             String QueryTypes[] = {"real", "real"};
             String QueryF[] = {"PRIMARY KEY", "NOT NULL"};
             sample.createNewTable("Query5", QueryColumns, QueryTypes, QueryF, "");
+            sample.execute("DELETE FROM query5");
 
-            while (result1.next()) {
                 String SQLStatementInsert1 = "INSERT INTO query5 (avg_distance, avg_trip_time)"
-                        + "VALUES (" + result1.getFloat(1) + ", " + result2.getFloat(1) + ")";
+                        + "VALUES (" +  Math.sqrt(result1.getFloat(1)) + ", " + result2.getFloat(1) + ")";
                 sample.execute(SQLStatementInsert1);
-            }
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
