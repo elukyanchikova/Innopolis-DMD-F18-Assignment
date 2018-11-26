@@ -25,14 +25,14 @@ public class DatabaseQueries {
         // TODO 10
         Query01();
         Query02(124253);
-        Query03(124326);
+        //Query03(124326);
         Query04();
-        Query05(132445);
+        Query05(1536435922);
         Query06(154324);
         Query07();
-        //Query08();
-        //Query09();
-        //Query10();
+        Query08();
+        Query09();
+        Query10();
 
 
         sample.close();
@@ -129,10 +129,10 @@ public class DatabaseQueries {
 
     public void FillSample() {
         sample.connect();
-        /*sample.clear();
+       sample.clear();
 
         DataGenerator dataGenerator = new DataGenerator();
-        GeneratedData metaData = dataGenerator.generateData(5, 10, 20, 2, 2, 2, 10, 24, 3, 12, 8, 21, new Date().getTime() - 4 * 1000 * 30 * 24 * 3600l);
+        GeneratedData metaData = dataGenerator.generateData(5, 10, 20, 2, 2, 2, 10, 24, 3, 12, 8, 21, new Date().getTime()/1000 - 4  * 30 * 24 * 3600l);
 
         sample.fillTheCarModel(metaData.getModels());
         sample.fillTheCustomer(metaData.getCustomers());
@@ -147,7 +147,7 @@ public class DatabaseQueries {
         sample.fillTheRepairs(metaData.getRepairs());
         sample.fillTheRequests(metaData.getRequests());
         sample.fillTheServes(metaData.getServes());
-        sample.fillTheFits(metaData.getFits());*/
+        sample.fillTheFits(metaData.getFits());
         sample.close();
 
         //use this method only ONCE ....
@@ -219,7 +219,7 @@ public class DatabaseQueries {
     void Query03(long requestedDate) {
         //TODO FIX HREN' with time format
         try {
-            long timeConst = 7 * 24 * 60 * 60 * 1000L;
+            long timeConst = 7 * 24 * 60 * 60 ;
             //колво машин в определенныйй момент времени/кол-во машин вообще *100
             //long requestedDate = date.getTime();
             String SQLStatement0 = "SELECT count(*) FROM car";
@@ -279,8 +279,8 @@ public class DatabaseQueries {
     void Query04() {
         //find users with high activity (more than 16 orders within last month)
         try {
-            long constant = 1000 * 60 * 60 * 24 * 30L;
-            String SQLStatement = "SELECT customer_username, COUNT(*) AS number_of_orders FROM orders WHERE order_time >= " + Long.toString(new Date().getTime() - constant) + " GROUP BY customer_username ORDER BY number_of_orders DESC";
+            long constant = 60 * 60 * 24 * 30L;
+            String SQLStatement = "SELECT customer_username, COUNT(*) AS number_of_orders FROM orders WHERE order_time >= " + Long.toString(new Date().getTime()/1000 - constant) + " GROUP BY customer_username ORDER BY number_of_orders DESC";
             ResultSet result = sample.executeQuery(SQLStatement);
 
             //look at the fields of result of your query and according to them create new table
@@ -451,14 +451,14 @@ public class DatabaseQueries {
             sample.execute("DELETE FROM Query8;");
 
             Date date = new Date();
-            long constant = 30 * 24 * 60 * 60 * 1000L;
-            long timeCondition = date.getTime() - constant;
+            long constant = 30 * 24 * 60 * 60 ;
+            long timeCondition = date.getTime()/1000 - constant;
             String SQLStatement = "SELECT orders.customer_username, count(*) FROM (orders INNER JOIN serves ON orders.order_id = serves.order_id) " +
                     "INNER JOIN charges_at ON serves.car_plate = charges_at.car_plate "/*WHERE order_time >= " + timeCondition*/;
 
             ResultSet result = sample.executeQuery(SQLStatement);
             while (result.next()) {
-                String SQLStatementInsert = "INSERT INTO query8 (username, trips_amount)"
+                String SQLStatementInsert = "INSERT INTO query8 (username, charges_amount)"
                         + " VALUES ('" + result.getString(1) + "'," + result.getInt(2) + ")";
                 sample.execute(SQLStatementInsert);
             }
@@ -470,22 +470,40 @@ public class DatabaseQueries {
     //TODO inner todo
     void Query09() {
         try {
-            String SQLStatement0 = "SELECT count(*) FROM car";
-            int carNumber = sample.executeQuery(SQLStatement0).getInt(1);
-            System.out.println(carNumber);
+            String SQLStatement0 = "SELECT * FROM workshop";
+            ResultSet res1 = sample.executeQuery(SQLStatement0);
+            Collection <Integer> WIDs = new LinkedList<>();
+            while(res1.next()){
+                WIDs.add(res1.getInt(1));
+            }
 
-            //количество деталек для каждого провайдера, необходимое в течение недели
+            //количество деталек для каждого workshopa, необходимое в течение недели
+            //for every workshop count
 
             Collection<ResultSet> res = new LinkedList<>();
-            for (int wid = 0; wid < carNumber; wid++) {
-                String SQLStatement = "SELECT WID, sum(number_of_parts) AS partsNumber FROM requests WHERE WID =" + wid + "GROUP BY WID ORDER BY partsNumber";
+            for (int wid : WIDs) {
+                String SQLStatement = "SELECT repairs.wid, car_parts.part_name, count(repairs.part_id) as parts_number FROM repairs INNER JOIN car_parts ON repairs.part_id = car_parts.part_id WHERE repairs.wid = " + wid + " GROUP BY repairs.wid ORDER BY parts_number LIMIT 1";
                 res.add(sample.executeQuery(SQLStatement));
             }
-            long weekConst = 7 * 24 * 60 * 60 * 1000L;
+
+
+
+            long weekConst = 7 * 24 * 60 * 60 ;
             String SQLStatement2 = "SELECT max(time_start) - min(time_finish) AS delta FROM repairs";
             ResultSet result2 = sample.executeQuery(SQLStatement2);
             int weeksNumber = (int)(result2.getLong(1)/weekConst);
-            //TODO посчитать количество недель и вывести необходимое количество запчастей в неделю
+
+            String[] Query9Columns = {"WID", "part_name", "number_of_parts"};
+            String[] Query9Types = {"integer", "text", "integer"};
+            String[] Query9F = {"PRIMARY KEY", "NOT NULL", "NOT NULL"};
+            sample.createNewTable("Query9", Query9Columns, Query9Types, Query9F, "");
+            sample.execute("DELETE FROM query9");
+
+            for(ResultSet result: res){
+                String insert = "INSERT INTO query9 (WID, part_name, number_of_parts)"
+                        + "VALUES (" + result.getInt(1) + ", '" + result.getString(2) + "',  " + (int)result.getInt(3) + " )";
+                sample.execute(insert);
+            }
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -494,7 +512,7 @@ public class DatabaseQueries {
     }
 
     void Query10() {
-        try {
+        try {//todo: string concatenation in sql
             // cartype(1) с самой высокой стоимостью содержани в день(все дни с начала) зарядка+ремонт
             String SQLStatementRepairs = "SELECT (car.brand_name + ' ' + car.model_name) AS type, sum(price) as total_cost FROM  car INNER JOIN ( SELECT repairs.car_plate AS plate, SUM (car_parts.part_price) AS price FROM (repairs INNER JOIN car_parts ON repairs.part_id = car_parts.part_id)  ) ON plate = car.car_plate GROUP BY type ORDER BY total_cost";
             String SQLStatementCharges = "SELECT (car.brand_name + ' ' + car.model_name) AS type, sum(price) as total_cost FROM car INNER JOIN ( SELECT charges_at.car_plate AS plate, SUM (charging_station.charging_amount_price*(charges_at.time_finish - charges_at.time_start)/" + 3600000l + " ) as price FROM ( charges_at INNER JOIN charging_station ON charges_at.UID = charging_station.UID) ) ON car.car_plate = plate GROUP BY type ORDER BY total_cost";
