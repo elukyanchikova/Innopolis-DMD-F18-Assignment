@@ -9,8 +9,8 @@ import java.util.Random;
 import java.util.stream.Collectors;
 
 public class DataGenerator {
-	private final String[] firstNames = {"Albert", "Andrei", "Nikola", "Alan", "Richard", "Alonzo"};
-	private final String[] lastNames = {"Sakharov", "Feynman", "Einstein", "Tesla", "Turing", "Church"};
+	private final String[] firstNames = {"Albert", "Andrei", "Nikola", "Alan", "Richard", "Alonzo", "Janos", "David"};
+	private final String[] lastNames = {"Sakharov", "Feynman", "Einstein", "Tesla", "Turing", "Church", "fon Neumann", "Hilbert"};
 	private final String[] colors = {"red", "green", "blue", "yellow", "silver", "black"};
 	private final String[] shapes = {"round", "square", "Klenee star"};
 	private final String[] carModels = {"Niva", "Corolla", "Desyatka", "X5", "Q6", "Teana", "Rapid", "C4", "Astra", "Outlander", "Model S"};

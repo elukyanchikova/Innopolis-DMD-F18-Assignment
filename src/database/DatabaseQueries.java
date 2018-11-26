@@ -23,7 +23,7 @@ public class DatabaseQueries {
         //Query06(15432443);
         //Query07();
         //Query08();
-        //Query09();
+        Query09();
         //Query10();
 
 
@@ -124,7 +124,7 @@ public class DatabaseQueries {
         sample.clear();
 
         DataGenerator dataGenerator = new DataGenerator();
-        GeneratedData metaData = dataGenerator.generateData(5, 10, 5, 3, 3, 3, 19, 10, 5, 4, 2, 9, new Date().getTime() - 3 * 1000 * 30 * 24 * 3600l);
+        GeneratedData metaData = dataGenerator.generateData(9, 50, 80, 5, 5, 5, 33, 120, 12, 110, 78, 107, new Date().getTime() - 4 * 1000 * 30 * 24 * 3600l);
 
         sample.fillTheCarModel(metaData.getModels());
         sample.fillTheCustomer(metaData.getCustomers());
@@ -141,6 +141,9 @@ public class DatabaseQueries {
         sample.fillTheServes(metaData.getServes());
         sample.fillTheFits(metaData.getFits());
         sample.close();
+
+        //use this method only ONCE ....
+        //TODO:  wid in car_parts and repairs differs ...
     }
 
 
@@ -295,17 +298,23 @@ public class DatabaseQueries {
     }
 
     void Query09() {
-        String SQLStatement0 = "SELECT count(*) FROM car";
-        int stub = -123;//result of sqlst1 query
-        int carNumber = stub;
-        //количество деталек для каждого провайдера, необходимое в течение недели
+        try {
+            String SQLStatement0 = "SELECT count(*) FROM car";
+            int carNumber = sample.executeQuery(SQLStatement0).getInt(1);
+            System.out.println(carNumber);
 
-        Collection<String> res = new LinkedList<>();
-        for (int wid = 0; wid < carNumber; wid++) {
-            String SQLStatement = "SELECT WID, sum(number_of_parts) AS partsNumber FROM requests WHERE WID =" + wid + "GROUP BY WID ORDER BY partsNumber";
-            res.add(SQLStatement);
+            //количество деталек для каждого провайдера, необходимое в течение недели
+
+            Collection<String> res = new LinkedList<>();
+            for (int wid = 0; wid < carNumber; wid++) {
+                String SQLStatement = "SELECT WID, sum(number_of_parts) AS partsNumber FROM requests WHERE WID =" + wid + "GROUP BY WID ORDER BY partsNumber";
+                res.add(SQLStatement);
+            }
+            //TODO посчитать количество недель и вывести необходимое количество запчастей в неделю
+
+        } catch (SQLException e){
+            e.printStackTrace();
         }
-        //TODO посчитать количество недель и вывести необходимое количество запчастей в неделю
 
     }
 
