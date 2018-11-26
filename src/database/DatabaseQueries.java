@@ -24,7 +24,7 @@ public class DatabaseQueries {
         Query05(132445234);
         Query06(15432443);
         Query07();
-        Query08();
+        //Query08();
         //Query09();
         Query10();
 
@@ -469,8 +469,8 @@ public class DatabaseQueries {
     void Query10() {
         try {
             // cartype(1) с самой высокой стоимостью содержани в день(все дни с начала) зарядка+ремонт
-            String SQLStatementRepairs = "SELECT (car.brand_name + ' ' + car.model_name) AS type, sum(price) as total_cost FROM  car INNER JOIN ( SELECT repairs.car_plate, SUM (car_parts.part_price) AS price FROM (repairs INNER JOIN car_parts ON repairs.part_id = car_parts.part_id)  ) ON repairs.car_plate = car.car_plate GROUP BY type ORDER BY total_cost";
-            String SQLStatementCharges = "SELECT (car.brand_name + ' ' + car.model_name) AS type, sum(price) as total_cost FROM car INNER JOIN ( SELECT charges_at.car_plate, SUM (charging_station.charging_amount_price*(charges_at.time_finish - charges_at.time_start)/" + 3600000l + " ) as price FROM ( charges_at INNER JOIN charging_station ON charges_at.UID = charging_station.UID) ) ON car.car_plate = charges_at.car_plate GROUP BY type ORDER BY total_cost";
+            String SQLStatementRepairs = "SELECT (car.brand_name + ' ' + car.model_name) AS type, sum(price) as total_cost FROM  car INNER JOIN ( SELECT repairs.car_plate AS plate, SUM (car_parts.part_price) AS price FROM (repairs INNER JOIN car_parts ON repairs.part_id = car_parts.part_id)  ) ON plate = car.car_plate GROUP BY type ORDER BY total_cost";
+            String SQLStatementCharges = "SELECT (car.brand_name + ' ' + car.model_name) AS type, sum(price) as total_cost FROM car INNER JOIN ( SELECT charges_at.car_plate AS plate, SUM (charging_station.charging_amount_price*(charges_at.time_finish - charges_at.time_start)/" + 3600000l + " ) as price FROM ( charges_at INNER JOIN charging_station ON charges_at.UID = charging_station.UID) ) ON car.car_plate = plate GROUP BY type ORDER BY total_cost";
             ResultSet resultRepairs = sample.executeQuery(SQLStatementRepairs);
             ResultSet resultCharges = sample.executeQuery(SQLStatementCharges);
 
@@ -497,7 +497,7 @@ public class DatabaseQueries {
 
             while (resultCharges.next()) {
                 String insertion = "INSERT INTO query10_2 (type, total_cost_charge)\n" +
-                        "VALUES ('" + resultCharges.getString(1) + "', " + resultCharges.getFloat(2) +" ";
+                        "VALUES ('" + resultCharges.getString(1) + "', " + resultCharges.getFloat(2) +" )";
                 sample.execute(insertion);
             }
         } catch (SQLException e) {
