@@ -17,15 +17,15 @@ public class DatabaseQueries {
         FillSample();
         sample.connect();
 
-        Query01();
+        //Query01();
         //Query02(12425346);
         //Query03(12432655);
-        //Query04();
+        Query04();
         //Query05(132445234);
         //Query06(15432443);
         //Query07();
         //Query08();
-        Query09();
+        //Query09();
         //Query10();
 
 
@@ -264,8 +264,10 @@ public class DatabaseQueries {
             String QueryF[] = {"PRIMARY KEY", "PRIMARY KEY"};
             sample.createNewTable("Query4", QueryColumns, QueryTypes, QueryF, "");
 
-            while (result.next())
-                System.out.println(result.getString(1));
+            while (result.next()) {
+                String SQLStatementInsert = "INSERT INTO query4 (costumer_username, number_of_orders)"
+                        + "VALUES ('" + result.getString(1) + "', '" + result.getInt(2) + ")";
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
