@@ -233,7 +233,7 @@ public class DatabaseQueries {
                     " AND " + timeCond0;
 
             //String timeCondition = "date("+ requestedDate +", 'unixepoch') <= date(time_start, 'unixepoch') < (date(requestedDate, 'unixepoch')+7)";
-            String SQLStatement1 = "SELECT car_plate, count(*) AS order_num FROM serves WHERE " + timeCondition + " AND  order_num > 0";
+            String SQLStatement1 = "SELECT car_plate, count(order_id) AS order_num FROM serves WHERE " + timeCondition + " AND  order_num > 0";
 
             timeCond0 = "strftime('%s', date(" + requestedDate + ", 'unixepoch'), 'start of day', '+" + 12 + " hour')" +
                     "<= time_start" +
@@ -476,10 +476,10 @@ public class DatabaseQueries {
 
             //количество деталек для каждого провайдера, необходимое в течение недели
 
-            Collection<String> res = new LinkedList<>();
+            Collection<ResultSet> res = new LinkedList<>();
             for (int wid = 0; wid < carNumber; wid++) {
                 String SQLStatement = "SELECT WID, sum(number_of_parts) AS partsNumber FROM requests WHERE WID =" + wid + "GROUP BY WID ORDER BY partsNumber";
-                res.add(SQLStatement);
+                res.add(sample.executeQuery(SQLStatement));
             }
             long weekConst = 7 * 24 * 60 * 60 * 1000L;
             String SQLStatement2 = "SELECT max(time_start) - min(time_finish) AS delta FROM repairs";
