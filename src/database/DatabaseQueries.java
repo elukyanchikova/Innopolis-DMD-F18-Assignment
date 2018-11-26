@@ -18,7 +18,7 @@ public class DatabaseQueries {
         sample.connect();
         //TODO 3 - broken completely
 
-        //TODO 5 - fix distance
+
         //TODO 6 - не выводится ничего
 
         //TODO 8  - выводится только один with inadequate number of charges, должно быть больше
@@ -414,11 +414,11 @@ public class DatabaseQueries {
         }
     }
 
-    public void Query07() {
+    public ResultSet Query07() {
         try {
             String SQLStatement0 = "SELECT count(*) FROM car";
             ResultSet result0 = sample.executeQuery(SQLStatement0);
-            //TODO ОНО ТАК РАБОТАЕТ?
+
             int carNumber = result0.getInt(1) / 10;
             String SQLStatement1 = "SELECT car_plate, count(*) AS orderedTimes FROM serves GROUP BY car_plate ORDER BY orderedTimes ASC LIMIT " + carNumber;
             ResultSet result1 = sample.executeQuery(SQLStatement1);
@@ -435,9 +435,10 @@ public class DatabaseQueries {
                         + " VALUES ('" + result1.getString(1) + "', '" + result1.getString(2) + "')";
                 sample.execute(SQLStatementInsert1);
             }
-
+            return sample.executeQuery("SELECT * FROM query7");
         } catch (SQLException e) {
             e.printStackTrace();
+            return null;
         }
     }
 
