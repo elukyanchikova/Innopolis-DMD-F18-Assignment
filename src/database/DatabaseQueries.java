@@ -21,7 +21,7 @@ public class DatabaseQueries {
         //Query02(12425346);
         //Query03(12432655);
         Query04();
-        //Query05(132445234);
+        Query05(132445234);
         //Query06(15432443);
         //Query07();
         //Query08();
@@ -165,6 +165,7 @@ public class DatabaseQueries {
             while (result.next()){
                 String SQLStatementInsert = "INSERT INTO query1 (car_plate, brand_name, model_name, car_color, car_latitude, car_longitude, car_rating, crash_flag, battery_percentage)\n"
                         + "VALUES ('" + result.getString(1) + "', '" + result.getString(2)+ "', '" + result.getString(3)+ "', '" + result.getString(4) + "', "+ result.getFloat(5) + ", " + result.getFloat(6) +", "+ result.getFloat(7) + ", " + result.getInt(8) + ", "+ result.getFloat(9) + ")";
+            sample.execute(SQLStatementInsert);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -255,18 +256,18 @@ public class DatabaseQueries {
         //find users with high activity (more than 16 orders within last month)
         try {
             long constant = 1000 * 60 * 60 * 24 * 30L;
-            String SQLStatement = "SELECT customer_username, COUNT(*) number_of_orders FROM orders WHERE order_time >= " + Long.toString(new Date().getTime() - constant) + " GROUP BY username ORDER BY number_of_orders";
+            String SQLStatement = "SELECT customer_username, COUNT(*) number_of_orders FROM orders WHERE order_time >= " + Long.toString(new Date().getTime() - constant) + " GROUP BY customer_username ORDER BY number_of_orders";
             ResultSet result = sample.executeQuery(SQLStatement);
 
             //look at the fields of result of your query and according to them create new table
-            String QueryColumns[] = {"costumer_username", "number_of_orders"};
+            String QueryColumns[] = {"customer_username", "number_of_orders"};
             String QueryTypes[] = {"text", "integer"};
-            String QueryF[] = {"PRIMARY KEY", "PRIMARY KEY"};
+            String QueryF[] = {"PRIMARY KEY", "NOT NULL"};
             sample.createNewTable("Query4", QueryColumns, QueryTypes, QueryF, "");
 
             while (result.next()) {
                 String SQLStatementInsert = "INSERT INTO query4 (costumer_username, number_of_orders)"
-                        + "VALUES ('" + result.getString(1) + "', '" + result.getInt(2) + ")";
+                        + "VALUES ('" + result.getString(1) + "', " + result.getInt(2) + ")";
                 sample.execute(SQLStatementInsert);
             }
         } catch (SQLException e) {
@@ -277,21 +278,20 @@ public class DatabaseQueries {
     //TODO DONE
     void Query05(long requestedDate) {
         try {
-            String SQLStatement1 = "SELECT avg((A_lat-B_lat)*(A_lon-B_lon)) FROM orders WHERE date(order_time,'unixepoch') >= date(" + requestedDate + ",'unixepoch')";
-            String SQLStatement2 = "SELECT avg(t_finish-t_start) FROM serves WHERE date(t_start,'unixepoch') = date(" + requestedDate + ",'unixepoch')";
+            String SQLStatement1 = "SELECT avg((A_latitude-B_latitude)*(A_longitude-B_longitude)) AS avg_distance FROM orders WHERE date(order_time,'unixepoch') >= date(" + requestedDate + ",'unixepoch')";
+            String SQLStatement2 = "SELECT avg(time_finish-time_start) AS avg_trip_time FROM serves WHERE date(time_start,'unixepoch') = date(" + requestedDate + ",'unixepoch')";
             ResultSet result1 = sample.executeQuery(SQLStatement1);
             ResultSet result2 = sample.executeQuery(SQLStatement2);
 
             String QueryColumns[] = {"avg_distance", "avg_trip_time"};
             String QueryTypes[] = {"real", "real"};
-            String QueryF[] = {"PRIMARY KEY", "PRIMARY KEY"};
+            String QueryF[] = {"PRIMARY KEY", "NOT NULL"};
             sample.createNewTable("Query5", QueryColumns, QueryTypes, QueryF, "");
 
-            while (result1.next())
-                /*String SQLStatementInsert1 = "INSERT INTO query4 (costumer_username, number_of_orders)"
-                        + "VALUES ('" + result.getString(1) + "', '" + result.getInt(2) + ")";*/
-            while (result2.next())
-                System.out.println(result2.getString(2));
+            while (result1.next()) {
+                String SQLStatementInsert1 = "INSERT INTO query5 (avg_distance, avg_trip_time)"
+                        + "VALUES (" + result1.getFloat(1) + ", " + result2.getFloat(1) + ")";
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
