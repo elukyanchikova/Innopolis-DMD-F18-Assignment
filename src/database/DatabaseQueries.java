@@ -17,7 +17,7 @@ public class DatabaseQueries {
         FillSample();
         sample.connect();
 
-        //Query01();
+        Query01();
         //Query02(12425346);
         //Query03(12432655);
         Query04();
@@ -251,7 +251,6 @@ public class DatabaseQueries {
         //  int res_3 = 100 * result_3 / result_0;//evening
     }
 
-    //TODO DONE
     void Query04() {
         //find users with high activity (more than 16 orders within last month)
         try {
@@ -275,7 +274,6 @@ public class DatabaseQueries {
         }
     }
 
-    //TODO DONE
     void Query05(long requestedDate) {
         try {
             String SQLStatement1 = "SELECT avg((A_latitude-B_latitude)*(A_longitude-B_longitude)) AS avg_distance FROM orders WHERE date(order_time,'unixepoch') >= date(" + requestedDate + ",'unixepoch')";
@@ -291,6 +289,7 @@ public class DatabaseQueries {
             while (result1.next()) {
                 String SQLStatementInsert1 = "INSERT INTO query5 (avg_distance, avg_trip_time)"
                         + "VALUES (" + result1.getFloat(1) + ", " + result2.getFloat(1) + ")";
+                sample.execute(SQLStatementInsert1);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -304,11 +303,11 @@ public class DatabaseQueries {
         try {
             String QueryColumns[] = {"morning_loc_from", "morning_loc_to", "afternoon_loc_from", "afternoon_loc_to", "evening_loc_from", "evening_loc_to"};
             String QueryTypes[] = {"real", "real", "real", "real", "real", "real"};
-            String QueryF[] = {"PRIMARY KEY", "PRIMARY KEY", "PRIMARY KEY", "PRIMARY KEY", "PRIMARY KEY", "PRIMARY KEY"};
+            String QueryF[] = {"PRIMARY KEY", "NOT NULL", "NOT NULL", "NOT NULL", "NOT NULL", "NOT NULL"};
             sample.createNewTable("Query6", QueryColumns, QueryTypes, QueryF, "");
 
             String timeConditions = "strftime('%s', date(" + requestedDate + ", 'unixepoch'), 'start of day', '+7')" +
-                    " <= order_start <" +
+                    " <= order_time <" +
                     " strftime('%s', date(" + requestedDate + ", 'unixepoch'), 'start of day', '+10')";
             String SQLStatement1_1 = "SELECT A_latitude*A_longitude AS hashed, count(*) AS timesOrdered , A_latitude, A_longitude FROM orders" +
                     "WHERE " + timeConditions +
@@ -319,7 +318,11 @@ public class DatabaseQueries {
 
             ResultSet result1_1 = sample.executeQuery(SQLStatement1_1);
             ResultSet result1_2 = sample.executeQuery(SQLStatement1_2);
-            while (result1_1.next())
+            while (result1_1.next()){
+                String SQLStatementInsert = "INSERT INTO query4 ()"
+                        + "VALUES ('" + result1_1.getString(1) + "')";
+                sample.execute(SQLStatementInsert);
+            }
                 System.out.println(result1_1.getString(1));
             while (result1_2.next())
                 System.out.println(result1_2.getString(2));
