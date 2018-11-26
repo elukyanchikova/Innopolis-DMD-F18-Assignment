@@ -3,6 +3,7 @@ package graphicalUI;
 import database.DatabaseQueries;
 import javafx.application.Application;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -19,6 +20,7 @@ import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.time.LocalDate;
 
 public class MainPage extends Application {
 
@@ -31,9 +33,10 @@ public class MainPage extends Application {
 	@FXML
 	TableView outputTable;
 
-	Button[] queryButtons;
+	private Button[] queryButtons;
+	private boolean buttonsAdded = false;
 
-	DatabaseQueries queries;
+	private DatabaseQueries queries;
 
 	public static void main(String[] args) {
 		launch(args);
@@ -61,13 +64,19 @@ public class MainPage extends Application {
 
 	@FXML
 	void generateData() {
+		datePicker.setValue(LocalDate.now().minusMonths(3));
+
 		queries = new DatabaseQueries();
 		queries.createSample();
 		queries.FillSample();
-		addQueryButtons();
+
+		if (!buttonsAdded) {
+			addQueryButtons();
+		}
 	}
 
 	void addQueryButtons() {
+		buttonsAdded = true;
 		queryButtons = new Button[10];
 		for (int i = 0; i < queryButtons.length; i++) {
 			queryButtons[i] = new Button("Query " + (i + 1));
@@ -84,7 +93,7 @@ public class MainPage extends Application {
 				resultSet = queries.Query01();
 				break;
 			case 2:
-//				resultSet = queries.Query02(getRequestedDateSeconds());
+				resultSet = queries.Query02(getRequestedDateSeconds());
 				break;
 			case 3:
 //				resultSet=queries.Query03(getRequestedDateSeconds());
@@ -102,18 +111,18 @@ public class MainPage extends Application {
 //				resultSet=queries.Query07();
 				break;
 			case 8:
-//				resultSet=queries.Query08();
+//				resultSet=queries.Query08(getRequestedDateSeconds());
 				break;
 			case 9:
 				resultSet = queries.Query09();
 				break;
 			case 10:
-//				resultSet=queries.Query10();
+				resultSet = queries.Query10();
 				break;
 		}
 
 		assert resultSet != null;
-
+		updateTable(resultSet);
 	}
 
 	void updateTable(ResultSet resultSet) {
@@ -129,7 +138,17 @@ public class MainPage extends Application {
 
 				outputTable.getColumns().add(column);
 			}
-		} catch (SQLException | ClassCastException e) {
+
+			ObservableList<ObservableList<String>> tableData = FXCollections.observableArrayList();
+			while (resultSet.next()) {
+				ObservableList<String> row = FXCollections.observableArrayList();
+				for (int i = 1; i <= resultSet.getMetaData().getColumnCount(); i++) {
+					row.add(resultSet.getString(i));
+				}
+				tableData.add(row);
+			}
+			outputTable.setItems(tableData);
+		} catch (SQLException | ClassCastException | NullPointerException e) {
 			e.printStackTrace();
 		}
 	}
