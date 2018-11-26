@@ -2,58 +2,58 @@ package entities;
 
 
 public class ChargingStation {
-    private int UID;
-    private int NumberOfSocketsAvailable;
-    private float ElectricalPower;
-    private float ChargingAmountPrice;
-    private GPSLocation StationLocation;
+	private int UID;
+	private int NumberOfSocketsAvailable;
+	private float ElectricalPower;
+	private float ChargingAmountPrice;
+	private GPSLocation StationLocation;
 
-    public ChargingStation(int UID, int numberOfSocketsAvailable, float electricalPower, float chargingAmountPrice, GPSLocation stationLocation) {
-        this.UID = UID;
-        NumberOfSocketsAvailable = numberOfSocketsAvailable;
-        ElectricalPower = electricalPower;
-        ChargingAmountPrice = chargingAmountPrice;
-        StationLocation = stationLocation;
-    }
+	public ChargingStation(int UID, int numberOfSocketsAvailable, float electricalPower, float chargingAmountPrice, GPSLocation stationLocation) {
+		this.UID = UID;
+		NumberOfSocketsAvailable = numberOfSocketsAvailable;
+		ElectricalPower = electricalPower;
+		ChargingAmountPrice = chargingAmountPrice;
+		StationLocation = stationLocation;
+	}
 
 
-    public int getUID() {
-        return UID;
-    }
+	public int getUID() {
+		return UID;
+	}
 
-    public void setUID(int UID) {
-        this.UID = UID;
-    }
+	public void setUID(int UID) {
+		this.UID = UID;
+	}
 
-    public int getNumberOfSocketsAvailable() {
-        return NumberOfSocketsAvailable;
-    }
+	public int getNumberOfSocketsAvailable() {
+		return NumberOfSocketsAvailable;
+	}
 
-    public void setNumberOfSocketsAvailable(int numberOfSocketsAvailable) {
-        NumberOfSocketsAvailable = numberOfSocketsAvailable;
-    }
+	public void setNumberOfSocketsAvailable(int numberOfSocketsAvailable) {
+		NumberOfSocketsAvailable = numberOfSocketsAvailable;
+	}
 
-    public float getElectricalPower() {
-        return ElectricalPower;
-    }
+	public float getElectricalPower() {
+		return ElectricalPower;
+	}
 
-    public void setElectricalPower(float electricalPower) {
-        ElectricalPower = electricalPower;
-    }
+	public void setElectricalPower(float electricalPower) {
+		ElectricalPower = electricalPower;
+	}
 
-    public float getChargingAmountPrice() {
-        return ChargingAmountPrice;
-    }
+	public float getChargingAmountPrice() {
+		return ChargingAmountPrice;
+	}
 
-    public void setChargingAmountPrice(float chargingAmountPrice) {
-        ChargingAmountPrice = chargingAmountPrice;
-    }
+	public void setChargingAmountPrice(float chargingAmountPrice) {
+		ChargingAmountPrice = chargingAmountPrice;
+	}
 
-    public GPSLocation getStationLocation() {
-        return StationLocation;
-    }
+	public GPSLocation getStationLocation() {
+		return StationLocation;
+	}
 
-    public void setStationLocation(GPSLocation stationLocation) {
-        StationLocation = stationLocation;
-    }
+	public void setStationLocation(GPSLocation stationLocation) {
+		StationLocation = stationLocation;
+	}
 }

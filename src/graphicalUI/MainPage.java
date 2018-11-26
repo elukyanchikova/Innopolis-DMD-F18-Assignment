@@ -59,16 +59,19 @@ public class MainPage extends Application {
 
 		Scene scene = new Scene(layout);
 		primaryStage.setScene(scene);
+		primaryStage.setTitle("LUKYANCHIKOVA MINAKOVA SHAKIROV B17-2");
 		primaryStage.show();
 	}
 
 	@FXML
 	void generateData() {
-		datePicker.setValue(LocalDate.now().minusMonths(3));
+		if (datePicker.getValue() == null) {
+			datePicker.setValue(LocalDate.now().minusMonths(3));
+		}
 
 		queries = new DatabaseQueries();
 		queries.createSample();
-		queries.FillSample();
+		queries.FillSample(getRequestedDateSeconds());
 
 		if (!buttonsAdded) {
 			addQueryButtons();
@@ -108,7 +111,7 @@ public class MainPage extends Application {
 //				resultSet=queries.Query06(getRequestedDateSeconds());
 				break;
 			case 7:
-//				resultSet=queries.Query07();
+				resultSet = queries.Query07();
 				break;
 			case 8:
 //				resultSet=queries.Query08(getRequestedDateSeconds());
